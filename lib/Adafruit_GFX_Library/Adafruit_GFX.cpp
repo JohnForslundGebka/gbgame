@@ -1208,7 +1208,7 @@ void Adafruit_GFX::drawChar(int16_t x, int16_t y, unsigned char c,
     // then draw new text.  This WILL infortunately 'blink' the text, but
     // is unavoidable.  Drawing 'background' pixels will NOT fix this,
     // only creates a new set of problems.  Have an idea to work around
-    // this (a canvas object type for MCUs that can afford the RAM and
+    // this (a display object type for MCUs that can afford the RAM and
     // displays supporting setAddrWindow() and pushColors()), but haven't
     // implemented this yet.
 
@@ -1755,7 +1755,7 @@ const uint8_t PROGMEM GFXcanvas1::GFXclrBit[] = {0x7F, 0xBF, 0xDF, 0xEF,
 
 /**************************************************************************/
 /*!
-   @brief    Instatiate a GFX 1-bit canvas context for graphics
+   @brief    Instatiate a GFX 1-bit display context for graphics
    @param    w   Display width, in pixels
    @param    h   Display height, in pixels
 */
@@ -1769,7 +1769,7 @@ GFXcanvas1::GFXcanvas1(uint16_t w, uint16_t h) : Adafruit_GFX(w, h) {
 
 /**************************************************************************/
 /*!
-   @brief    Delete the canvas, free memory
+   @brief    Delete the display, free memory
 */
 /**************************************************************************/
 GFXcanvas1::~GFXcanvas1(void) {
@@ -1779,7 +1779,7 @@ GFXcanvas1::~GFXcanvas1(void) {
 
 /**************************************************************************/
 /*!
-    @brief  Draw a pixel to the canvas framebuffer
+    @brief  Draw a pixel to the display framebuffer
     @param  x     x coordinate
     @param  y     y coordinate
     @param  color Binary (on or off) color to fill with
@@ -1913,7 +1913,7 @@ void GFXcanvas1::drawFastVLine(int16_t x, int16_t y, int16_t h,
     }
   }
 
-  // Edge rejection (no-draw if totally off canvas)
+  // Edge rejection (no-draw if totally off display)
   if ((x < 0) || (x >= width()) || (y >= height()) || ((y + h - 1) < 0)) {
     return;
   }
@@ -1968,7 +1968,7 @@ void GFXcanvas1::drawFastHLine(int16_t x, int16_t y, int16_t w,
     }
   }
 
-  // Edge rejection (no-draw if totally off canvas)
+  // Edge rejection (no-draw if totally off display)
   if ((y < 0) || (y >= height()) || (x >= width()) || ((x + w - 1) < 0)) {
     return;
   }
@@ -2005,7 +2005,7 @@ void GFXcanvas1::drawFastHLine(int16_t x, int16_t y, int16_t w,
 
 /**************************************************************************/
 /*!
-   @brief    Speed optimized vertical line drawing into the raw canvas buffer
+   @brief    Speed optimized vertical line drawing into the raw display buffer
    @param    x   Line horizontal start point
    @param    y   Line vertical start point
    @param    h   length of vertical line to be drawn, including first point
@@ -2043,7 +2043,7 @@ void GFXcanvas1::drawFastRawVLine(int16_t x, int16_t y, int16_t h,
 
 /**************************************************************************/
 /*!
-   @brief    Speed optimized horizontal line drawing into the raw canvas buffer
+   @brief    Speed optimized horizontal line drawing into the raw display buffer
    @param    x   Line horizontal start point
    @param    y   Line vertical start point
    @param    w   length of horizontal line to be drawn, including first point
@@ -2108,7 +2108,7 @@ void GFXcanvas1::drawFastRawHLine(int16_t x, int16_t y, int16_t w,
 
 /**************************************************************************/
 /*!
-   @brief    Instatiate a GFX 8-bit canvas context for graphics
+   @brief    Instatiate a GFX 8-bit display context for graphics
    @param    w   Display width, in pixels
    @param    h   Display height, in pixels
 */
@@ -2122,7 +2122,7 @@ GFXcanvas8::GFXcanvas8(uint16_t w, uint16_t h) : Adafruit_GFX(w, h) {
 
 /**************************************************************************/
 /*!
-   @brief    Delete the canvas, free memory
+   @brief    Delete the display, free memory
 */
 /**************************************************************************/
 GFXcanvas8::~GFXcanvas8(void) {
@@ -2132,7 +2132,7 @@ GFXcanvas8::~GFXcanvas8(void) {
 
 /**************************************************************************/
 /*!
-    @brief  Draw a pixel to the canvas framebuffer
+    @brief  Draw a pixel to the display framebuffer
     @param  x   x coordinate
     @param  y   y coordinate
     @param  color 8-bit Color to fill with. Only lower byte of uint16_t is used.
@@ -2246,7 +2246,7 @@ void GFXcanvas8::drawFastVLine(int16_t x, int16_t y, int16_t h,
     }
   }
 
-  // Edge rejection (no-draw if totally off canvas)
+  // Edge rejection (no-draw if totally off display)
   if ((x < 0) || (x >= width()) || (y >= height()) || ((y + h - 1) < 0)) {
     return;
   }
@@ -2303,7 +2303,7 @@ void GFXcanvas8::drawFastHLine(int16_t x, int16_t y, int16_t w,
     }
   }
 
-  // Edge rejection (no-draw if totally off canvas)
+  // Edge rejection (no-draw if totally off display)
   if ((y < 0) || (y >= height()) || (x >= width()) || ((x + w - 1) < 0)) {
     return;
   }
@@ -2340,7 +2340,7 @@ void GFXcanvas8::drawFastHLine(int16_t x, int16_t y, int16_t w,
 
 /**************************************************************************/
 /*!
-   @brief    Speed optimized vertical line drawing into the raw canvas buffer
+   @brief    Speed optimized vertical line drawing into the raw display buffer
    @param    x   Line horizontal start point
    @param    y   Line vertical start point
    @param    h   length of vertical line to be drawn, including first point
@@ -2360,7 +2360,7 @@ void GFXcanvas8::drawFastRawVLine(int16_t x, int16_t y, int16_t h,
 
 /**************************************************************************/
 /*!
-   @brief    Speed optimized horizontal line drawing into the raw canvas buffer
+   @brief    Speed optimized horizontal line drawing into the raw display buffer
    @param    x   Line horizontal start point
    @param    y   Line vertical start point
    @param    w   length of horizontal line to be drawn, including first point
@@ -2376,7 +2376,7 @@ void GFXcanvas8::drawFastRawHLine(int16_t x, int16_t y, int16_t w,
 
 /**************************************************************************/
 /*!
-   @brief    Instatiate a GFX 16-bit canvas context for graphics
+   @brief    Instatiate a GFX 16-bit display context for graphics
    @param    w   Display width, in pixels
    @param    h   Display height, in pixels
 */
@@ -2390,7 +2390,7 @@ GFXcanvas16::GFXcanvas16(uint16_t w, uint16_t h) : Adafruit_GFX(w, h) {
 
 /**************************************************************************/
 /*!
-   @brief    Delete the canvas, free memory
+   @brief    Delete the display, free memory
 */
 /**************************************************************************/
 GFXcanvas16::~GFXcanvas16(void) {
@@ -2400,7 +2400,7 @@ GFXcanvas16::~GFXcanvas16(void) {
 
 /**************************************************************************/
 /*!
-    @brief  Draw a pixel to the canvas framebuffer
+    @brief  Draw a pixel to the display framebuffer
     @param  x   x coordinate
     @param  y   y coordinate
     @param  color 16-bit 5-6-5 Color to fill with
@@ -2503,7 +2503,7 @@ void GFXcanvas16::fillScreen(uint16_t color) {
 /**************************************************************************/
 /*!
     @brief  Reverses the "endian-ness" of each 16-bit pixel within the
-            canvas; little-endian to big-endian, or big-endian to little.
+            display; little-endian to big-endian, or big-endian to little.
             Most microcontrollers (such as SAMD) are little-endian, while
             most displays tend toward big-endianness. All the drawing
             functions (including RGB bitmap drawing) take care of this
@@ -2541,7 +2541,7 @@ void GFXcanvas16::drawFastVLine(int16_t x, int16_t y, int16_t h,
     }
   }
 
-  // Edge rejection (no-draw if totally off canvas)
+  // Edge rejection (no-draw if totally off display)
   if ((x < 0) || (x >= width()) || (y >= height()) || ((y + h - 1) < 0)) {
     return;
   }
@@ -2596,7 +2596,7 @@ void GFXcanvas16::drawFastHLine(int16_t x, int16_t y, int16_t w,
     }
   }
 
-  // Edge rejection (no-draw if totally off canvas)
+  // Edge rejection (no-draw if totally off display)
   if ((y < 0) || (y >= height()) || (x >= width()) || ((x + w - 1) < 0)) {
     return;
   }
@@ -2633,7 +2633,7 @@ void GFXcanvas16::drawFastHLine(int16_t x, int16_t y, int16_t w,
 
 /**************************************************************************/
 /*!
-   @brief    Speed optimized vertical line drawing into the raw canvas buffer
+   @brief    Speed optimized vertical line drawing into the raw display buffer
    @param    x   Line horizontal start point
    @param    y   Line vertical start point
    @param    h   length of vertical line to be drawn, including first point
@@ -2652,7 +2652,7 @@ void GFXcanvas16::drawFastRawVLine(int16_t x, int16_t y, int16_t h,
 
 /**************************************************************************/
 /*!
-   @brief    Speed optimized horizontal line drawing into the raw canvas buffer
+   @brief    Speed optimized horizontal line drawing into the raw display buffer
    @param    x   Line horizontal start point
    @param    y   Line vertical start point
    @param    w   length of horizontal line to be drawn, including first point

@@ -306,7 +306,7 @@ private:
   bool currstate, laststate;
 };
 
-/// A GFX 1-bit canvas context for graphics
+/// A GFX 1-bit display context for graphics
 class GFXcanvas1 : public Adafruit_GFX {
 public:
   GFXcanvas1(uint16_t w, uint16_t h);
@@ -337,7 +337,7 @@ private:
 #endif
 };
 
-/// A GFX 8-bit canvas context for graphics
+/// A GFX 8-bit display context for graphics
 class GFXcanvas8 : public Adafruit_GFX {
 public:
   GFXcanvas8(uint16_t w, uint16_t h);
@@ -362,7 +362,7 @@ protected:
   uint8_t *buffer; ///< Raster data: no longer private, allow subclass access
 };
 
-///  A GFX 16-bit canvas context for graphics
+///  A GFX 16-bit display context for graphics
 class GFXcanvas16 : public Adafruit_GFX {
 public:
   GFXcanvas16(uint16_t w, uint16_t h);

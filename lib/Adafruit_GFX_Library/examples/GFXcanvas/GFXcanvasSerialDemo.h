@@ -14,9 +14,9 @@ public:
 
   /**********************************************************************/
   /*!
-    @brief    Prints the current contents of the canvas to Serial
+    @brief    Prints the current contents of the display to Serial
     @param    rotated  true to print according to the current GFX rotation,
-    false to print to the native rotation of the canvas (or unrotated).
+    false to print to the native rotation of the display (or unrotated).
   */
   /**********************************************************************/
   void print(bool rotated);
@@ -34,9 +34,9 @@ public:
 
   /**********************************************************************/
   /*!
-    @brief    Prints the current contents of the canvas to Serial
+    @brief    Prints the current contents of the display to Serial
     @param    rotated  true to print according to the current GFX rotation,
-    false to print to the native rotation of the canvas (or unrotated).
+    false to print to the native rotation of the display (or unrotated).
   */
   /**********************************************************************/
   void print(bool rotated);
@@ -54,9 +54,9 @@ public:
 
   /**********************************************************************/
   /*!
-    @brief    Prints the current contents of the canvas to Serial
+    @brief    Prints the current contents of the display to Serial
     @param    rotated  true to print according to the current GFX rotation,
-    false to print to the native rotation of the canvas (or unrotated).
+    false to print to the native rotation of the display (or unrotated).
   */
   /**********************************************************************/
   void print(bool rotated);
