@@ -1194,7 +1194,7 @@ void Adafruit_GFX::drawChar(int16_t x, int16_t y, unsigned char c,
       yo16 = yo;
     }
 
-    // Todo: Add character clipping here
+
 
     // NOTE: THERE IS NO 'BACKGROUND' COLOR OPTION ON CUSTOM FONTS.
     // THIS IS ON PURPOSE AND BY DESIGN.  The background color feature
