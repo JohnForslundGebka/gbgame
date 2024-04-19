@@ -1,3 +1,9 @@
 ### PlatformIO ###
 .pio
 
+
+##MAC##
+.DS_Store
+.AppleDouble
+.LSOverride
+
