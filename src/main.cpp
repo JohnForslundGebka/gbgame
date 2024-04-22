@@ -18,6 +18,7 @@
 #define BALL_RADIUS  3
 
 //Button enums
+//These are the pins the buttons and vibration motor is connected to. 
 enum buttons {
     BTN_UP = 2,
     BTN_LEFT = 3,
