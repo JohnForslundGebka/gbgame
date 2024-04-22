@@ -88,7 +88,7 @@ void loop() {
     canvas.setTextWrap(false);
     canvas.setCursor(46, 9);
     canvas.print("WOHOO!");
-    canvas.setCursor(33, 46);
+    canvas.setCursor(16, 46);
     canvas.print(buttonText);
     canvas.drawBitmap(32, 62, image_Space_bits, 65, 18, 0xFFFF);
     canvas.drawBitmap(49, yPos, image_FaceNormal_bits, 29, 14, 0xFFFF);
