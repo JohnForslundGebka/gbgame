@@ -157,18 +157,21 @@ void loop() {
     else if (!digitalRead(BTN_A)) {
         setDisplayText(buttonText, "BTN_A pressed", 20);
         setDisplayText(buttonText2, "Vibration ON", 20);
+        ballX = 64;                                          //Reset ball position
+        ballY = 70;                                          //Reset ball position
 
         Serial.println("Button A pressed Vibration ON");
 
-        digitalWrite(VIBRA, HIGH);
+        digitalWrite(VIBRA, HIGH);                           //Turn off vibrations
     }
     else if (!digitalRead(BTN_B)) {
         setDisplayText(buttonText, "BTN_B Pressed", 20);
         setDisplayText(buttonText2, "Vibration OFF", 20);
+        yPos = 0;                                          //Reset animation position
 
         Serial.println("Button B pressed Vibration OFF");
         
-        digitalWrite(VIBRA, LOW);
+        digitalWrite(VIBRA, LOW);                           //Turn off vibrations
     }
     else {
         setDisplayText(buttonText, "No buttons pressed", 20);
