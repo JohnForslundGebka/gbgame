@@ -153,7 +153,7 @@ void loop() {
     else if (!digitalRead(BTN_B)) {
         setDisplayText(buttonText, "BTN_B Pressed", 20);
         setDisplayText(buttonText2, "Vibration OFF", 20);
-        yPos = 0;                                          //Reset animation position
+
 
         Serial.println("Button B pressed Vibration OFF");
         
