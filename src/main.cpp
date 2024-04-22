@@ -97,21 +97,21 @@ void loop() {
     yPos += direction;
     recWidth += 2;
 
-    if (yPos >= upperBound || yPos <= lowerBound) {
-        direction = -direction; // Reverse direction at the bounds
-    }
+    // if (yPos >= upperBound || yPos <= lowerBound) {
+    //     direction = -direction; // Reverse direction at the bounds
+    // }
 
-    // Update ball position
-    ballX += velX;
-    ballY += velY;
+    // // Update ball position
+    // ballX += velX;
+    // ballY += velY;
 
-    // Check for collisions
-    if (ballX <= SQUARE_X + BALL_RADIUS || ballX >= SQUARE_X + SQUARE_W - BALL_RADIUS) {
-        velX = -velX; // Reverse the horizontal velocity
-    }
-    if (ballY <= SQUARE_Y + BALL_RADIUS || ballY >= SQUARE_Y + SQUARE_H - BALL_RADIUS) {
-        velY = -velY; // Reverse the vertical velocity
-    }
+    // // Check for collisions
+    // if (ballX <= SQUARE_X + BALL_RADIUS || ballX >= SQUARE_X + SQUARE_W - BALL_RADIUS) {
+    //     velX = -velX; // Reverse the horizontal velocity
+    // }
+    // if (ballY <= SQUARE_Y + BALL_RADIUS || ballY >= SQUARE_Y + SQUARE_H - BALL_RADIUS) {
+    //     velY = -velY; // Reverse the vertical velocity
+    // }
 
     // Draw the ball at the new position
     canvas.drawCircle(ballX, ballY, BALL_RADIUS, 0xA800);
@@ -123,17 +123,20 @@ void loop() {
     //Serial prints and display update for buttons and vibration testing
     if (!digitalRead(BTN_UP)) {
        setDisplayText(buttonText, "BTN_UP Pressed", 20); 
-        Serial.println("Button UP pressed");        
+        Serial.println("Button UP pressed");   
+        ballY += -2;     
     }
 
     else if (!digitalRead(BTN_LEFT)) {
         setDisplayText(buttonText, "BTN_LEFT pressed", 20);
         Serial.println("Button LEFT pressed");
+        ballX += -2; 
      
     }
     else if (!digitalRead(BTN_RIGHT)) {
         setDisplayText(buttonText, "BTN_RIGHT Pressed", 20);
         Serial.println("Button RIGHT pressed");
+        ballX += 2;
     }
         
     else if (!digitalRead(BTN_START)) {
@@ -144,6 +147,7 @@ void loop() {
     else if (!digitalRead(BTN_DOWN)) {
         setDisplayText(buttonText, "BTN_DOWN Pressed", 20);
         Serial.println("Button DOWN pressed");  
+        ballY += 2;
     }
     
     else if (!digitalRead(BTN_A)) {
