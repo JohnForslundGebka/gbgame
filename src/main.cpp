@@ -2,6 +2,7 @@
 #include <SPI.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1351.h>
+#include <Serial.h>
 
 // Standard SPI pin assignments on Arduino
 #define SCLK_PIN 13   // Clock
@@ -15,6 +16,18 @@
 #define SQUARE_W     65
 #define SQUARE_H     18
 #define BALL_RADIUS  3
+
+//Button enums
+enum buttons {
+    BTN_UP = 2,
+    BTN_LEFT = 3,
+    BTN_RIGHT = 4,
+    BTN_START = 5,
+    BTN_A = 6,
+    BTN_B = 7,
+    BTN_DOWN = 8,
+    VIBRA = 9
+};
 
 // Ball position and velocity
 int ballX = SQUARE_X + SQUARE_W / 2;
@@ -38,6 +51,19 @@ void setup() {
     // Initialize display
     display.begin(13000000);
     display.fillScreen(0x0000);
+
+    Serial.begin(9600);
+
+    //Set pinMode for buttons and vibration
+    pinMode(BTN_UP, INPUT_PULLUP);
+    pinMode(BTN_LEFT, INPUT_PULLUP);
+    pinMode(BTN_RIGHT, INPUT_PULLUP);
+    pinMode(BTN_START, INPUT_PULLUP);
+    pinMode(BTN_A, INPUT_PULLUP);
+    pinMode(BTN_B, INPUT_PULLUP);
+    pinMode(BTN_DOWN, INPUT_PULLUP);
+    pinMode(VIBRA, OUTPUT);
+
 }
 
 void loop() {
@@ -50,7 +76,7 @@ void loop() {
     canvas.setTextSize(1);
     canvas.setTextWrap(false);
     canvas.setCursor(46, 9);
-    canvas.print("WOHO!");
+    canvas.print("WOHOO!");
     canvas.setCursor(33, 46);
     canvas.print("Det funkar!");
     canvas.drawBitmap(32, 62, image_Space_bits, 65, 18, 0xFFFF);
@@ -81,4 +107,28 @@ void loop() {
 
     //draw canvas
     display.drawRGBBitmap(0, 0, canvas.getBuffer(), canvas.width(), canvas.height());
+
+
+    //Serial prints for button and vibration testing
+    if (!digitalRead(BTN_UP))
+        Serial.println("Button UP pressed");
+    if (!digitalRead(BTN_LEFT))
+        Serial.println("Button LEFT pressed");
+    if (!digitalRead(BTN_RIGHT))
+        Serial.println("Button RIGHT pressed");
+    if (!digitalRead(BTN_START))
+        Serial.println("Button START pressed");
+    if (!digitalRead(BTN_A))
+        Serial.println("Button A pressed");
+    if (!digitalRead(BTN_B))
+        Serial.println("Button B pressed");
+    if (!digitalRead(BTN_DOWN)) {
+        Serial.println("Button DOWN pressed and Vibrations ON");
+        digitalWrite(VIBRA, HIGH);
+    } else {
+        digitalWrite(VIBRA, LOW);  
+    }
+
+    
+
 }
