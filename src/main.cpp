@@ -65,6 +65,16 @@ void setup() {
     pinMode(BTN_DOWN, INPUT_PULLUP);
     pinMode(VIBRA, OUTPUT);
 
+    digitalWrite(VIBRA, LOW);
+
+}
+
+// Array and function to display button press on display
+char buttonText[20] = "Hejsan";
+void setDisplayText(char* buttonText, const char* newText, size_t bufferSize) {
+   
+    strncpy(buttonText, newText, bufferSize - 1);    // Change text on the display
+    buttonText[bufferSize - 1] = '\0';  // null termination
 }
 
 void loop() {
@@ -79,7 +89,7 @@ void loop() {
     canvas.setCursor(46, 9);
     canvas.print("WOHOO!");
     canvas.setCursor(33, 46);
-    canvas.print("Det funkar!");
+    canvas.print(buttonText);
     canvas.drawBitmap(32, 62, image_Space_bits, 65, 18, 0xFFFF);
     canvas.drawBitmap(49, yPos, image_FaceNormal_bits, 29, 14, 0xFFFF);
 
@@ -110,26 +120,43 @@ void loop() {
     display.drawRGBBitmap(0, 0, canvas.getBuffer(), canvas.width(), canvas.height());
 
 
-    //Serial prints for button and vibration testing
-    if (!digitalRead(BTN_UP))
-        Serial.println("Button UP pressed");
-    if (!digitalRead(BTN_LEFT))
-        Serial.println("Button LEFT pressed");
-    if (!digitalRead(BTN_RIGHT))
-        Serial.println("Button RIGHT pressed");
-    if (!digitalRead(BTN_START))
-        Serial.println("Button START pressed");
-    if (!digitalRead(BTN_A))
-        Serial.println("Button A pressed");
-    if (!digitalRead(BTN_B))
-        Serial.println("Button B pressed");
-    if (!digitalRead(BTN_DOWN)) {
-        Serial.println("Button DOWN pressed and Vibrations ON");
-        digitalWrite(VIBRA, HIGH);
-    } else {
-        digitalWrite(VIBRA, LOW);  
+    //Serial prints and display update for buttons and vibration testing
+    if (!digitalRead(BTN_UP)) {
+       setDisplayText(buttonText, "BTN_UP Pressed", 20); 
+        Serial.println("Button UP pressed");        
     }
 
+    else if (!digitalRead(BTN_LEFT)) {
+        setDisplayText(buttonText, "BTN_LEFT pressed", 20);
+        Serial.println("Button LEFT pressed");
+     
+    }
+    else if (!digitalRead(BTN_RIGHT)) {
+        setDisplayText(buttonText, "BTN_RIGHT Pressed", 20);
+        Serial.println("Button RIGHT pressed");
+    }
+        
+    else if (!digitalRead(BTN_START)) {
+        setDisplayText(buttonText, "BTN_START Pressed", 20);
+        Serial.println("Button START pressed");   
+    }
+   
+    else if (!digitalRead(BTN_DOWN)) {
+        setDisplayText(buttonText, "BTN_DOWN Pressed", 20);
+        Serial.println("Button DOWN pressed");  
+    }
     
-
+    else if (!digitalRead(BTN_A)) {
+        setDisplayText(buttonText, "BTN_A pressed", 20);
+        Serial.println("Button A pressed Vibration ON");
+        digitalWrite(VIBRA, HIGH);
+    }
+    else if (!digitalRead(BTN_B)) {
+        setDisplayText(buttonText, "BTN_B Pressed", 20);
+        Serial.println("Button B pressed Vibration OFF");
+        digitalWrite(VIBRA, LOW);
+    }
+    else {
+        setDisplayText(buttonText, "No buttons pressed", 20);
+    }
 }
