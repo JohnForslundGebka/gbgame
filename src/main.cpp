@@ -70,7 +70,9 @@ void setup() {
 }
 
 // Array and function to display button press on display
-char buttonText[20] = "Hejsan";
+char buttonText[20] = "No buttons pressed";
+char buttonText2[20] = "Vibration OFF";
+
 void setDisplayText(char* buttonText, const char* newText, size_t bufferSize) {
    
     strncpy(buttonText, newText, bufferSize - 1);    // Change text on the display
@@ -93,6 +95,8 @@ void loop() {
     canvas.drawBitmap(32, 62, image_Space_bits, 65, 18, 0xFFFF);
     canvas.drawBitmap(49, yPos, image_FaceNormal_bits, 29, 14, 0xFFFF);
 
+    canvas.setCursor(16, 90);
+    canvas.print(buttonText2);
     // Update the y position
     yPos += direction;
     recWidth += 2;
@@ -152,12 +156,18 @@ void loop() {
     
     else if (!digitalRead(BTN_A)) {
         setDisplayText(buttonText, "BTN_A pressed", 20);
+        setDisplayText(buttonText2, "Vibration ON", 20);
+
         Serial.println("Button A pressed Vibration ON");
+
         digitalWrite(VIBRA, HIGH);
     }
     else if (!digitalRead(BTN_B)) {
         setDisplayText(buttonText, "BTN_B Pressed", 20);
+        setDisplayText(buttonText2, "Vibration OFF", 20);
+
         Serial.println("Button B pressed Vibration OFF");
+        
         digitalWrite(VIBRA, LOW);
     }
     else {
