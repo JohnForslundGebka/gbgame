@@ -52,7 +52,11 @@ void loop() {
             Buttons::B_FLAG |
             Buttons::DOWN_FLAG, osWaitForever, false
     );
-    Serial.println(flagsRead);
+
+    switch (flagsRead) {
+        case Buttons::UP_FLAG:
+
+    }
 
 
 }
