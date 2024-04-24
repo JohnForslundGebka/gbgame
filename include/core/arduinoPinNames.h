@@ -1,5 +1,12 @@
+//this headerfile contains the PinName variables for the digital pins on the Aruino Nano rp2040 connect
+//
+//  Usage:   pin::BTN_UP
+//
+
+
 #ifndef GBGAME_ARDUINOPINNAMES_H
 #define GBGAME_ARDUINOPINNAMES_H
+
 
 namespace pin {
     //These are the pins the buttons and vibration motor is connected to.
