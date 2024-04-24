@@ -1,10 +1,10 @@
 //buttons.h
 #ifndef BUTTONS_H
 #define BUTTONS_H
-
 #include <Arduino.h>
 #include "mbed.h"
 #include "rtos.h"
+#include "DebounceIn.h"
 #include "core/arduinoPinNames.h"
 
 using namespace mbed;
@@ -15,8 +15,7 @@ public:
     Buttons();  // Constructor to initialize all buttons
     
     // Event flags for button states
-    rtos::EventFlags buttonStates;
-
+    EventFlags buttonStates;
     enum ButtonFlags {
         UP_FLAG = 0x01,
         LEFT_FLAG = 0x02,
@@ -28,7 +27,6 @@ public:
     };
 
 private:
-  
     // Declare InterruptIn object for each button
     InterruptIn buttonUp;
     InterruptIn buttonLeft;
@@ -37,14 +35,5 @@ private:
     InterruptIn buttonA;
     InterruptIn buttonB;
     InterruptIn buttonDown;
-
-    // Handler functions for button events
-    void handleButtonPressRelease(mbed::InterruptIn &button, uint32_t flag);  // Modified handler
-
 };
-
-
-
-
-
 #endif

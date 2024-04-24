@@ -3,54 +3,36 @@
 
 
 Buttons::Buttons()
-    : buttonUp(pin::BTN_UP, PullUp),
-      buttonLeft(pin::BTN_LEFT, PullUp),
-      buttonRight(pin::BTN_RIGHT, PullUp),
-      buttonStart(pin::BTN_START, PullUp),
-      buttonA(pin::BTN_A, PullUp),
-      buttonB(pin::BTN_B, PullUp),
-      buttonDown(pin::BTN_DOWN, PullUp) {
+        : buttonUp(pin::BTN_UP, PullUp),
+          buttonLeft(pin::BTN_LEFT, PullUp),
+          buttonRight(pin::BTN_RIGHT, PullUp),
+          buttonStart(pin::BTN_START, PullUp),
+          buttonA(pin::BTN_A, PullUp),
+          buttonB(pin::BTN_B, PullUp),
+          buttonDown(pin::BTN_DOWN, PullUp)
+{
+    buttonUp.rise([this]() { buttonStates.clear(UP_FLAG); });
+    buttonUp.fall([this]() { buttonStates.set(UP_FLAG); });
 
-    
+    buttonLeft.rise([this]() { buttonStates.clear(LEFT_FLAG); });
+    buttonLeft.fall([this]() { buttonStates.set(LEFT_FLAG); });
 
-    // Initialize all buttons to trigger on both rising and falling edges
-    auto callback = mbed::callback(this, &Buttons::handleButtonPressRelease);
-    
-    
-    buttonUp.rise([&]() {buttonStates.clear(UP_FLAG);});
-    buttonUp.fall([&]() {buttonStates.set(UP_FLAG);});
+    buttonRight.rise([this]() { buttonStates.clear(RIGHT_FLAG); });
+    buttonRight.fall([this]() { buttonStates.set(RIGHT_FLAG); });
 
-//     buttonUp.rise(callback);
-//     buttonUp.fall(callback);
+    buttonStart.rise([this]() { buttonStates.clear(START_FLAG); });
+    buttonStart.fall([this]() { buttonStates.set(START_FLAG); });
 
-//     buttonLeft.rise(callback);
-//     buttonLeft.fall(callback);
+    buttonA.rise([this]() { buttonStates.clear(A_FLAG); });
+    buttonA.fall([this]() { buttonStates.set(A_FLAG); });
 
-//     buttonRight.rise(callback);
-//     buttonRight.fall(callback);
+    buttonB.rise([this]() { buttonStates.clear(B_FLAG); });
+    buttonB.fall([this]() { buttonStates.set(B_FLAG); });
 
-//     buttonStart.rise(callback);
-//     buttonStart.fall(callback);
-
-//     buttonA.rise(callback);
-//     buttonA.fall(callback);
-
-//     buttonB.rise(callback);
-//     buttonB.fall(callback);
-
-//     buttonDown.rise(callback);
-//     buttonDown.fall(callback);
-// 
+    buttonDown.rise([this]() { buttonStates.clear(DOWN_FLAG); });
+    buttonDown.fall([this]() { buttonStates.set(DOWN_FLAG); });
 }
 
-void Buttons::handleButtonPressRelease(mbed::InterruptIn &button, uint32_t flag) {
-    if (button.read() == 0) {  // Assuming active low buttons
-        buttonStates.set(flag);
-    } else {
-        buttonStates.clear(flag);
-    }
-    Serial.println("Button state changed.\n");
-}
 
 
 
