@@ -18,23 +18,20 @@ EventFlags flags;
 
 void print(){
 
-    while(true) {
-        flags.wait_all(FLAG1, osWaitForever, false);
-        while (true) {
+    while(flags.wait_all(FLAG1, osWaitForever, false)) {
+
             if (shouldPrint) {
                 Serial.println("ON");
             } else {
                 Serial.println("OFF");
             }
             ThisThread::sleep_for(std::chrono::milliseconds(500));
-            if (!(flags.get() & FLAG1))
-                break;
-        }
+
+
     }
 }
 
 void on_button_press() {
-   // shouldPrint = !shouldPrint;
    flags.set(FLAG1);
 }
 
