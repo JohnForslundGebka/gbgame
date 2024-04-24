@@ -1,7 +1,10 @@
 #include <Arduino.h>
 #include "mbed.h"
 #include "rtos.h"
+#include "core/arduinoPinNames.h"
 
+mbed::DigitalIn knapp(pin::BTN_A , PullUp);
+mbed::DigitalOut vibration(pin::VIBRA);
 
 // Create a DigitalOut object to control the LED
 mbed::DigitalOut led(LED1);
@@ -24,5 +27,10 @@ void setup() {
 }
 
 void loop() {
+
+    if(!knapp.read())
+        vibration = !vibration;
+
+
 
 }
