@@ -32,7 +32,7 @@ void setup() {
 
 void loop() {
 
-    Serial.println(buttons.buttonStates.get());
+    buttons.printBinaryStates();
 
 
 }

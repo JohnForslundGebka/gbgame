@@ -11,37 +11,38 @@ Buttons::Buttons()
       buttonB(pin::BTN_B, PullUp),
       buttonDown(pin::BTN_DOWN, PullUp) {
 
-    
+  
 
-    // Initialize all buttons to trigger on both rising and falling edges
-    auto callback = mbed::callback(this, &Buttons::handleButtonPressRelease);
-    
-    
     buttonUp.rise([&]() {buttonStates.clear(UP_FLAG);});
     buttonUp.fall([&]() {buttonStates.set(UP_FLAG);});
 
-//     buttonUp.rise(callback);
-//     buttonUp.fall(callback);
+    buttonLeft.rise([&]() {buttonStates.clear(LEFT_FLAG);});
+    buttonLeft.fall([&]() {buttonStates.set(LEFT_FLAG);});
 
-//     buttonLeft.rise(callback);
-//     buttonLeft.fall(callback);
+    buttonRight.rise([&]() {buttonStates.clear(RIGHT_FLAG);});
+    buttonRight.fall([&]() {buttonStates.set(RIGHT_FLAG);});
 
-//     buttonRight.rise(callback);
-//     buttonRight.fall(callback);
+    buttonStart.rise([&]() {buttonStates.clear(START_FLAG);});
+    buttonStart.fall([&]() {buttonStates.set(START_FLAG);});
 
-//     buttonStart.rise(callback);
-//     buttonStart.fall(callback);
+    buttonA.rise([&]() {buttonStates.clear(A_FLAG);});
+    buttonA.fall([&]() {buttonStates.set(A_FLAG);});
 
-//     buttonA.rise(callback);
-//     buttonA.fall(callback);
+    buttonB.rise([&]() {buttonStates.clear(B_FLAG);});
+    buttonB.fall([&]() {buttonStates.set(B_FLAG);});
 
-//     buttonB.rise(callback);
-//     buttonB.fall(callback);
+    buttonDown.rise([&]() {buttonStates.clear(DOWN_FLAG);});
+    buttonDown.fall([&]() {buttonStates.set(DOWN_FLAG);});
 
-//     buttonDown.rise(callback);
-//     buttonDown.fall(callback);
-// 
 }
+
+
+void Buttons::printBinaryStates() {
+    // Assuming you want to display 19 bits as per your example
+    std::bitset<7> bitRep(buttonStates.get());
+    Serial.println(bitRep.to_string().c_str()); // Convert bitset to string and print
+}
+
 
 void Buttons::handleButtonPressRelease(mbed::InterruptIn &button, uint32_t flag) {
     if (button.read() == 0) {  // Assuming active low buttons

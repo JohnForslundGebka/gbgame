@@ -6,6 +6,8 @@
 #include "mbed.h"
 #include "rtos.h"
 #include "core/arduinoPinNames.h"
+#include <bitset>
+
 
 using namespace mbed;
 using namespace rtos;
@@ -13,9 +15,9 @@ using namespace rtos;
 class Buttons {
 public:
     Buttons();  // Constructor to initialize all buttons
-    
+   
     // Event flags for button states
-    rtos::EventFlags buttonStates;
+    EventFlags buttonStates;
 
     enum ButtonFlags {
         UP_FLAG = 0x01,
@@ -26,6 +28,8 @@ public:
         B_FLAG = 0x20,
         DOWN_FLAG = 0x40
     };
+
+    void printBinaryStates();
 
 private:
   
