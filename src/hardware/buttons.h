@@ -15,7 +15,6 @@ using namespace rtos;
 class Buttons {
 public:
     Buttons();  // Constructor to initialize all buttons
-   
     // Event flags for button states
     EventFlags buttonStates;
 
@@ -23,10 +22,10 @@ public:
         UP_FLAG = 0x01,
         LEFT_FLAG = 0x02,
         RIGHT_FLAG = 0x04,
-        START_FLAG = 0x08,
+        START_FLAG = 0x40,
         A_FLAG = 0x10,
         B_FLAG = 0x20,
-        DOWN_FLAG = 0x40
+        DOWN_FLAG = 0x08
     };
 
     void printBinaryStates();
