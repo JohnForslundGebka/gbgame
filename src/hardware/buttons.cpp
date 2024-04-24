@@ -11,6 +11,7 @@ Buttons::Buttons()
           buttonB(pin::BTN_B, PullUp),
           buttonDown(pin::BTN_DOWN, PullUp)
 {
+    //callback functions for the buttons
     buttonUp.rise([this]() { buttonStates.clear(UP_FLAG); });
     buttonUp.fall([this]() { buttonStates.set(UP_FLAG); });
 
