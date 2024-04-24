@@ -35,6 +35,7 @@ void setup() {
 
 void loop() {
 
+    //clear canvas
     canvas.fillScreen(0x0000); // Clear canvas (not display)
 
     // Draw the ball at the new position
@@ -43,6 +44,7 @@ void loop() {
     //draw canvas
     display.drawRGBBitmap(0, 0, canvas.getBuffer(), canvas.width(), canvas.height());
 
+    //wait for flags to be set
     flagsRead = buttons.buttonStates.wait_any(
             Buttons::UP_FLAG |
             Buttons::LEFT_FLAG |
@@ -52,10 +54,22 @@ void loop() {
             Buttons::B_FLAG |
             Buttons::DOWN_FLAG, osWaitForever, false
     );
-
+    //draw circle depending on which flag was set
     switch (flagsRead) {
         case Buttons::UP_FLAG:
-
+            ballY += -2;
+            break;
+        case Buttons::LEFT_FLAG:
+            ballX += -2;
+            break;
+        case Buttons::RIGHT_FLAG:
+            ballX += 2;
+            break;
+        case Buttons::DOWN_FLAG:
+            ballY += 2;
+            break;
+        default:
+            break;
     }
 
 
