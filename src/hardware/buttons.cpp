@@ -12,7 +12,7 @@ Buttons::Buttons()
       buttonDown(pin::BTN_DOWN, PullUp) {
 
   
-        // Sets the button state flags for each interrupt
+    // Sets the button state flags for each interrupt
     buttonUp.rise([&]() {states.clear(UP_FLAG);});
     buttonUp.fall([&]() {states.set(UP_FLAG);});
 
@@ -36,7 +36,7 @@ Buttons::Buttons()
 
 }
 
-//Prints out the states variable in binary
+//Prints out the states variable in binary form for debugging
 void Buttons::printBinaryStates() {
     std::bitset<7> bits(states.get()); // Show 7 bits
     Serial.println(bits.to_string().c_str()); // Convert bitset to string and print

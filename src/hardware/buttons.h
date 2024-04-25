@@ -1,4 +1,16 @@
 //buttons.h
+/**
+ * @brief This class handles button and button presses. 
+ *        It sets all button pins to be an iterrupt on both falling and rising edges and sets
+ *        flags in an EventFlags object according to button state. 
+ * 
+ *
+ * @param states This object holds the current state of each button. 
+ *               When an interrupt is triggered it sets the corresponding flag to the button state.
+ * @param buttonFlags Enums for each button state flag, this can be expanding .
+ * 
+ */
+
 #ifndef BUTTONS_H
 #define BUTTONS_H
 
@@ -31,7 +43,7 @@ public:
         ALL_FLAG = (UP_FLAG | LEFT_FLAG | RIGHT_FLAG | START_FLAG | A_FLAG | B_FLAG | DOWN_FLAG)
     };
 
-    //Prints the button states in binary
+    //Prints the button states in binary form for debugging
     void printBinaryStates();
 
 private:
