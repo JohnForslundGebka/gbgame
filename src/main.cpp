@@ -12,25 +12,15 @@ using namespace rtos;
 
 //Buttons object
 Buttons buttons;
-uint32_t flagsRead = 0;
+
 
 void setup() {
     Serial.begin(9600);
 }
 
 void loop() {
-    //wait for flags to be set
-    flagsRead = buttons.states.wait_any(
-            Buttons::UP_FLAG |
-            Buttons::LEFT_FLAG |
-            Buttons::RIGHT_FLAG |
-            Buttons::START_FLAG |
-            Buttons::A_FLAG |
-            Buttons::B_FLAG |
-            Buttons::DOWN_FLAG, osWaitForever, false
-    );
-    //draw circle depending on which flag was set
-    switch (flagsRead) {
+    //Wait for any of ALL_flags to be set.
+    switch (buttons.states.wait_any(Buttons::ALL_FLAG)) {
         case Buttons::UP_FLAG:
             Serial.println("Button UP");
             break;

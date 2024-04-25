@@ -27,10 +27,11 @@ public:
         START_FLAG = 0x40,
         A_FLAG = 0x10,
         B_FLAG = 0x20,
-        DOWN_FLAG = 0x08
+        DOWN_FLAG = 0x08,
+        ALL_FLAG = (UP_FLAG | LEFT_FLAG | RIGHT_FLAG | START_FLAG | A_FLAG | B_FLAG | DOWN_FLAG)
     };
 
-    //Prints the buttonStates in binary
+    //Prints the button states in binary
     void printBinaryStates();
 
 private:
