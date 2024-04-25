@@ -9,12 +9,12 @@
 using namespace mbed;
 using namespace rtos;
 
-class Buttons {
+ class Buttons {
 public:
     Buttons();  // Constructor to initialize all buttons
     
     // Event flags for button states
-    EventFlags buttonStates;
+    static EventFlags buttonStates;
     enum ButtonFlags {
         UP_FLAG = 0x01,
         LEFT_FLAG = 0x02,
@@ -22,7 +22,11 @@ public:
         START_FLAG = 0x08,
         A_FLAG = 0x10,
         B_FLAG = 0x20,
-        DOWN_FLAG = 0x40
+        DOWN_FLAG = 0x40,
+        UP_RIGHT_FLAG = UP_FLAG | RIGHT_FLAG,
+        UP_LEFT_FLAG = UP_FLAG | LEFT_FLAG,
+        DOWN_LEFT_FLAG = DOWN_FLAG | LEFT_FLAG,
+        DOWN_RIGHT_FLAG = DOWN_FLAG | RIGHT_FLAG,
     };
 
 private:

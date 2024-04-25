@@ -1,6 +1,7 @@
 //buttons.cpp
 #include "buttons.h"
 
+EventFlags Buttons::buttonStates;
 
 Buttons::Buttons()
         : buttonUp(pin::BTN_UP, PullUp),
