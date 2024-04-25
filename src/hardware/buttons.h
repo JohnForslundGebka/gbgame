@@ -15,9 +15,11 @@ using namespace rtos;
 class Buttons {
 public:
     Buttons();  // Constructor to initialize all buttons
-    // Event flags for button states
-    EventFlags buttonStates;
 
+    // EventFlags object for button states
+    EventFlags states;
+
+    //Enums for flag names
     enum ButtonFlags {
         UP_FLAG = 0x01,
         LEFT_FLAG = 0x02,
@@ -28,11 +30,12 @@ public:
         DOWN_FLAG = 0x08
     };
 
+    //Prints the buttonStates in binary
     void printBinaryStates();
 
 private:
   
-    // Declare InterruptIn object for each button
+    // InterruptIn object for each button
     InterruptIn buttonUp;
     InterruptIn buttonLeft;
     InterruptIn buttonRight;
@@ -40,10 +43,7 @@ private:
     InterruptIn buttonA;
     InterruptIn buttonB;
     InterruptIn buttonDown;
-
-    // Handler functions for button events
-    void handleButtonPressRelease(mbed::InterruptIn &button, uint32_t flag);  // Modified handler
-
+    
 };
 
 

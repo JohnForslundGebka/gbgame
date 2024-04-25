@@ -12,46 +12,36 @@ Buttons::Buttons()
       buttonDown(pin::BTN_DOWN, PullUp) {
 
   
+        // Sets the button state flags for each interrupt
+    buttonUp.rise([&]() {states.clear(UP_FLAG);});
+    buttonUp.fall([&]() {states.set(UP_FLAG);});
 
-    buttonUp.rise([&]() {buttonStates.clear(UP_FLAG);});
-    buttonUp.fall([&]() {buttonStates.set(UP_FLAG);});
+    buttonLeft.rise([&]() {states.clear(LEFT_FLAG);});
+    buttonLeft.fall([&]() {states.set(LEFT_FLAG);});
 
-    buttonLeft.rise([&]() {buttonStates.clear(LEFT_FLAG);});
-    buttonLeft.fall([&]() {buttonStates.set(LEFT_FLAG);});
+    buttonRight.rise([&]() {states.clear(RIGHT_FLAG);});
+    buttonRight.fall([&]() {states.set(RIGHT_FLAG);});
 
-    buttonRight.rise([&]() {buttonStates.clear(RIGHT_FLAG);});
-    buttonRight.fall([&]() {buttonStates.set(RIGHT_FLAG);});
+    buttonStart.rise([&]() {states.clear(START_FLAG);});
+    buttonStart.fall([&]() {states.set(START_FLAG);});
 
-    buttonStart.rise([&]() {buttonStates.clear(START_FLAG);});
-    buttonStart.fall([&]() {buttonStates.set(START_FLAG);});
+    buttonA.rise([&]() {states.clear(A_FLAG);});
+    buttonA.fall([&]() {states.set(A_FLAG);});
 
-    buttonA.rise([&]() {buttonStates.clear(A_FLAG);});
-    buttonA.fall([&]() {buttonStates.set(A_FLAG);});
+    buttonB.rise([&]() {states.clear(B_FLAG);});
+    buttonB.fall([&]() {states.set(B_FLAG);});
 
-    buttonB.rise([&]() {buttonStates.clear(B_FLAG);});
-    buttonB.fall([&]() {buttonStates.set(B_FLAG);});
-
-    buttonDown.rise([&]() {buttonStates.clear(DOWN_FLAG);});
-    buttonDown.fall([&]() {buttonStates.set(DOWN_FLAG);});
+    buttonDown.rise([&]() {states.clear(DOWN_FLAG);});
+    buttonDown.fall([&]() {states.set(DOWN_FLAG);});
 
 }
 
-
+//Prints out the states variable in binary
 void Buttons::printBinaryStates() {
-    // Assuming you want to display 19 bits as per your example
-    std::bitset<7> bitRep(buttonStates.get());
-    Serial.println(bitRep.to_string().c_str()); // Convert bitset to string and print
+    std::bitset<7> bits(states.get()); // Show 7 bits
+    Serial.println(bits.to_string().c_str()); // Convert bitset to string and print
 }
 
-
-void Buttons::handleButtonPressRelease(mbed::InterruptIn &button, uint32_t flag) {
-    if (button.read() == 0) {  // Assuming active low buttons
-        buttonStates.set(flag);
-    } else {
-        buttonStates.clear(flag);
-    }
-    Serial.println("Button state changed.\n");
-}
 
 
 
