@@ -7,14 +7,9 @@
 #include "rtos.h"
 #include "hardware/buttons.h"
 
-
 #define DC_PIN   15   // Data/Command
 #define CS_PIN   14   // Chip Select, can use any GPIO except A6/A7
 #define RST_PIN  9    // Reset
-
-#define DISPLAY_WIDTH  128
-#define DISPLAY_HEIGHT 128
-#define BALL_RADIUS    3
 
 // Color definitions
 #define BLACK 0x0000
@@ -34,31 +29,52 @@ GFXcanvas16 canvas(128, 128);
 EventFlags isDoneMoving;
 
 Thread gfx(osPriorityNormal1);
-Thread bal(osPriorityNormal);
+Thread move(osPriorityNormal);
 
 Buttons button;
 
 using namespace mbed;
 using namespace rtos;
+using namespace std::chrono;
 
-int ballX = 10;
-int ballY = 10;
-int balRad = 3;
+int xPos = 64;
+int yPos = 64;
+
+void moveBall(){
+
+    while (Buttons::states.wait_any(Buttons::UP_FLAG | Buttons::LEFT_FLAG | Buttons::RIGHT_FLAG | Buttons::DOWN_FLAG, osWaitForever, false)){
+
+           switch(Buttons::states.get()){
+               case Buttons::UP_FLAG:    yPos = max(0, yPos - 3); break;
+               case Buttons::LEFT_FLAG:  xPos = max(0, xPos - 3); break;
+               case Buttons::RIGHT_FLAG: xPos = min(127, xPos + 3); break;
+               case Buttons::DOWN_FLAG:  yPos = min(127, yPos + 3); break;
+               default: break;
+           }
+           isDoneMoving.set(MOV_FLAG);
+           ThisThread::sleep_for(milliseconds(60));
+    }
+}
+
+void print(){
+    while (isDoneMoving.wait_any(MOV_FLAG,osWaitForever))
+    {
+        canvas.fillScreen(0x0000);
+
+        canvas.fillRect(xPos,yPos,14,14,RED);
+
+        display.drawRGBBitmap(0, 0, canvas.getBuffer(), canvas.width(), canvas.height());
+    }
+}
 
 void setup(){
     ::SPI.begin();
     display.begin(13000000);
     Serial.begin(9600);
-
+    gfx.start(print);
+    move.start(moveBall);
 }
 
-
 void loop(){
-
-    canvas.fillScreen(0x0000);
-
-    canvas.fillRect(10,10,14,14,RED);
-
-    delay(300);
-   // ThisThread::sleep_for(300);
+    ThisThread::sleep_for(5000);
 }
