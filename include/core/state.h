@@ -1,3 +1,15 @@
+//state.h
+/**
+ * @brief This is the base class for the states of the machine
+ *        They could be Main Menu, setting, etc
+ *
+ *      Each state class can go into the "stateholder" class
+ *
+ *
+ *
+ *
+ *
+ */
 #ifndef GBGAME_STATE_H
 #define GBGAME_STATE_H
 class State {
