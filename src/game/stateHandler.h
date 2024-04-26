@@ -5,18 +5,14 @@
 class StateHandler {
 public:
     //constructor
-    explicit StateHandler(State* currentState) : m_currentState(currentState) {}
+    explicit StateHandler(State &currentState) : m_currentState(&currentState) {}
 
-    void setState();
+    void setState(State &currentState);
     void handleInput();
     void updateState();
     void run();
-
+private:
     //a pointer to the current state that is running at the moment
     State* m_currentState;
-
-private:
-
-
 };
 #endif //GBGAME_STATEHANDLER_H
