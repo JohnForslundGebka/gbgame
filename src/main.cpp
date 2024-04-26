@@ -6,6 +6,8 @@
 #include "mbed.h"
 #include "rtos.h"
 #include "hardware/buttons.h"
+#include "core/state.h"
+#include "game/stateHandler.h"
 
 #define DC_PIN   15   // Data/Command
 #define CS_PIN   14   // Chip Select, can use any GPIO except A6/A7
