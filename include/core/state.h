@@ -6,6 +6,7 @@ public:
     virtual void handleInput() = 0;
     virtual void update() = 0;
     virtual void run() = 0;
+    virtual void stop() = 0;
 };
 
 #endif //GBGAME_STATE_H
