@@ -9,6 +9,12 @@ void StateHandler::updateState() {
 }
 
 void StateHandler::run(){
+    m_currentState->stop();
     m_currentState->run();
 }
 
+void StateHandler::setState(State &currentState) {
+    m_currentState->stop();
+    m_currentState = &currentState;
+    m_currentState->run();
+}
