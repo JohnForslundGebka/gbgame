@@ -29,7 +29,7 @@ public:
     Buttons();  // Constructor to initialize all buttons
 
     // EventFlags object for button states
-    EventFlags states;
+    static EventFlags states;
 
     //Enums for flag names
     enum ButtonFlags {
