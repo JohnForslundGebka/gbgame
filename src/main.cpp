@@ -35,7 +35,6 @@ int ballX = 10;
 int ballY = 10;
 int balRad = 3;
 
-//isDoneMoving.wait_any(MOV_FLAG,osWaitForever,true)
 
 void print()
 {
@@ -49,64 +48,7 @@ void print()
         //draw canvas
         display.drawRGBBitmap(0, 0, canvas.getBuffer(), canvas.width(), canvas.height());
       }
-}
 
-void moveBal() {
-    while (Buttons::buttonStates.wait_any(
-            0xFFFFFFFF,
-            osWaitForever, false)) {
-
-        Serial.println("WOHO i movbal");
-
-        switch (Buttons::buttonStates.get()) {
-            case Buttons::UP_FLAG:
-                if (ballY > BALL_RADIUS)  // Ensure the ball doesn't go out of the upper boundary
-                    ballY -= 1;
-                break;
-            case Buttons::LEFT_FLAG:
-                if (ballX > BALL_RADIUS)  // Ensure the ball doesn't go out of the left boundary
-                    ballX -= 1;
-                break;
-            case Buttons::RIGHT_FLAG:
-                if (ballX < DISPLAY_WIDTH - BALL_RADIUS)  // Ensure the ball doesn't go out of the right boundary
-                    ballX += 1;
-                break;
-            case Buttons::DOWN_FLAG:
-                if (ballY < DISPLAY_HEIGHT - BALL_RADIUS)  // Ensure the ball doesn't go out of the lower boundary
-                    ballY += 1;
-                break;
-            case Buttons::UP_RIGHT_FLAG:
-                if (ballY > BALL_RADIUS && ballX < DISPLAY_WIDTH - BALL_RADIUS) {
-                    ballY -= 1;
-                    ballX += 1;
-                }
-                break;
-            case Buttons::UP_LEFT_FLAG:
-                if (ballY > BALL_RADIUS && ballX > BALL_RADIUS) {
-                    ballY -= 1;
-                    ballX -= 1;
-                }
-                break;
-            default:
-                break;
-        }
-
-        isDoneMoving.set(MOV_FLAG);
-    }
-}
-
-void setup() {
-    Serial.begin(9600);
-  //  delay(5000);  // Allow time for the serial connection to stabilize
-    Serial.println("Serial started");  // Check if this gets printed
-    ::SPI.begin();
-    display.begin(13000000);
-    display.fillScreen(0x0000);
-    gfx.start(print);
-    bal.start(moveBal);
-}
-
-void loop() {
    // Serial.println("LOOP");  // Check if this gets printed
     ThisThread::sleep_for(1000);
 }
