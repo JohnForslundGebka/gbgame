@@ -19,6 +19,7 @@ public:
     virtual void update() = 0;
     virtual void run() = 0;
     virtual void stop() = 0;
+    volatile bool m_isRunning = false;
 };
 
 #endif //GBGAME_STATE_H
