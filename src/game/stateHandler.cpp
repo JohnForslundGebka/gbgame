@@ -18,7 +18,7 @@ void StateHandler::updateState() {
      *
      */
 void StateHandler::run(){
-    if (m_currentState->m_isRunning)
+    if (m_currentState->m_isRunning) //check if state is already running
         m_currentState->stop();
 
     m_currentState->run();
