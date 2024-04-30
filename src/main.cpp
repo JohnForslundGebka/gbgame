@@ -1,29 +1,29 @@
 #include <Arduino.h>
 #include "mbed.h"
 #include "rtos.h"
+#include <Serial.h>
+
+#include "hardware/ultrasonic.h"
 
 using namespace mbed;
 using namespace rtos;
 using namespace std::chrono;
 
-// Create a DigitalOut object to control the LED
-DigitalOut led(LED1);
-// Main thread object
-Thread thread;
 
-// Function that toggles the LED in a thread
-void toggleLED() {
-    while (true) {
-        led = !led;  // Toggle the state of the LED
-        ThisThread::sleep_for(milliseconds(500));
-    }
-}
+
+Ultrasonic ultrasonic;
 
 void setup() {
-    // Start the thread, running the toggleLED function
-    thread.start(callback(toggleLED));
+
+    Serial.begin(9600);
 }
 
+
 void loop() {
+    int measurment = ultrasonic.readDistance();
+
+    Serial.println(measurment);
+
+    delay(400);
 
 }
