@@ -1,3 +1,11 @@
+/**
+ * @class Canvas
+ * @brief Manages a graphical canvas for drawing operations.
+ *
+ * This class encapsulates a GFXcanvas16 for rendering graphics and maintains
+ * position data that can be used to manage and track rendering operations.
+ */
+
 #ifndef GBGAME_CANVAS_H
 #define GBGAME_CANVAS_H
 #include <Adafruit_GFX.h>
@@ -16,10 +24,16 @@ public:
     void setOldX(int16_t oldX);
     int16_t getOldY() const;
     void setOldY(int16_t oldY);
-  //update the x and y position
+   //update the x and y position
     void updatePos();
 
-    //constructor
+    /**
+     * @brief Constructor initializes the canvas and position.
+     * @param width Width of the canvas.
+     * @param height Height of the canvas.
+     * @param x Initial x-coordinate position.
+     * @param y Initial y-coordinate position.
+   */
     Canvas(uint16_t width, uint16_t height, int16_t x, int16_t y);
 private:
     //member variables that holds the current position and the previous position
