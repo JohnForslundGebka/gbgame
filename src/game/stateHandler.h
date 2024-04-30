@@ -21,7 +21,7 @@ public:
     //constructor
     explicit StateHandler(State &currentState) : m_currentState(&currentState) {}
 
-    void setState(State &currentState);
+    void setState(State &newState);
     void handleInput();
     void updateState();
     void run();

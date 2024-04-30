@@ -26,10 +26,10 @@ void StateHandler::run(){
 /**
     * @brief Set the current state of the game or application.
     *
-    * @param currentState The new state to be managed.
+    * @param newState The new state to be managed.
     */
-void StateHandler::setState(State &currentState) {
+void StateHandler::setState(State &newState) {
     m_currentState->stop();
-    m_currentState = &currentState;
+    m_currentState = &newState;
     m_currentState->run();
 }
