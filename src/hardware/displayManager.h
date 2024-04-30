@@ -1,3 +1,12 @@
+/**
+ * @class DisplayManager
+ * @brief Manages display operations across the entire application.
+ *
+ * This singleton class handles all display operations, ensuring that display access
+ * is synchronized across different threads.
+ *
+ */
+
 #ifndef GBGAME_DISPLAYMANAGER_H
 #define GBGAME_DISPLAYMANAGER_H
 #include <Adafruit_GFX.h>
@@ -11,12 +20,21 @@ using namespace rtos;
 class DisplayManager {
 
 public:
+    /**
+     * @brief Retrieves the singleton instance of DisplayManager.
+     * @return Reference to the singleton DisplayManager instance.
+     */
     static DisplayManager& getInstance();
     // Initialize the display
     void init();
-    // Update the entire screen based on the provided GFXcanvas16
+
+     /**
+     * @brief Updates the display with contents from a specified canvas.
+     * @param canvas Pointer to the canvas whose contents will be displayed.
+     */
     void updateScreen(Canvas *canvas);
 
+    // Prevent copying and assignment.
     DisplayManager(const DisplayManager&) = delete;
     DisplayManager& operator=(const DisplayManager&) = delete;
 
