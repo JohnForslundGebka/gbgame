@@ -5,6 +5,7 @@
 #include <SPI.h>
 #include "rtos.h"
 #include "core/macros.h"
+#include "ui/canvas.h"
 
 using namespace rtos;
 class DisplayManager {
