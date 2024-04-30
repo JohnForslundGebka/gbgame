@@ -4,7 +4,7 @@ int16_t Canvas::getX() const {
     return m_x;
 }
 
-Canvas::Canvas(uint16_t width, uint16_t height, int16_t x, int16_t y) : C(width,height), x(x), y(y) {
+Canvas::Canvas(uint16_t width, uint16_t height, int16_t x, int16_t y) : C(width,height), m_x(x), m_y(y) {
     m_oldX = x;
     m_oldY = y;
 }
