@@ -1,0 +1,10 @@
+#ifndef GBGAME_DISPLAYMANAGER_H
+#define GBGAME_DISPLAYMANAGER_H
+
+
+class DisplayManager {
+
+};
+
+
+#endif //GBGAME_DISPLAYMANAGER_H
