@@ -1,15 +1,11 @@
 //ultrasonic.h
 
 /**
- * @brief This class handles button and button presses. 
- *        It sets all button pins to be an iterrupt on both falling and rising edges and sets
- *        flags in an EventFlags object according to button state. 
- * 
+ * @brief This class handles the ultrasonic sensor. 
+ *        It initializes the pins to the correct mode and has a method that
+ *        reads and returns the distance in centimeters. 
  *
- * @param states This object holds the current state of each button. 
- *               When an interrupt is triggered it sets the corresponding flag to the button state.
- * @param buttonFlags Enums for each button state flag, this can be expanding .
- * 
+ *        The defined pins gets setup in the constructor.
  */
 
 #ifndef ULTRASONIC_H
@@ -43,7 +39,7 @@ public:
         delayMicroseconds(10);
         digitalWrite(TRIG_PIN, LOW);
 
-        // Reads the ECHO pin, returns the sound wave travel time in microseconds
+        // Reads the ECHO pin, returns the sound travel time in microseconds
         duration = pulseIn(ECHO_PIN, HIGH);
 
         // Calculates the distance in centimeters

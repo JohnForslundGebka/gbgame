@@ -14,7 +14,6 @@ using namespace std::chrono;
 Ultrasonic ultrasonic;
 
 void setup() {
-
     Serial.begin(9600);
 }
 
@@ -25,5 +24,4 @@ void loop() {
     Serial.println(measurment);
 
     delay(400);
-
 }
