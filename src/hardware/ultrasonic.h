@@ -14,8 +14,9 @@
 #include <Arduino.h>
 
 //Pins used by the ultrasonic sensor
-#define ECHO_PIN 16    //D16
-#define TRIG_PIN 17    //D17
+#define TRIG_PIN 16    //D16
+#define ECHO_PIN 17    //D17
+
 
 class Ultrasonic {
 public:
