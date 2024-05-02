@@ -8,25 +8,41 @@
 #include "mbed.h"
 #include "rtos.h"
 #include "core/state.h"
+#include "hardware/buttons.h"
+#include "hardware/displayManager.h"
+#include "ui/canvas.h"
+#include "hardware/ultrasonic.h"
 
 using namespace mbed;
 using namespace rtos;
 using namespace std::chrono;
 
+//Number of rounds for a game
+#define MAX_ROUNDS 3
+
 class DistanceGame : public State {
 private:
-    GFXcanvas16 m_canvas;
-    Adafruit_SSD1351 *m_display;
-    Thread m_gfx;
-    Thread m_move;
-    EventFlags m_isDoneMoving;
-   // bool m_running;
+    
+    Ultrasonic ultrasonic;
+    Thread m_gameLogic;
+    Thread m_userInput;
+    EventFlags m_updateUI;
+    bool m_running;
 
-    int m_xPos = 64;
-    int m_yPos = 64;
+    Canvas m_screen;
+
+
+
+    int m_targetLength;
+    int m_measured = 0;
+    int m_score = 0;
+   
+    
+
 
 public:
-    DistanceGame(Adafruit_SSD1351 &display);
+    DistanceGame();
+    void game();
     void run() override;
     void handleInput() override;
     void update() override;
