@@ -30,16 +30,10 @@ private:
     bool m_running;
 
     Canvas m_screen;
-
-
-
     int m_targetLength;
-    int m_measured = 0;
-    int m_score = 0;
-   
-    
-
-
+    int measured;
+    int score;
+  
 public:
     DistanceGame();
     void run() override;
@@ -50,6 +44,7 @@ public:
     
     void game();
     void draw_screen1();
+    void draw_screen2();
 };
 
 
