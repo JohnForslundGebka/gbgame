@@ -4,6 +4,7 @@
 #include "hardware/displayManager.h"
 #include "hardware/buttons.h"
 #include "game/stateHandler.h"
+#include "game/mainMenu.h"
 
 
 using namespace mbed;

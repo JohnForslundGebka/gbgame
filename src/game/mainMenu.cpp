@@ -1,5 +1,19 @@
-//
-// Created by John Jakobsson forslund on 2024-05-02.
-//
-
 #include "mainMenu.h"
+
+void MainMenu::handleInput() {
+
+}
+
+void MainMenu::update() {
+
+}
+
+void MainMenu::run() {
+
+}
+
+void MainMenu::stop() {
+
+}
+
+MainMenu::MainMenu() : m_canvas(128,128) {}
