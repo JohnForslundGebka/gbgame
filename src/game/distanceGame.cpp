@@ -6,15 +6,19 @@ using namespace rtos;
 using namespace std::chrono;
 
 // Constructor implementation
-DistanceGame::DistanceGame() : m_gameLogic(osPriorityNormal1, 1024), m_userInput(osPriorityNormal, 1024), m_screen(128, 128, 0, 0) {}
+DistanceGame::DistanceGame() 
+            : m_gameLogic(osPriorityNormal1, 1024), m_userInput(osPriorityNormal, 1024), m_screen(128, 128, 0, 0) 
+            {
+                randomSeed(analogRead(5));  //Seeds the random generator ensuring new random numbers every time.
+            }
 
 void DistanceGame::handleInput(){
     while (m_running && Buttons::states.wait_any(Buttons::A_FLAG | Buttons::B_FLAG | Buttons::START_FLAG, osWaitForever, false)){
 
         switch(Buttons::states.get()){
             case Buttons::A_FLAG:
-                // m_measured = ultrasonic.readDistance();
-                // m_score = abs(m_targetLength - m_measured);
+                m_measured = ultrasonic.readDistance();
+                m_score = abs(m_targetLength - m_measured);
                 
                 break;
             case Buttons::B_FLAG:   
@@ -37,7 +41,7 @@ void DistanceGame::handleInput(){
 void DistanceGame::update(){
     while (m_running && m_updateUI.wait_any(MOV_FLAG,osWaitForever))
     {
-        Serial.println(m_measured); 
+        //Serial.println(m_measured); 
        
 
         m_displayManager.updateScreen(&m_screen);
@@ -47,76 +51,42 @@ void DistanceGame::update(){
         // Serial.println(totScore); 
     }
 }
-// void DistanceGame::game() {
+void DistanceGame::game() {
     
-//         //Randomize a number between 10 and 100 store to targetLength
+    m_targetLength = random(10, 100);
 
-//         if(i == 0) {
-//           Serial.println("Draw welcome/first screen and update");   
-//         } else {
-//             Serial.println("Draw other screen and update");
-//         }
+    draw_screen1();
+    m_displayManager.updateScreen(&m_screen); 
+
+    while (m_running && Buttons::states.wait_any(Buttons::A_FLAG, osWaitForever, false)){
         
 
-//         //wait for button press and take measurement when A button pressed
+        m_measured = ultrasonic.readDistance();
+        Serial.print("TargetLength:  ");
+        Serial.print(analogRead(0));
+        Serial.print("        Measured length:  ");
+        Serial.print(m_measured);
+        Serial.println();
 
-//         //Calculate score and add to total
+        Buttons::states.clear(Buttons::ALL_FLAG);
+    }
+        
 
-//     }
 
-//     //Update screen with total score and ranking etc. 
     
-// }
+
+    //Update screen with total score and ranking etc. 
+    
+}
 
 
 
 void DistanceGame::run() {
     m_running = true;
-    m_gameLogic.start(callback(this, &DistanceGame::update));
+    m_gameLogic.start(callback(this, &DistanceGame::game));
     m_userInput.start(callback(this, &DistanceGame::handleInput));
 
-    m_targetLength = random(10, 101); 
-
-    Serial.println(m_targetLength);
-
-            
-    m_screen.C.setTextColor(0xFFFF);
-    m_screen.C.setTextSize(2);
-    m_screen.C.setTextWrap(false);
-    m_screen.C.setCursor(17, 3);
-    m_screen.C.print("Distance");
-    m_screen.C.drawLine(0, 0, 0, 0, 0xFFFF);
-    m_screen.C.setTextColor(0x540);
-    m_screen.C.setCursor(88, 24);
-    m_screen.C.print("0");
-    m_screen.C.drawLine(0, 0, 0, 0, 0xFFFF);
-    m_screen.C.setTextColor(0xFFFF);
-    m_screen.C.setCursor(21, 24);
-    m_screen.C.print("Score");
-    m_screen.C.drawLine(0, 0, 0, 0, 0xFFFF);
-    m_screen.C.setTextColor(0xFAAA);
-    m_screen.C.setTextSize(3);
-    m_screen.C.setCursor(22, 67);
-    m_screen.C.print(m_targetLength);
-    m_screen.C.setTextColor(0x57FF);
-    m_screen.C.setTextSize(2);
-    m_screen.C.setCursor(-1, 45);
-    m_screen.C.print("Hold device");
-    m_screen.C.drawLine(0, 0, 0, 0, 0xFFFF);
-    m_screen.C.setTextColor(0xFAAA);
-    m_screen.C.setTextSize(3);
-    m_screen.C.setCursor(71, 67);
-    m_screen.C.print("cm");
-    m_screen.C.drawRect(67, 15, 1, 1, 0xFFFF);
-    m_screen.C.setTextColor(0x57FF);
-    m_screen.C.setTextSize(2);
-    m_screen.C.setCursor(16, 95);
-    m_screen.C.print("from the");
-    m_screen.C.drawLine(125, 20, -3, 20, 0xFFFF);
-    m_screen.C.setCursor(41, 112);
-    m_screen.C.print("wall");
-
-    m_displayManager.updateScreen(&m_screen);
+    m_targetLength = random(10, 100);
 }
 
 void DistanceGame::stop() {
@@ -125,7 +95,44 @@ void DistanceGame::stop() {
     m_userInput.join();
 }
 
+void DistanceGame::draw_screen1() {
+    m_screen.C.setTextColor(0xFFFF);
+    m_screen.C.setTextSize(2);
+    m_screen.C.setTextWrap(false);
+    m_screen.C.setCursor(17, 3);
+    m_screen.C.print("Distance");
 
+    m_screen.C.drawLine(125, 20, -3, 20, 0xFFFF); //Line under 'Distance'
+
+    m_screen.C.setTextColor(0x57FF);
+    m_screen.C.setTextSize(2);
+    m_screen.C.setCursor(-1, 25);
+    m_screen.C.print("Hold device");
+
+    m_screen.C.setTextColor(0xFAAA);
+    m_screen.C.setTextSize(3);
+    m_screen.C.setCursor(22, 43);
+    m_screen.C.print(m_targetLength);
+
+    m_screen.C.drawLine(0, 0, 0, 0, 0xFFFF);
+    m_screen.C.setTextColor(0xFAAA);
+    m_screen.C.setTextSize(3);
+    m_screen.C.setCursor(71, 43);
+    m_screen.C.print("cm");
+
+    m_screen.C.setTextColor(0x57FF);
+    m_screen.C.setTextSize(2);
+    m_screen.C.setCursor(16, 71);
+    m_screen.C.print("from the");
+
+    
+    m_screen.C.setCursor(41, 88);
+    m_screen.C.print("wall");
+    
+    m_screen.C.setTextColor(0xFFFF);
+    m_screen.C.setCursor(20, 107);
+    m_screen.C.print("press A!");
+}
 
 
 

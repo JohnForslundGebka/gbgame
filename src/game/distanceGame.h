@@ -42,11 +42,14 @@ private:
 
 public:
     DistanceGame();
-    void game();
     void run() override;
     void handleInput() override;
     void update() override;
     void stop() override;
+
+    
+    void game();
+    void draw_screen1();
 };
 
 
