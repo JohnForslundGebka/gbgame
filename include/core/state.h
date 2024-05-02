@@ -12,6 +12,7 @@
  */
 #ifndef GBGAME_STATE_H
 #define GBGAME_STATE_H
+#include "hardware/displayManager.h"
 class State {
 public:
     //Virtual functions that handles inputs and updates
@@ -19,6 +20,7 @@ public:
     virtual void update() = 0;
     virtual void run() = 0;
     virtual void stop() = 0;
+    DisplayManager & m_displayManager = DisplayManager::getInstance();
     volatile bool m_isRunning = false;
 };
 
