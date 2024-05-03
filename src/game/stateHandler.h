@@ -22,7 +22,7 @@ public:
     //constructor
     StateHandler();
 
-   // void handleInput();
+   //
    [[noreturn]] void updateState();
     void run();
     void init();
@@ -34,6 +34,7 @@ private:
     //Pointer to the current state that is running at the moment
     State* m_currentState;
 
+    //all available states
     MainMenu mainMenu;
 };
 #endif //GBGAME_STATEHANDLER_H
