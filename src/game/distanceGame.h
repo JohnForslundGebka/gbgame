@@ -1,10 +1,7 @@
 #ifndef GBGAME_DistanceGame_H
 #define GBGAME_DistanceGame_H
 #include <Arduino.h>
-#include <SPI.h>
 #include "core/macros.h"
-#include <Adafruit_GFX.h>
-#include <Adafruit_SSD1351.h>
 #include "mbed.h"
 #include "rtos.h"
 #include "core/state.h"
@@ -23,16 +20,19 @@ using namespace std::chrono;
 class DistanceGame : public State {
 private:
     
-    Ultrasonic ultrasonic;
-    Thread m_gameLogic;
-    Thread m_userInput;
-    EventFlags m_updateUI;
-    bool m_running;
+    Ultrasonic ultrasonic;     //Object that initializes the ultrasonic sensor and a method that reads the distance
+    Thread t_gameLogic;        //Thread that handles the game logic/order
+    Thread t_userInput;        //Thread that handles user input
+    Thread t_screenUpdate;     //This thread is resposible for updating the screen when the SCREEN_UPDATE_FLAG is set (highest prority)
 
-    Canvas m_screen;
-    int m_targetLength;
-    int measured;
-    int score;
+    EventFlags m_gameFlags;    //Contains flags ADVANCE_GAME_FLAG and SCREEN_UPDATE_FLAG
+
+    Canvas m_canvas;           //Canvas object for drawing the screens
+    int textColor = WHITE;     //Variable for blinking text
+    
+    int m_targetLength;        //Randomly generated number for the target length of the game
+    int m_measured;            //The distance read by the ultracosin sensor get saved here
+    int m_score;               //The calculated score gets saved here when a measurement is taken.
   
 public:
     DistanceGame();
@@ -41,10 +41,10 @@ public:
     void update() override;
     void stop() override;
 
-    
-    void game();
-    void draw_screen1();
-    void draw_screen2();
+    void game();               //Contains the logic for the game
+
+    void draw_screen1();       //Draws screen 1
+    void draw_screen2();       //Draws screen 2
 };
 
 
