@@ -4,12 +4,22 @@
  *
  * This method delegates the input handling to the active state.
  */
-void StateHandler::handleInput() {
-    m_currentState->handleInput();
-}
 
 void StateHandler::updateState() {
-    m_currentState->update();
+    while (true){
+        uint32_t state = State::stateFlag.wait_any(MAIN_MENU | DISTANCE_GAME,  osWaitForever, true);
+        switch (state){
+            case MAIN_MENU :
+             m_currentState = &mainMenu;
+             run();
+                break;
+            case DISTANCE_GAME :
+                break;
+            default:
+                break;
+        }
+    }
+
 }
 /**
      * @brief Run the active state.
@@ -21,15 +31,10 @@ void StateHandler::run(){
     if (m_currentState->m_isRunning) //check if state is already running
         m_currentState->stop();
 
-    m_currentState->run();
+     m_currentState->run();
 }
-/**
-    * @brief Set the current state of the game or application.
-    *
-    * @param newState The new state to be managed.
-    */
-void StateHandler::setState(State &newState) {
-    m_currentState->stop();
-    m_currentState = &newState;
-    m_currentState->run();
+
+void StateHandler::init() {
+     mainThread.start(callback(this,&updateState));
+
 }

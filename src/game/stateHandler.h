@@ -15,18 +15,25 @@
 #ifndef GBGAME_STATEHANDLER_H
 #define GBGAME_STATEHANDLER_H
 #include "core/state.h"
+#include "mainMenu.h"
 
 class StateHandler {
 public:
     //constructor
-    explicit StateHandler(State &currentState) : m_currentState(&currentState) {}
+    StateHandler();
 
-    void setState(State &newState);
-    void handleInput();
+   // void handleInput();
     void updateState();
     void run();
+    void init();
+
 private:
+    // Main thread object
+    Thread mainThread;
     //a pointer to the current state that is running at the moment
     State* m_currentState;
+    MainMenu mainMenu;
+
+
 };
 #endif //GBGAME_STATEHANDLER_H
