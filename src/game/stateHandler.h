@@ -16,6 +16,7 @@
 #define GBGAME_STATEHANDLER_H
 #include "core/state.h"
 #include "mainMenu.h"
+#include "distanceGame.h"
 
 class StateHandler {
 public:
@@ -29,12 +30,13 @@ public:
 
 private:
     // Main thread object
-    Thread mainThread;
+    Thread m_mainThread;
 
     //a pointer to the current state that is running at the moment
     State* m_currentState;
 
     MainMenu mainMenu;
+
 
 
 };

@@ -14,6 +14,9 @@ void StateHandler::updateState() {
              run();
                 break;
             case DISTANCE_GAME :
+                m_currentState->stop();
+                m_currentState = &distanceGame;
+                run();
                 break;
             default:
                 break;
@@ -31,7 +34,7 @@ void StateHandler::run(){
     if (m_currentState->m_isRunning) //check if state is already running
         m_currentState->stop();
 
-    m_currentState->run();
+     m_currentState->run();
 }
 
 void StateHandler::init() {

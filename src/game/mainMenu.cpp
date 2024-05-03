@@ -6,10 +6,10 @@ using namespace mbed;
 using namespace rtos;
 using namespace std::chrono;
 
-EventFlags State::stateFlags;
+//EventFlags State::stateFlags;
 
 void MainMenu::handleInput() {
-    while (m_isRunning && Buttons::states.wait_any(Buttons::UP_FLAG | Buttons::DOWN_FLAG, osWaitForever, false)) {
+    while (m_isRunning && Buttons::states.wait_any(Buttons::UP_FLAG | Buttons::DOWN_FLAG | Buttons::A_FLAG, osWaitForever, false)) {
 
         // Handle input and update positions
         switch(Buttons::states.get()){
@@ -22,6 +22,9 @@ void MainMenu::handleInput() {
                 m_handCanvas.setY(min(50, m_handCanvas.getY() + 20));
                 m_pntrCanvas = &m_handCanvas;
                 break;
+
+            case Buttons::A_FLAG:
+                State::stateFlags.set(DISTANCE_GAME);
             default:
                 break;
         }
@@ -67,6 +70,7 @@ void MainMenu::stop() {
     m_gfx.join();
     m_move.join();
     State::stateFlags.set(MAIN_MENU);
+    DigitalIn test();
 }
 
 MainMenu::MainMenu() : m_textCanvas(128,128,0,0), m_handCanvas(16,11,7,30),
