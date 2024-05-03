@@ -9,7 +9,7 @@ using namespace std::chrono;
 DistanceGame::DistanceGame() 
             : m_gameLogic(osPriorityNormal1, 1024), m_userInput(osPriorityNormal, 1024), m_screen(128, 128, 0, 0) 
             {
-                randomSeed(analogRead(0));  //Seeds the random generator ensuring new random numbers every time.
+                //randomSeed(analogRead(6));  //Seeds the random generator ensuring new random numbers every time.
             }
 
 void DistanceGame::handleInput(){
