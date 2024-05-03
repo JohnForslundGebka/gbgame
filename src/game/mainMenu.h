@@ -1,3 +1,10 @@
+/**
+ * @class MainMenu
+ * @brief Handles the main menu state of the application.
+ *
+ * Is used to select different states to start
+ */
+
 #ifndef GBGAME_MAINMENU_H
 #define GBGAME_MAINMENU_H
 #include "core/state.h"
@@ -23,9 +30,10 @@ private:
      CanvasMainMenu1 m_textCanvas;
      CanvasMainMenu2 m_handCanvas;
      Canvas *m_pntrCanvas;
+     int m_selectedState = 0;
 
-     class Thread m_gfx;
-     class Thread m_move;
+     class Thread t_gfx;
+     class Thread t_move;
      class EventFlags m_isDoneMoving;
 
 };
