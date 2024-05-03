@@ -30,8 +30,10 @@ public:
 private:
     // Main thread object
     Thread mainThread;
+
     //a pointer to the current state that is running at the moment
     State* m_currentState;
+
     MainMenu mainMenu;
 
 

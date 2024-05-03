@@ -20,7 +20,7 @@ public:
     virtual void update() = 0;
     virtual void run() = 0;
     virtual void stop() = 0;
-    static EventFlags stateFlag;
+    static EventFlags stateFlags;
     DisplayManager & m_displayManager = DisplayManager::getInstance();
     volatile bool m_isRunning = false;
 };
