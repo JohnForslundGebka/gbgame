@@ -6,7 +6,7 @@ using namespace mbed;
 using namespace rtos;
 using namespace std::chrono;
 
-//EventFlags State::stateFlags;
+EventFlags State::stateFlags;
 
 void MainMenu::handleInput() {
     while (m_isRunning && Buttons::states.wait_any(Buttons::UP_FLAG | Buttons::DOWN_FLAG | Buttons::A_FLAG, osWaitForever, false)) {
@@ -46,19 +46,8 @@ void MainMenu::run() {
     m_gfx.start(callback(this, &MainMenu::update));
     m_move.start(callback(this, &MainMenu::handleInput));
 
-    m_textCanvas.C.setTextColor(0xFFFF);
-    m_textCanvas.C.setTextSize(2);
-    m_textCanvas.C.setTextWrap(false);
-    m_textCanvas.C.setCursor(18, 0);
-    m_textCanvas.C.print("-GbgGame-");
-    m_textCanvas.C.drawLine(1, 18, 128, 18, 0xFFFF);
-    m_textCanvas.C.drawBitmap(1, 1, image_light_bits, 16, 16, 0xA800);
-    m_textCanvas.C.setCursor(31, 26);
-    m_textCanvas.C.print("Games");
-    m_textCanvas.C.setCursor(31, 47);
-    m_textCanvas.C.print("Settings");
-
-    m_handCanvas.C.drawBitmap(0, 0, image_hand_notice_bits, 16, 11, 0x555);
+    m_textCanvas.init();
+    m_handCanvas.init();
 
     m_displayManager.updateScreen(&m_textCanvas);
     m_displayManager.updateScreen(&m_handCanvas);

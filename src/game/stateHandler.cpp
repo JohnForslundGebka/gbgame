@@ -12,6 +12,8 @@ StateHandler::StateHandler(): m_mainThread(osPriorityAboveNormal,1024), m_curren
  * @param State::stateFlags is a static variable located in the state.h base class
  */
 
+
+
 [[noreturn]] void StateHandler::updateState() {
     while (true){
         uint32_t state = State::stateFlags.wait_any(MAIN_MENU | DISTANCE_GAME, osWaitForever, true);

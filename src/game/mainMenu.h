@@ -2,7 +2,10 @@
 #define GBGAME_MAINMENU_H
 #include "core/state.h"
 #include "ui/canvas.h"
+#include "ui/mainMenu/canvasMainMenu1.h"
+#include "ui/mainMenu/canvasMainMenu2.h"
 #include "hardware/buttons.h"
+
 
 class MainMenu : public State{
 public:
@@ -17,8 +20,8 @@ public:
     explicit MainMenu();
 
 private:
-     Canvas m_textCanvas;
-     Canvas m_handCanvas;
+     CanvasMainMenu1 m_textCanvas;
+     CanvasMainMenu2 m_handCanvas;
      Canvas *m_pntrCanvas;
 
      class Thread m_gfx;
