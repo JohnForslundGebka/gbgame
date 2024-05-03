@@ -12,15 +12,11 @@ using namespace std::chrono;
 
 DisplayManager& dm = DisplayManager::getInstance();
 Buttons button;
-StateHandler stateHandler();
-
-
-
-
+StateHandler stateHandler;
 
 void setup() {
     dm.init();
-   // stateHandler.run();
+    stateHandler.init();
 }
 
 void loop() {

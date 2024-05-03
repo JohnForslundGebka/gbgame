@@ -6,7 +6,7 @@ using namespace mbed;
 using namespace rtos;
 using namespace std::chrono;
 
-
+EventFlags State::stateFlags;
 
 void MainMenu::handleInput() {
     while (m_isRunning && Buttons::states.wait_any(Buttons::UP_FLAG | Buttons::DOWN_FLAG, osWaitForever, false)) {
@@ -25,7 +25,6 @@ void MainMenu::handleInput() {
             default:
                 break;
         }
-
         m_isDoneMoving.set(MOV_FLAG);
         m_handCanvas.updatePos();
         ThisThread::sleep_for(milliseconds(500));
@@ -64,7 +63,10 @@ void MainMenu::run() {
 }
 
 void MainMenu::stop() {
-
+    m_isRunning = false;
+    m_gfx.join();
+    m_move.join();
+    State::stateFlags.set(MAIN_MENU);
 }
 
 MainMenu::MainMenu() : m_textCanvas(128,128,0,0), m_handCanvas(16,11,7,30),
