@@ -16,6 +16,7 @@
 #define GBGAME_STATEHANDLER_H
 #include "core/state.h"
 #include "mainMenu.h"
+#include "distanceGame.h"
 
 class StateHandler {
 public:
@@ -36,5 +37,6 @@ private:
 
     //all available states
     MainMenu mainMenu;
+    DistanceGame distanceGame;
 };
 #endif //GBGAME_STATEHANDLER_H

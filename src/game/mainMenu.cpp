@@ -12,12 +12,14 @@ EventFlags State::stateFlags;
  * Handles button input to navigate through menu items.
  */
 void MainMenu::handleInput() {
-    while (m_isRunning && Buttons::states.wait_any(Buttons::UP_FLAG | Buttons::DOWN_FLAG | Buttons::A_FLAG, osWaitForever, false)) {
+    uint32_t m_result;
+    while (true){
+        m_result = Buttons::states.wait_any(Buttons::UP_FLAG | Buttons::DOWN_FLAG | Buttons::A_FLAG, osWaitForever, true);
         // Handle input and update positions
-        switch(Buttons::states.get()){
+        switch(m_result){
             case Buttons::UP_FLAG:
                 m_handCanvas.setY(max(30, m_handCanvas.getY() - 20)); //update coordinates of hand
-                m_selectedState = max(0,m_selectedState-1); //change the selected state
+                m_selectedState = max(1,m_selectedState-1); //change the selected state
                 m_pntrCanvas = &m_handCanvas;
                 break;
 
@@ -40,9 +42,9 @@ void MainMenu::handleInput() {
             default:
                 break;
         }
-        m_isDoneMoving.set(MOV_FLAG);
+        m_isDoneMoving.set(SCREEN_UPDATE_FLAG);
         m_handCanvas.updatePos();
-        ThisThread::sleep_for(milliseconds(500));
+       // ThisThread::sleep_for(milliseconds(500));
     }
 }
 
@@ -50,7 +52,7 @@ void MainMenu::handleInput() {
  * Updates the display based on the current state of the canvas.
  */
 void MainMenu::update() {
-    while (m_isRunning && m_isDoneMoving.wait_any(MOV_FLAG,osWaitForever)){
+    while (m_isRunning && m_isDoneMoving.wait_any(SCREEN_UPDATE_FLAG,osWaitForever)){
         m_displayManager.updateScreen(m_pntrCanvas);
     }
 }
@@ -73,9 +75,8 @@ void MainMenu::run() {
 void MainMenu::stop() {
     m_isRunning = false;
     t_gfx.join();
-    t_move.join();
+    t_move.terminate();
     State::stateFlags.set(MAIN_MENU);
-    DigitalIn test();
 }
 
 MainMenu::MainMenu() : m_textCanvas(128,128,0,0), m_handCanvas(16,11,7,30),

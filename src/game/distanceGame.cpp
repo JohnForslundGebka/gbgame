@@ -17,7 +17,7 @@ void DistanceGame::handleInput(){
     if (result == Buttons::A_FLAG) {
         m_gameFlags.set(ADVANCE_GAME_FLAG);
     } else if (result == Buttons::START_FLAG) {
-        //back to main menu
+        State::stateFlags.set(MAIN_MENU);
     }
 }
 

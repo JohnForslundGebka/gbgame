@@ -32,6 +32,7 @@ private:
      Canvas *m_pntrCanvas;
      int m_selectedState = 0;
 
+
      class Thread t_gfx;
      class Thread t_move;
      class EventFlags m_isDoneMoving;
