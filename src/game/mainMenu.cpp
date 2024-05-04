@@ -19,13 +19,15 @@ void MainMenu::handleInput() {
         switch(m_result){
             case Buttons::UP_FLAG:
                 m_handCanvas.setY(max(30, m_handCanvas.getY() - 20)); //update coordinates of hand
-                m_selectedState = max(1,m_selectedState-1); //change the selected state
+                if (m_selectedState > 1)
+                    m_selectedState--;
                 m_pntrCanvas = &m_handCanvas;
                 break;
 
             case Buttons::DOWN_FLAG:
                 m_handCanvas.setY(min(50, m_handCanvas.getY() + 20)); //update coordinates of hand
-                m_selectedState = min(2,m_selectedState+1); //change the selected state
+                if (m_selectedState < 2)
+                    m_selectedState++;
                 m_pntrCanvas = &m_handCanvas;
                 break;
 
@@ -33,6 +35,7 @@ void MainMenu::handleInput() {
                 switch (m_selectedState) {  //start the selected state
                     case 1:
                         //set the stateFlags, to the state that the StateHandler should run
+                        m_selectedState = 1;
                         State::stateFlags.set(DISTANCE_GAME);
                         break;
                     default:
@@ -44,7 +47,7 @@ void MainMenu::handleInput() {
         }
         m_isDoneMoving.set(SCREEN_UPDATE_FLAG);
         m_handCanvas.updatePos();
-       // ThisThread::sleep_for(milliseconds(500));
+
     }
 }
 

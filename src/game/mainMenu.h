@@ -30,7 +30,7 @@ private:
      CanvasMainMenu1 m_textCanvas;
      CanvasMainMenu2 m_handCanvas;
      Canvas *m_pntrCanvas;
-     int m_selectedState = 0;
+     int m_selectedState = 1;
 
 
      class Thread t_gfx;
