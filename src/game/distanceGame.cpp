@@ -16,11 +16,17 @@ void DistanceGame::handleInput() {
         // Handle input and update positions
         switch (result) {
             case Buttons::A_FLAG :
-                Serial.println("HEJ FRAN A");
+                #ifdef DEBUG
+                     Serial.println("HEJ FRAN A");
+                #endif 
+                
                 m_gameFlags.set(ADVANCE_GAME_FLAG);
                 break;
             case Buttons::START_FLAG:
-                Serial.println("HEJ FRAN START");
+                #ifdef DEBUG
+                    Serial.println("HEJ FRAN START");
+                #endif 
+                
                 m_isRunning = false;
                 State::stateFlags.set(MAIN_MENU);
                 break;
@@ -50,8 +56,11 @@ void DistanceGame::game() {
         draw_screen1();
         m_gameFlags.set(SCREEN_UPDATE_FLAG); 
 
-        //Waits for user to press A to measure distance
+#ifdef DEBUG
     Serial.println("NU VANTAR JAG");
+#endif    
+        
+        //Waits for user to press A to measure distance
         m_gameFlags.wait_any(ADVANCE_GAME_FLAG, osWaitForever, true);
         
         //Measures distance and calculates how far off the user was.
@@ -65,9 +74,11 @@ void DistanceGame::game() {
         //Waits for button A press to finish the game
         m_gameFlags.wait_any(ADVANCE_GAME_FLAG, osWaitForever, true);
 
-    Serial.println("NU HAR GAME KÖRTS KLART");
-}
+#ifdef DEBUG
+   Serial.println("NU HAR GAME KÖRTS KLART");  
+#endif 
 
+} 
 void DistanceGame::run() {
     //Starts the threads
     m_isRunning = true;
@@ -91,7 +102,7 @@ void DistanceGame::stop() {
 #endif
     m_isRunning = false;
     // Wait for threads to finish
-    t_gameLogic->terminate();
+    t_gameLogic->terminate();               // CHANGE TO JOIN???
     t_userInput->terminate();
     t_screenUpdate->terminate();
 
