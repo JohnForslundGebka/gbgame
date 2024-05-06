@@ -19,8 +19,9 @@ StateHandler::StateHandler(): m_mainThread(osPriorityAboveNormal,1024), m_curren
         uint32_t state = State::stateFlags.wait_any(MAIN_MENU | DISTANCE_GAME, osWaitForever, true);
         switch (state){
             case MAIN_MENU :
-             m_currentState = &mainMenu;
-             run();
+                m_currentState->stop();
+                m_currentState = &mainMenu;
+                run();
                 break;
             case DISTANCE_GAME :
                 m_currentState->stop();

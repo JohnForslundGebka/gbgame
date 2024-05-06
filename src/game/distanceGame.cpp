@@ -15,13 +15,15 @@ void DistanceGame::handleInput(){
     uint32_t result = Buttons::states.wait_any(Buttons::A_FLAG | Buttons::START_FLAG, osWaitForever);
 
     if (result == Buttons::A_FLAG) {
+        Serial.println("HEJ FRAN A!");
         m_gameFlags.set(ADVANCE_GAME_FLAG);
     } else if (result == Buttons::START_FLAG) {
+        Serial.println("HEJ FRAN START!");
         State::stateFlags.set(MAIN_MENU);
     }
 }
 
-//Updates the screen immidiately when the SCREEN_UPDATE_FLAG is set (this thread has highest priority)
+//Updates the screen immediately when the SCREEN_UPDATE_FLAG is set (this thread has the highest priority)
 void DistanceGame::update(){
     while (m_gameFlags.wait_any(SCREEN_UPDATE_FLAG, osWaitForever))
     {
@@ -67,8 +69,9 @@ void DistanceGame::run() {
 }
 
 void DistanceGame::stop() {
+    m_isRunning = false;
     // Wait for threads to finish
-    t_gameLogic.join();       
+    t_gameLogic.join();
     t_userInput.join();
     t_screenUpdate.join();
 }

@@ -13,7 +13,7 @@ EventFlags State::stateFlags;
  */
 void MainMenu::handleInput() {
     uint32_t m_result;
-    while (true){
+    while (m_isRunning){
         m_result = Buttons::states.wait_any(Buttons::UP_FLAG | Buttons::DOWN_FLAG | Buttons::A_FLAG, osWaitForever, true);
         // Handle input and update positions
         switch(m_result){
@@ -36,6 +36,7 @@ void MainMenu::handleInput() {
                     case 1:
                         //set the stateFlags, to the state that the StateHandler should run
                         m_selectedState = 1;
+                        Buttons::states.clear(Buttons::A_FLAG);
                         State::stateFlags.set(DISTANCE_GAME);
                         break;
                     default:
@@ -47,7 +48,6 @@ void MainMenu::handleInput() {
         }
         m_isDoneMoving.set(SCREEN_UPDATE_FLAG);
         m_handCanvas.updatePos();
-
     }
 }
 
@@ -78,7 +78,7 @@ void MainMenu::run() {
 void MainMenu::stop() {
     m_isRunning = false;
     t_gfx.join();
-    t_move.terminate();
+    t_move.join();
     State::stateFlags.set(MAIN_MENU);
 }
 
