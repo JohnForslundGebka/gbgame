@@ -6,8 +6,7 @@ using namespace std::chrono;
 
 // Constructor, initializes all necessary objects
 DistanceGame::DistanceGame() 
-            : t_gameLogic(osPriorityNormal, 1024), t_userInput(osPriorityNormal, 1024)
-            , t_screenUpdate(osPriorityNormal1, 1024), m_canvas(128, 128, 0, 0) {}
+            :  m_canvas(128, 128, 0, 0) {}
 
 //
 void DistanceGame::handleInput() {
@@ -75,20 +74,29 @@ void DistanceGame::run() {
 #ifdef DEBUG
     Serial.println("NU RUN JAG");
 #endif
+    t_gameLogic = new Thread;
+    t_screenUpdate = new Thread;
+    t_userInput = new Thread;
 
-    t_gameLogic.start(callback(this, &DistanceGame::game));
-    t_userInput.start(callback(this, &DistanceGame::handleInput));
-    t_screenUpdate.start(callback(this, &DistanceGame::update));
+    t_gameLogic->start(callback(this, &DistanceGame::game));
+    t_userInput->start(callback(this, &DistanceGame::handleInput));
+    t_screenUpdate->start(callback(this, &DistanceGame::update));
     
 }
 
 void DistanceGame::stop() {
+#ifdef DEBUG
     Serial.println("NU STOPPAR JAG");
+#endif
     m_isRunning = false;
     // Wait for threads to finish
-    t_gameLogic.terminate();
-    t_userInput.terminate();
-    t_screenUpdate.terminate();
+    t_gameLogic->terminate();
+    t_userInput->terminate();
+    t_screenUpdate->terminate();
+
+    delete t_gameLogic;
+    delete t_userInput;
+    delete t_screenUpdate;
 }
 
 void DistanceGame::draw_screen1() {

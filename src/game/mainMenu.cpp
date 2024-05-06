@@ -74,7 +74,6 @@ void MainMenu::run() {
 #ifdef DEBUG
     Serial.println("NU KÖRS MAIN MENU STATE");
 #endif
-
     m_isRunning = true;
 
     t_gfx = new Thread;
@@ -90,7 +89,6 @@ void MainMenu::run() {
 #ifdef DEBUG
     Serial.println("NU HAR MAIN MENU STATE GJORT FÄRDIGT SITT RUN");
 #endif
-
 }
 
 void MainMenu::stop() {

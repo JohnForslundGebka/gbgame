@@ -21,9 +21,9 @@ class DistanceGame : public State {
 private:
     
     Ultrasonic ultrasonic;     //Object that initializes the ultrasonic sensor and a method that reads the distance
-    Thread t_gameLogic;        //Thread that handles the game logic/order
-    Thread t_userInput;        //Thread that handles user input
-    Thread t_screenUpdate;     //This thread is resposible for updating the screen when the SCREEN_UPDATE_FLAG is set (highest prority)
+    Thread *t_gameLogic;        //Thread that handles the game logic/order
+    Thread *t_userInput;        //Thread that handles user input
+    Thread *t_screenUpdate;     //This thread is resposible for updating the screen when the SCREEN_UPDATE_FLAG is set (highest prority)
 
     EventFlags m_gameFlags;    //Contains flags ADVANCE_GAME_FLAG and SCREEN_UPDATE_FLAG
 
