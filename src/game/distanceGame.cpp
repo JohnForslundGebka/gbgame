@@ -125,6 +125,10 @@ void DistanceGame::stop() {
     delete t_gameLogic;
     delete t_userInput;
     delete t_screenUpdate;
+
+    t_gameLogic = nullptr;
+    t_screenUpdate = nullptr;
+    t_userInput = nullptr;
 }
 
 void DistanceGame::draw_screen1() {
