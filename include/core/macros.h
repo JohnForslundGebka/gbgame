@@ -14,7 +14,11 @@
 #define CS_PIN   14   // Chip Select, can use any GPIO except A6/A7
 #define RST_PIN  9    // Reset
 
-#define MOV_FLAG  (1UL << 2)
+#define SCREEN_UPDATE_FLAG  (1UL << 1)
+#define ADVANCE_GAME_FLAG  (1UL << 2)
+
+#define MAIN_MENU (1UL << 1)
+#define DISTANCE_GAME (1UL << 2)
 
 
 #endif //GBGAME_MACROS_H

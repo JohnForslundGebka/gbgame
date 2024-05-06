@@ -1,35 +1,74 @@
 #include "stateHandler.h"
-/**
- * @brief Handle inputs for the current state.
- *
- * This method delegates the input handling to the active state.
- */
-void StateHandler::handleInput() {
-    m_currentState->handleInput();
+#include "core/state.h"
+
+StateHandler::StateHandler(): m_mainThread(osPriorityAboveNormal,1024), m_currentState(&mainMenu) {
 }
 
-void StateHandler::updateState() {
-    m_currentState->update();
+/**
+ * @brief thread function that waits for a flag to be set, then starts the corresponding state
+ *
+ * Will reset all flags after starting a state, then the thread will wait/sleep until a new flag has been set
+ * @param state stores the flag that was set in the Eventflag object.
+ * @param State::stateFlags is a static variable located in the state.h base class
+ */
+
+
+
+[[noreturn]] void StateHandler::updateState() {
+    while (true){
+#ifdef DEBUG
+        Serial.println("NU KOM JAG IN I UPPDATESTATE I STATEHANDLER");
+#endif
+
+        uint32_t state = State::stateFlags.wait_any(MAIN_MENU | DISTANCE_GAME, osWaitForever, true);
+        switch (state){
+            case MAIN_MENU :
+
+#ifdef DEBUG
+                Serial.println("NU BÖRJAR JAG ATT BYTA STATE TILL MAIN MENU");
+#endif
+
+                m_currentState->stop();
+                m_currentState = &mainMenu;
+
+#ifdef DEBUG
+                Serial.println("NU STARTAR STATEHANDLERS MAIN MENU");
+#endif
+
+                run();
+                break;
+            case DISTANCE_GAME :
+                m_currentState->stop();
+                m_currentState = &distanceGame;
+                run();
+                break;
+            default:
+                break;
+        }
+    }
 }
+
 /**
      * @brief Run the active state.
      *
      *
      *
      */
+    
 void StateHandler::run(){
-    if (m_currentState->m_isRunning) //check if state is already running
-        m_currentState->stop();
-
-    m_currentState->run();
+    //if (m_currentState->m_isRunning) //check if state is already running
+    //m_currentState->stop();
+     m_currentState->run();
 }
 /**
-    * @brief Set the current state of the game or application.
-    *
-    * @param newState The new state to be managed.
-    */
-void StateHandler::setState(State &newState) {
-    m_currentState->stop();
-    m_currentState = &newState;
-    m_currentState->run();
+ * @brief Starts up the main thread that is responsible for changing the state
+ *
+ *
+ */
+
+void StateHandler::init() {
+     delay(300);
+     run();
+    m_mainThread.start(callback(this,&StateHandler::updateState));
+
 }

@@ -2,24 +2,24 @@
 #include "mbed.h"
 #include "rtos.h"
 #include "hardware/displayManager.h"
+#include "core/state.h"
 #include "hardware/buttons.h"
+#include "game/mainMenu.h"
 #include "game/stateHandler.h"
-
-
+//#define DEBUG
 using namespace mbed;
 using namespace rtos;
 using namespace std::chrono;
 
 DisplayManager& dm = DisplayManager::getInstance();
 Buttons button;
-
-// Main thread object
-Thread thread;
+StateHandler stateHandler;
 
 void setup() {
     dm.init();
+    stateHandler.init();
 }
 
 void loop() {
-
+   ThisThread::sleep_for(seconds(5));
 }

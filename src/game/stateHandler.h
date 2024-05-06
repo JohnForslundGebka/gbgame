@@ -15,18 +15,28 @@
 #ifndef GBGAME_STATEHANDLER_H
 #define GBGAME_STATEHANDLER_H
 #include "core/state.h"
+#include "mainMenu.h"
+#include "distanceGame.h"
 
 class StateHandler {
 public:
     //constructor
-    explicit StateHandler(State &currentState) : m_currentState(&currentState) {}
+    StateHandler();
 
-    void setState(State &newState);
-    void handleInput();
-    void updateState();
+   //
+   [[noreturn]] void updateState();
     void run();
+    void init();
+
 private:
-    //a pointer to the current state that is running at the moment
+    // Main thread object
+    Thread m_mainThread;
+
+    //Pointer to the current state that is running at the moment
     State* m_currentState;
+
+    //all available states
+    MainMenu mainMenu;
+    DistanceGame distanceGame;
 };
 #endif //GBGAME_STATEHANDLER_H
