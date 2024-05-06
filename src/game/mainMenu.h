@@ -33,8 +33,8 @@ private:
      int m_selectedState = 1;
 
 
-     class Thread t_gfx;
-     class Thread t_move;
+     Thread* t_gfx;
+     Thread* t_move;
      class EventFlags m_isDoneMoving;
 
 };

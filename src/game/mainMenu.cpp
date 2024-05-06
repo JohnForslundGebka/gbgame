@@ -13,6 +13,7 @@ EventFlags State::stateFlags;
  */
 void MainMenu::handleInput() {
     uint32_t m_result;
+    Serial.println("NU KOLLAR MAINMENU STATE EFTER KNAPPTRYCK");
     while (m_isRunning){
         m_result = Buttons::states.wait_any(Buttons::UP_FLAG | Buttons::DOWN_FLAG | Buttons::A_FLAG, osWaitForever, true);
         // Handle input and update positions
@@ -36,7 +37,7 @@ void MainMenu::handleInput() {
                     case 1:
                         //set the stateFlags, to the state that the StateHandler should run
                         m_selectedState = 1;
-                        Buttons::states.clear(Buttons::A_FLAG);
+                     //   Buttons::states.clear(Buttons::A_FLAG);
                         State::stateFlags.set(DISTANCE_GAME);
                         break;
                     default:
@@ -55,6 +56,7 @@ void MainMenu::handleInput() {
  * Updates the display based on the current state of the canvas.
  */
 void MainMenu::update() {
+    Serial.println("NU KÖRS UPDATE I MAINMENU STATE");
     while (m_isRunning && m_isDoneMoving.wait_any(SCREEN_UPDATE_FLAG,osWaitForever)){
         m_displayManager.updateScreen(m_pntrCanvas);
     }
@@ -63,25 +65,35 @@ void MainMenu::update() {
  * Initializes and runs the main menu.
  */
 void MainMenu::run() {
-    m_isRunning = true;
-    t_gfx.start(callback(this, &MainMenu::update));
-    t_move.start(callback(this, &MainMenu::handleInput));
 
-    m_textCanvas.init();
-    m_handCanvas.init();
+    Serial.println("NU KÖRS MAIN MENU STATE");
+    m_isRunning = true;
+
+    t_gfx = new Thread;
+    t_move = new Thread;
+
+    t_gfx->start(callback(this, &MainMenu::update));
+    t_move->start(callback(this, &MainMenu::handleInput));
+
+    t_move->set_priority(osPriorityBelowNormal1);
 
     m_displayManager.updateScreen(&m_textCanvas);
     m_displayManager.updateScreen(&m_handCanvas);
 
+    Serial.println("NU HAR MAIN MENU STATE GJORT FÄRDIGT SITT RUN");
 }
 
 void MainMenu::stop() {
     m_isRunning = false;
-    t_gfx.join();
-    t_move.join();
-    State::stateFlags.set(MAIN_MENU);
+    t_gfx->join();
+    t_move->join();
+    delete t_gfx;
+    delete t_move;
+
+   // State::stateFlags.set(MAIN_MENU);
 }
 
-MainMenu::MainMenu() : m_textCanvas(128,128,0,0), m_handCanvas(16,11,7,30),
-                       t_gfx(osPriorityNormal1, 1024),
-                       t_move(osPriorityNormal, 1024) {}
+MainMenu::MainMenu() : m_textCanvas(128,128,0,0), m_handCanvas(16,11,7,30) {
+    m_textCanvas.init();
+    m_handCanvas.init();
+}

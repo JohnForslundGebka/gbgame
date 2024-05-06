@@ -10,29 +10,39 @@ DistanceGame::DistanceGame()
             , t_screenUpdate(osPriorityNormal1, 1024), m_canvas(128, 128, 0, 0) {}
 
 //
-void DistanceGame::handleInput(){
-    
-    uint32_t result = Buttons::states.wait_any(Buttons::A_FLAG | Buttons::START_FLAG, osWaitForever);
+void DistanceGame::handleInput() {
+    Serial.println("NU VÄNTAR JAG PÅ KNAPPAR");
+    while (m_isRunning) {
+        uint32_t result = Buttons::states.wait_any(Buttons::START_FLAG  | Buttons::A_FLAG, osWaitForever, true);
+        // Handle input and update positions
+        switch (result) {
+            case Buttons::A_FLAG :
+                Serial.println("HEJ FRAN A");
+                m_gameFlags.set(ADVANCE_GAME_FLAG);
+                break;
+            case Buttons::START_FLAG:
+                Serial.println("HEJ FRAN START");
+                m_isRunning = false;
+                State::stateFlags.set(MAIN_MENU);
+                break;
+            default:
+                break;
+        }
 
-    if (result == Buttons::A_FLAG) {
-        Serial.println("HEJ FRAN A!");
-        m_gameFlags.set(ADVANCE_GAME_FLAG);
-    } else if (result == Buttons::START_FLAG) {
-        Serial.println("HEJ FRAN START!");
-        State::stateFlags.set(MAIN_MENU);
     }
 }
 
 //Updates the screen immediately when the SCREEN_UPDATE_FLAG is set (this thread has the highest priority)
 void DistanceGame::update(){
-    while (m_gameFlags.wait_any(SCREEN_UPDATE_FLAG, osWaitForever))
+    while (m_isRunning)
     {
+        m_gameFlags.wait_any(SCREEN_UPDATE_FLAG, osWaitForever);
         m_displayManager.updateScreen(&m_canvas);
     }
 }
 
 void DistanceGame::game() {
-        
+    Serial.println("NU BORJAR JAG");
         //Seeds the random generator and generates the target length
         randomSeed(millis());
         m_targetLength = random(10, 100);
@@ -42,6 +52,7 @@ void DistanceGame::game() {
         m_gameFlags.set(SCREEN_UPDATE_FLAG); 
 
         //Waits for user to press A to measure distance
+    Serial.println("NU VANTAR JAG");
         m_gameFlags.wait_any(ADVANCE_GAME_FLAG, osWaitForever, true);
         
         //Measures distance and calculates how far off the user was.
@@ -55,13 +66,13 @@ void DistanceGame::game() {
         //Waits for button A press to finish the game
         m_gameFlags.wait_any(ADVANCE_GAME_FLAG, osWaitForever, true);
 
-        //Do exit code
+    Serial.println("NU HAR GAME KÖRTS KLART");
 }
 
 void DistanceGame::run() {
     //Starts the threads
     m_isRunning = true;
-
+    Serial.println("NU RUN JAG");
     t_gameLogic.start(callback(this, &DistanceGame::game));
     t_userInput.start(callback(this, &DistanceGame::handleInput));
     t_screenUpdate.start(callback(this, &DistanceGame::update));
@@ -69,11 +80,12 @@ void DistanceGame::run() {
 }
 
 void DistanceGame::stop() {
+    Serial.println("NU STOPPAR JAG");
     m_isRunning = false;
     // Wait for threads to finish
-    t_gameLogic.join();
-    t_userInput.join();
-    t_screenUpdate.join();
+    t_gameLogic.terminate();
+    t_userInput.terminate();
+    t_screenUpdate.terminate();
 }
 
 void DistanceGame::draw_screen1() {

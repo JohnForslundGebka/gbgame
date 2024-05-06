@@ -16,11 +16,14 @@ StateHandler::StateHandler(): m_mainThread(osPriorityAboveNormal,1024), m_curren
 
 [[noreturn]] void StateHandler::updateState() {
     while (true){
+        Serial.println("NU KOM JAG IN I UPPDATESTATE I STATEHANDLER");
         uint32_t state = State::stateFlags.wait_any(MAIN_MENU | DISTANCE_GAME, osWaitForever, true);
         switch (state){
             case MAIN_MENU :
+                Serial.println("NU BÖRJAR JAG ATT BYTA STATE TILL MAIN MENU");
                 m_currentState->stop();
                 m_currentState = &mainMenu;
+                Serial.println("NU STARTAR STATEHANDLERS MAIN MENU");
                 run();
                 break;
             case DISTANCE_GAME :
@@ -41,8 +44,8 @@ StateHandler::StateHandler(): m_mainThread(osPriorityAboveNormal,1024), m_curren
      *
      */
 void StateHandler::run(){
-    if (m_currentState->m_isRunning) //check if state is already running
-        m_currentState->stop();
+//    if (m_currentState->m_isRunning) //check if state is already running
+//        m_currentState->stop();
 
      m_currentState->run();
 }
@@ -52,6 +55,7 @@ void StateHandler::run(){
  *
  */
 void StateHandler::init() {
+     delay(300);
      run();
     m_mainThread.start(callback(this,&StateHandler::updateState));
 
