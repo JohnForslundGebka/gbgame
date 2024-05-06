@@ -117,8 +117,9 @@ void DistanceGame::stop() {
     Serial.println("NU STOPPAR JAG");
 #endif
     m_isRunning = false;
+
     // Wait for threads to finish
-    t_gameLogic->terminate();               // CHANGE TO JOIN???
+    t_gameLogic->join();               // CHANGE TO JOIN???
     t_userInput->terminate();
     t_screenUpdate->terminate();
 
