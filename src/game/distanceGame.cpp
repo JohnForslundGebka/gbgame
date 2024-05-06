@@ -50,22 +50,26 @@ void DistanceGame::update(){
 }
 
 void DistanceGame::game() {
+#ifdef DEBUG
     Serial.println("NU BORJAR JAG");
+#endif 
+
         //Seeds the random generator and generates the target length
         randomSeed(millis());
         m_targetLength = random(10, 100);
 
-        //Draws screen1 and sets the flag to update the screen
-        draw_screen1();
-        m_gameFlags.set(SCREEN_UPDATE_FLAG); 
+        //Creates and starts a thread that blink the screen text "button A"
+        Thread t_screenBlink;
+        t_screenBlink.start(callback(this, &DistanceGame::screenBlink));
 
 #ifdef DEBUG
     Serial.println("NU VANTAR JAG");
 #endif    
-        ThisThread::sleep_for(300ms);
         //Waits for user to press A to measure distance
-        m_gameFlags.wait_any(ADVANCE_GAME_FLAG, osWaitForever, true);
+        m_gameFlags.wait_any(ADVANCE_GAME_FLAG, osWaitForever, false);
         
+        t_screenBlink.join();
+
         //Measures distance and calculates how far off the user was.
         m_measured = ultrasonic.readDistance();
         m_score = abs(m_targetLength - m_measured);
@@ -76,6 +80,15 @@ void DistanceGame::game() {
 
         //Waits for button A press to finish the game
         m_gameFlags.wait_any(ADVANCE_GAME_FLAG, osWaitForever, true);
+
+        draw_screen3();
+        m_gameFlags.set(SCREEN_UPDATE_FLAG); 
+
+        ThisThread::sleep_for(1000ms);
+        
+        //Return to main manu when game finish
+        m_isRunning = false;
+        State::stateFlags.set(MAIN_MENU);
 
 #ifdef DEBUG
    Serial.println("NU HAR GAME KÖRTS KLART");  
@@ -92,12 +105,12 @@ void DistanceGame::run() {
     t_gameLogic = new Thread;
     t_screenUpdate = new Thread;
     t_userInput = new Thread;
-    t_screenBlink = new Thread;
+    //t_screenBlink = new Thread;
 
     t_gameLogic->start(callback(this, &DistanceGame::game));
     t_userInput->start(callback(this, &DistanceGame::handleInput));
     t_screenUpdate->start(callback(this, &DistanceGame::update));
-    t_screenBlink->start(callback(this, &DistanceGame::update));
+    //t_screenBlink->start(callback(this, &DistanceGame::update));
     
 }
 
@@ -110,12 +123,12 @@ void DistanceGame::stop() {
     t_gameLogic->terminate();               // CHANGE TO JOIN???
     t_userInput->terminate();
     t_screenUpdate->terminate();
-    t_screenBlink->terminate();
+    //t_screenBlink->terminate();
 
     delete t_gameLogic;
     delete t_userInput;
     delete t_screenUpdate;
-    delete t_screenBlink;
+    //delete t_screenBlink;
 }
 
 void DistanceGame::draw_screen1() {
@@ -138,7 +151,6 @@ void DistanceGame::draw_screen1() {
     m_canvas.C.setCursor(22, 43);
     m_canvas.C.print(m_targetLength);
 
-    //m_canvas.C.drawLine(0, 0, 0, 0, 0xFFFF);
     m_canvas.C.setTextColor(0xFAAA);
     m_canvas.C.setTextSize(3);
     m_canvas.C.setCursor(71, 43);
@@ -171,18 +183,17 @@ void DistanceGame::draw_screen2() {
 
     m_canvas.C.setTextColor(0x57FF);
     m_canvas.C.setTextSize(2);
-    m_canvas.C.setCursor(-1, 25);
+    m_canvas.C.setCursor(5, 25);
     m_canvas.C.print("Your guess");
 
-    m_canvas.C.setTextColor(0xFAAA);
+    m_canvas.C.setTextColor(GREEN);
     m_canvas.C.setTextSize(3);
-    m_canvas.C.setCursor(22, 43);
+    m_canvas.C.setCursor(22, 46);
     m_canvas.C.print(m_measured);
 
-    m_canvas.C.drawLine(0, 0, 0, 0, 0xFFFF);
-    m_canvas.C.setTextColor(0xFAAA);
+    m_canvas.C.setTextColor(GREEN);
     m_canvas.C.setTextSize(3);
-    m_canvas.C.setCursor(71, 43);
+    m_canvas.C.setCursor(71, 46);
     m_canvas.C.print("cm");
 
     m_canvas.C.setTextColor(0x57FF);
@@ -190,18 +201,29 @@ void DistanceGame::draw_screen2() {
     m_canvas.C.setCursor(16, 71);
     m_canvas.C.print("you were");
 
-    
-    m_canvas.C.setCursor(41, 88);
+    m_canvas.C.setTextColor(RED);
+    m_canvas.C.setCursor(53, 91);
     m_canvas.C.print(m_score);
     
     m_canvas.C.setTextColor(0xFFFF);
-    m_canvas.C.setCursor(20, 107);
+    m_canvas.C.setCursor(25, 109);
     m_canvas.C.print("cm off!");
+}
+
+void DistanceGame::draw_screen3() {
+    m_canvas.C.fillRect(0, 0, 128, 128, BLACK);
+
+    m_canvas.C.setTextColor(0xFFFF);
+    m_canvas.C.setTextSize(2);
+    m_canvas.C.setTextWrap(false);
+    m_canvas.C.setCursor(17, 3);
+    m_canvas.C.print("Exiting...");   
 }
 
 void DistanceGame::screenBlink() {
     while (m_isRunning) {  
         if (m_gameFlags.get() & ADVANCE_GAME_FLAG) {
+            m_gameFlags.clear(ADVANCE_GAME_FLAG);
             break;  // Exit loop if the flag is set
         }
 

@@ -39,7 +39,7 @@ private:
     Thread *t_gameLogic;        //Thread that handles the game logic/order
     Thread *t_userInput;        //Thread that handles user input
     Thread *t_screenUpdate;     //This thread is resposible for updating the screen when the SCREEN_UPDATE_FLAG is set (highest prority)
-    Thread *t_screenBlink;     //This thread is resposible for blinking the "press A" text on the screen when entering the game. 
+    //Thread *t_screenBlink;     //This thread is resposible for blinking the "press A" text on the screen when entering the game. 
 
     EventFlags m_gameFlags;    //Contains flags ADVANCE_GAME_FLAG and SCREEN_UPDATE_FLAG
 
@@ -59,8 +59,10 @@ public:
 
     void game();               //Contains the logic for the game
 
+    //UI functions
     void draw_screen1();       //Draws screen 1
     void draw_screen2();       //Draws screen 2
+    void draw_screen3();       //Draws screen 2
     void screenBlink();        //Blinks the "press A" text
 };
 
