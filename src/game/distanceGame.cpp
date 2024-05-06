@@ -235,8 +235,6 @@ void DistanceGame::screenBlink() {
         m_gameFlags.set(SCREEN_UPDATE_FLAG);
         ThisThread::sleep_for(300ms);
     }
-
-    //m_gameFlags.clear(ADVANCE_GAME_FLAG);
 }
 
 
