@@ -92,10 +92,12 @@ void DistanceGame::run() {
     t_gameLogic = new Thread;
     t_screenUpdate = new Thread;
     t_userInput = new Thread;
+    t_screenBlink = new Thread;
 
     t_gameLogic->start(callback(this, &DistanceGame::game));
     t_userInput->start(callback(this, &DistanceGame::handleInput));
     t_screenUpdate->start(callback(this, &DistanceGame::update));
+    t_screenBlink->start(callback(this, &DistanceGame::update));
     
 }
 
@@ -108,10 +110,12 @@ void DistanceGame::stop() {
     t_gameLogic->terminate();               // CHANGE TO JOIN???
     t_userInput->terminate();
     t_screenUpdate->terminate();
+    t_screenBlink->terminate();
 
     delete t_gameLogic;
     delete t_userInput;
     delete t_screenUpdate;
+    delete t_screenBlink;
 }
 
 void DistanceGame::draw_screen1() {
