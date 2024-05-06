@@ -8,7 +8,7 @@ using namespace std::chrono;
 DistanceGame::DistanceGame() 
             :  m_canvas(128, 128, 0, 0) {}
 
-//
+
 void DistanceGame::handleInput() {
 #ifdef DEBUG
      Serial.println("NU VÄNTAR JAG PÅ KNAPPAR");  
@@ -98,6 +98,7 @@ void DistanceGame::game() {
 void DistanceGame::run() {
     //Starts the threads
     m_isRunning = true;
+
 #ifdef DEBUG
     Serial.println("NU RUN JAG");
 #endif
@@ -105,13 +106,10 @@ void DistanceGame::run() {
     t_gameLogic = new Thread;
     t_screenUpdate = new Thread;
     t_userInput = new Thread;
-    //t_screenBlink = new Thread;
 
     t_gameLogic->start(callback(this, &DistanceGame::game));
     t_userInput->start(callback(this, &DistanceGame::handleInput));
     t_screenUpdate->start(callback(this, &DistanceGame::update));
-    //t_screenBlink->start(callback(this, &DistanceGame::update));
-    
 }
 
 void DistanceGame::stop() {
@@ -123,12 +121,10 @@ void DistanceGame::stop() {
     t_gameLogic->terminate();               // CHANGE TO JOIN???
     t_userInput->terminate();
     t_screenUpdate->terminate();
-    //t_screenBlink->terminate();
 
     delete t_gameLogic;
     delete t_userInput;
     delete t_screenUpdate;
-    //delete t_screenBlink;
 }
 
 void DistanceGame::draw_screen1() {
