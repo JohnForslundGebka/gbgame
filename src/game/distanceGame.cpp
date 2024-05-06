@@ -10,7 +10,10 @@ DistanceGame::DistanceGame()
 
 //
 void DistanceGame::handleInput() {
-    Serial.println("NU VÄNTAR JAG PÅ KNAPPAR");
+#ifdef DEBUG
+     Serial.println("NU VÄNTAR JAG PÅ KNAPPAR");  
+#endif 
+
     while (m_isRunning) {
         uint32_t result = Buttons::states.wait_any(Buttons::START_FLAG  | Buttons::A_FLAG, osWaitForever, true);
         // Handle input and update positions
