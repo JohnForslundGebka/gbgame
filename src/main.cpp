@@ -6,6 +6,7 @@
 #include "hardware/buttons.h"
 #include "game/mainMenu.h"
 #include "game/stateHandler.h"
+#define DEBUG
 using namespace mbed;
 using namespace rtos;
 using namespace std::chrono;

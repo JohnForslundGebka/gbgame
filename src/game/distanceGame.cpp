@@ -72,7 +72,10 @@ void DistanceGame::game() {
 void DistanceGame::run() {
     //Starts the threads
     m_isRunning = true;
+#ifdef DEBUG
     Serial.println("NU RUN JAG");
+#endif
+
     t_gameLogic.start(callback(this, &DistanceGame::game));
     t_userInput.start(callback(this, &DistanceGame::handleInput));
     t_screenUpdate.start(callback(this, &DistanceGame::update));

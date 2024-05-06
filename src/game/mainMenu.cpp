@@ -13,7 +13,10 @@ EventFlags State::stateFlags;
  */
 void MainMenu::handleInput() {
     uint32_t m_result;
+#ifdef DEBUG
     Serial.println("NU KOLLAR MAINMENU STATE EFTER KNAPPTRYCK");
+#endif
+
     while (m_isRunning){
         m_result = Buttons::states.wait_any(Buttons::UP_FLAG | Buttons::DOWN_FLAG | Buttons::A_FLAG, osWaitForever, true);
         // Handle input and update positions
@@ -56,7 +59,10 @@ void MainMenu::handleInput() {
  * Updates the display based on the current state of the canvas.
  */
 void MainMenu::update() {
+#ifdef DEBUG
     Serial.println("NU KÖRS UPDATE I MAINMENU STATE");
+#endif
+
     while (m_isRunning && m_isDoneMoving.wait_any(SCREEN_UPDATE_FLAG,osWaitForever)){
         m_displayManager.updateScreen(m_pntrCanvas);
     }
@@ -65,8 +71,10 @@ void MainMenu::update() {
  * Initializes and runs the main menu.
  */
 void MainMenu::run() {
-
+#ifdef DEBUG
     Serial.println("NU KÖRS MAIN MENU STATE");
+#endif
+
     m_isRunning = true;
 
     t_gfx = new Thread;
@@ -79,8 +87,10 @@ void MainMenu::run() {
 
     m_displayManager.updateScreen(&m_textCanvas);
     m_displayManager.updateScreen(&m_handCanvas);
-
+#ifdef DEBUG
     Serial.println("NU HAR MAIN MENU STATE GJORT FÄRDIGT SITT RUN");
+#endif
+
 }
 
 void MainMenu::stop() {
@@ -89,8 +99,6 @@ void MainMenu::stop() {
     t_move->join();
     delete t_gfx;
     delete t_move;
-
-   // State::stateFlags.set(MAIN_MENU);
 }
 
 MainMenu::MainMenu() : m_textCanvas(128,128,0,0), m_handCanvas(16,11,7,30) {
