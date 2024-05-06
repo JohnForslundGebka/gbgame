@@ -1,3 +1,18 @@
+
+/**
+ * @brief Runs the game "DistanceGame", a game that lets the user 
+ * play a game by measuring the distance to the wall. 
+ * 
+ * @class DistanceGame is a derived class of 'state'.
+ * To run the DistanceGame set the DISTANCE_GAME flag State::stateFlags.set(DISTANCE_GAME)
+ * and let the StateHandler switch to the DistanceGame state.
+ *
+
+ * @param DistanceGame::m_gameFlags has flags for updating the
+ * SCREEN_UPDATE_FLAG and ADVANCE_GAME_FLAG that controls if the screen is 
+ * updated or the game is advancing sequentally. 
+ */
+
 #ifndef GBGAME_DistanceGame_H
 #define GBGAME_DistanceGame_H
 #include <Arduino.h>
