@@ -61,6 +61,7 @@ public:
 
     void draw_screen1();       //Draws screen 1
     void draw_screen2();       //Draws screen 2
+    void screenBlink();        //Blinks the "press A" text
 };
 
 

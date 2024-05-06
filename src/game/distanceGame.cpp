@@ -62,7 +62,7 @@ void DistanceGame::game() {
 #ifdef DEBUG
     Serial.println("NU VANTAR JAG");
 #endif    
-        
+        ThisThread::sleep_for(300ms);
         //Waits for user to press A to measure distance
         m_gameFlags.wait_any(ADVANCE_GAME_FLAG, osWaitForever, true);
         
@@ -199,7 +199,27 @@ void DistanceGame::draw_screen2() {
     m_canvas.C.print("cm off!");
 }
 
+void DistanceGame::screenBlink() {
+    while (m_isRunning) {  
+        if (m_gameFlags.get() & ADVANCE_GAME_FLAG) {
+            break;  // Exit loop if the flag is set
+        }
 
+        // Set the text color to white and draw screen
+        textColor = WHITE;
+        draw_screen1();
+        m_gameFlags.set(SCREEN_UPDATE_FLAG);
+        ThisThread::sleep_for(300ms);
+
+        // Set the text color to black and draw screen
+        textColor = BLACK;
+        draw_screen1();
+        m_gameFlags.set(SCREEN_UPDATE_FLAG);
+        ThisThread::sleep_for(300ms);
+    }
+
+    //m_gameFlags.clear(ADVANCE_GAME_FLAG);
+}
 
 
 
