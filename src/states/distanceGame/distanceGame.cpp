@@ -1,4 +1,5 @@
 #include "distanceGame.h"
+#include "distanceGameUi.h"
 
 using namespace mbed;
 using namespace rtos;
@@ -6,7 +7,6 @@ using namespace std::chrono;
 
 // Constructor, initializes all necessary objects
 DistanceGame::DistanceGame(): m_canvas(this) {}
-
 
 void DistanceGame::handleInput() {
 #ifdef DEBUG
@@ -53,15 +53,14 @@ void DistanceGame::update(){
     while (m_isRunning)
     {
         m_gameFlags.wait_any(SCREEN_UPDATE_FLAG, osWaitForever);
-        m_displayManager.updateScreen(&m_canvas);
+        m_displayManager.updateScreen(&m_canvas.c_main);
     }
 }
 
 void DistanceGame::game() {
 #ifdef DEBUG
     Serial.println("NU BORJAR JAG");
-#endif 
-
+#endif
         //Seeds the random generator and generates the target length
         randomSeed(millis());
         m_targetLength = random(10, 100);
@@ -83,13 +82,13 @@ void DistanceGame::game() {
         m_score = abs(m_targetLength - m_measured);
     
         //Draws screen2 with the results and sets the flag to update screen
-        draw_screen2();
+        m_canvas.drawScreen2();
         m_gameFlags.set(SCREEN_UPDATE_FLAG); 
 
         //Waits for button A press to finish the game
         m_gameFlags.wait_any(ADVANCE_GAME_FLAG, osWaitForever, true);
 
-        draw_screen3();
+        m_canvas.drawScreen3();
         m_gameFlags.set(SCREEN_UPDATE_FLAG); 
 
         ThisThread::sleep_for(1000ms);
@@ -102,7 +101,8 @@ void DistanceGame::game() {
    Serial.println("NU HAR GAME KÖRTS KLART");  
 #endif 
 
-} 
+}
+
 void DistanceGame::run() {
     //Starts the threads
     m_isRunning = true;
@@ -110,7 +110,6 @@ void DistanceGame::run() {
 #ifdef DEBUG
     Serial.println("NU RUN JAG");
 #endif
-
     t_gameLogic = new Thread;
     t_screenUpdate = new Thread;
     t_userInput = new Thread;
@@ -140,15 +139,7 @@ void DistanceGame::stop() {
     t_userInput = nullptr;
 }
 
-void DistanceGame::draw_screen1() {
-}
 
-void DistanceGame::draw_screen2() {
-}
-
-void DistanceGame::draw_screen3() {
-
-}
 
 void DistanceGame::screenBlink() {
     while (m_isRunning) {  

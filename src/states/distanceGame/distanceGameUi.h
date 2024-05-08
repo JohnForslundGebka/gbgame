@@ -2,17 +2,17 @@
 #define GBGAME_DISTANCEGAMEUI_H
 #include "ui/canvas.h"
 #include "core/macros.h"
-#include "distanceGame.h"
+#include "core/state.h" // Include State but forward-declare DistanceGame
+
+class DistanceGame; // Forward declaration
 
 class DistanceGameUi {
 public:
 
-    DistanceGameUi(DistanceGame *pGame);
+    explicit DistanceGameUi(DistanceGame *pGame);
 
     DistanceGame *parentState;
     Canvas c_main;
-
-
 
     void init();
 

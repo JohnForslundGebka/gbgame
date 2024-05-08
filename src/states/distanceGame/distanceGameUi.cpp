@@ -1,12 +1,9 @@
 #include "distanceGameUi.h"
+#include "distanceGame.h"
 
-DistanceGameUi::DistanceGameUi(DistanceGame *pGame) : parentState(pGame), c_main(128, 128, 0, 0) {
+DistanceGameUi::DistanceGameUi(DistanceGame *pGame) : parentState(pGame), c_main(128, 128, 0, 0) {}
 
-}
-
-void DistanceGameUi::init() {
-
-}
+void DistanceGameUi::init() {}
 
 void DistanceGameUi::drawScreen1() {
     c_main.C.fillRect(0, 0, 128, 128, BLACK);
