@@ -4,8 +4,8 @@
 #include "hardware/displayManager.h"
 #include "core/state.h"
 #include "hardware/buttons.h"
-#include "game/mainMenu.h"
-#include "game/stateHandler.h"
+#include "states/mainMenu.h"
+#include "states/stateHandler.h"
 //#define DEBUG
 using namespace mbed;
 using namespace rtos;
