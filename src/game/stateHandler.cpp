@@ -57,8 +57,9 @@ StateHandler::StateHandler(): m_mainThread(osPriorityAboveNormal,1024), m_curren
     
 void StateHandler::run(){
     if (m_currentState->m_isRunning) //check if state is already running
-    m_currentState->stop();
-     m_currentState->run();
+        m_currentState->stop();
+
+    m_currentState->run();
 }
 /**
  * @brief Starts up the main thread that is responsible for changing the state
@@ -69,6 +70,5 @@ void StateHandler::run(){
 void StateHandler::init() {
      delay(300);
      run();
-    m_mainThread.start(callback(this,&StateHandler::updateState));
-
+     m_mainThread.start(callback(this,&StateHandler::updateState));
 }
