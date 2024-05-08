@@ -11,7 +11,7 @@
 #include "ui/canvas.h"
 #include "ui/mainMenu/canvasMainMenu1.h"
 #include "ui/mainMenu/canvasMainMenu2.h"
-#include "ui/mainMenu/mainMenuUi.h"
+#include "mainMenuUi.h"
 #include "hardware/buttons.h"
 
 
