@@ -15,8 +15,8 @@
 #ifndef GBGAME_STATEHANDLER_H
 #define GBGAME_STATEHANDLER_H
 #include "core/state.h"
-#include "mainMenu.h"
-#include "distanceGame.h"
+#include "states/mainMenu/mainMenu.h"
+#include "states/distanceGame/distanceGame.h"
 
 class StateHandler {
 public:

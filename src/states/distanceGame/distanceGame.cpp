@@ -1,4 +1,4 @@
-#include "states/distanceGame.h"
+#include "distanceGame.h"
 
 using namespace mbed;
 using namespace rtos;

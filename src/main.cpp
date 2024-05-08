@@ -4,7 +4,7 @@
 #include "hardware/displayManager.h"
 #include "core/state.h"
 #include "hardware/buttons.h"
-#include "states/mainMenu.h"
+#include "states/mainMenu/mainMenu.h"
 #include "states/stateHandler.h"
 //#define DEBUG
 using namespace mbed;
