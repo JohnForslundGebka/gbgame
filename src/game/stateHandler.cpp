@@ -56,8 +56,8 @@ StateHandler::StateHandler(): m_mainThread(osPriorityAboveNormal,1024), m_curren
      */
     
 void StateHandler::run(){
-    //if (m_currentState->m_isRunning) //check if state is already running
-    //m_currentState->stop();
+    if (m_currentState->m_isRunning) //check if state is already running
+    m_currentState->stop();
      m_currentState->run();
 }
 /**

@@ -15,7 +15,16 @@ void DistanceGame::handleInput() {
 #endif 
 
     while (m_isRunning) {
-        uint32_t result = Buttons::states.wait_any(Buttons::START_FLAG  | Buttons::A_FLAG, osWaitForever, true);
+
+        uint32_t result = Buttons::states.wait_any(Buttons::START_FLAG  | Buttons::A_FLAG, osWaitForever, false);
+
+        //debounce logic
+        ThisThread::sleep_for(50ms);
+        if(Buttons::states.get() == 0)
+            continue;
+
+        //clear flags
+        Buttons::states.clear(Buttons::START_FLAG  | Buttons::A_FLAG);
         // Handle input and update positions
         switch (result) {
             case Buttons::A_FLAG :
