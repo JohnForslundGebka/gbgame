@@ -67,7 +67,7 @@ void StateHandler::run(){
  */
 
 void StateHandler::init() {
-     delay(300);
+   //  delay(300);
      run();
     m_mainThread.start(callback(this,&StateHandler::updateState));
 

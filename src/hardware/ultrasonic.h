@@ -14,18 +14,21 @@
 #include <Arduino.h>
 
 //Pins used by the ultrasonic sensor
-#define TRIG_PIN 16    //D16
-#define ECHO_PIN 17    //D17
+
 
 
 class Ultrasonic {
-public:
-    Ultrasonic() { init(); }
-
+private:
     void init() {
         pinMode(ECHO_PIN, INPUT); // Sets the TRIG_PIN as an Output
         pinMode(TRIG_PIN, OUTPUT); // Sets the ECHO_PIN as an Input
     }
+
+#define TRIG_PIN 16    //D16
+#define ECHO_PIN 17    //D17
+
+public:
+    Ultrasonic() { init(); }
 
     int readDistance() {
         unsigned long duration;

@@ -39,8 +39,6 @@ void MainMenu::handleInput() {
                 switch (m_selectedState) {  //start the selected state
                     case 1:
                         //set the stateFlags, to the state that the StateHandler should run
-                        m_selectedState = 1;
-                     //   Buttons::states.clear(Buttons::A_FLAG);
                         State::stateFlags.set(DISTANCE_GAME);
                         break;
                     default:

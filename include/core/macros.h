@@ -1,6 +1,6 @@
 #ifndef GBGAME_MACROS_H
 #define GBGAME_MACROS_H
-// Color definitions
+// Color definitions for DisplayManager
 #define BLACK 0x0000
 #define BLUE 0x001F
 #define RED 0xF800
