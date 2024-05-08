@@ -11,6 +11,8 @@ public:
 
     void init();
 
+private:
+
     void drawHand();
     void drawText();
 

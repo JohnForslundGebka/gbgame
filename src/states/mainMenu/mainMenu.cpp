@@ -102,7 +102,6 @@ void MainMenu::stop() {
     t_move = nullptr;
 }
 
-MainMenu::MainMenu() : m_textCanvas(128,128,0,0), m_handCanvas(16,11,7,30) {
-    m_textCanvas.init();
-    m_handCanvas.init();
+MainMenu::MainMenu() {
+    canvas.init();
 }

@@ -4,16 +4,12 @@
  *
  * Is used to select different states to start
  */
-
 #ifndef GBGAME_MAINMENU_H
 #define GBGAME_MAINMENU_H
 #include "core/state.h"
 #include "ui/canvas.h"
-#include "ui/mainMenu/canvasMainMenu1.h"
-#include "ui/mainMenu/canvasMainMenu2.h"
 #include "mainMenuUi.h"
 #include "hardware/buttons.h"
-
 
 class MainMenu : public State{
 public:
@@ -28,8 +24,8 @@ public:
     explicit MainMenu();
 
 private:
-     CanvasMainMenu1 m_textCanvas;
-     CanvasMainMenu2 m_handCanvas;
+
+     MainMenuUi canvas;
      Canvas *m_pntrCanvas;
      int m_selectedState = 1;
 
