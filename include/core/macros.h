@@ -10,6 +10,7 @@
 #define YELLOW 0xFFE0
 #define WHITE 0xFFFF
 
+//pins used for SPI communication by the DisplayManager
 #define DC_PIN   15   // Data/Command
 #define CS_PIN   14   // Chip Select, can use any GPIO except A6/A7
 #define RST_PIN  9    // Reset
@@ -18,6 +19,7 @@
 #define TRIG_PIN 16    //D16
 #define ECHO_PIN 17    //D17
 
+//flags used as conditions for threads
 #define SCREEN_UPDATE_FLAG  (1UL << 1)
 #define ADVANCE_GAME_FLAG  (1UL << 2)
 
