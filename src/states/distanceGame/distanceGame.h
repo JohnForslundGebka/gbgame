@@ -24,6 +24,7 @@
 #include "hardware/displayManager.h"
 #include "ui/canvas.h"
 #include "hardware/ultrasonic.h"
+#include "distanceGameUi.h"
 
 using namespace mbed;
 using namespace rtos;
@@ -42,15 +43,18 @@ private:
 
     EventFlags m_gameFlags;    //Contains flags ADVANCE_GAME_FLAG and SCREEN_UPDATE_FLAG
 
-    Canvas m_canvas;           //Canvas object for drawing the screens
+ //   Canvas m_canvas;           //Canvas object for drawing the screens
+    DistanceGameUi m_canvas;
+
+
+public:
+    DistanceGame();
+
     int textColor = WHITE;     //Variable for blinking text
-    
+
     int m_targetLength;        //Randomly generated number for the target length of the game
     int m_measured;            //The distance read by the ultrasonic sensor get saved here
     int m_score;               //The calculated score gets saved here when a measurement is taken.
-  
-public:
-    DistanceGame();
     void run() override;
     void handleInput() override;
     void update() override;
