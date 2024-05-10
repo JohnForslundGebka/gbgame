@@ -13,6 +13,7 @@
 #include <Adafruit_SSD1351.h>
 #include <SPI.h>
 #include "rtos.h"
+#include "mbed.h"
 #include "core/macros.h"
 #include "ui/canvas.h"
 

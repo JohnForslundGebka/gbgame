@@ -25,6 +25,6 @@
 
 #define MAIN_MENU (1UL << 1)
 #define DISTANCE_GAME (1UL << 2)
-
+#define ALL_STATE_FLAGS (1UL << 1) | (1UL << 2)
 
 #endif //GBGAME_MACROS_H

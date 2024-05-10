@@ -6,6 +6,7 @@ class MainMenu;
 class DistanceGame;
 class State;
 
+
 namespace GlobalStates {
     extern MainMenu mainMenu;
     extern DistanceGame distanceGame;
