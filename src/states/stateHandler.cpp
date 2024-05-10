@@ -1,7 +1,7 @@
 #include "stateHandler.h"
-#include "core/state.h"
 
-StateHandler::StateHandler(): m_mainThread(osPriorityAboveNormal,1024), m_currentState(&mainMenu) {
+
+StateHandler::StateHandler(): m_mainThread(osPriorityAboveNormal,1024), m_currentState(GlobalStates::stateList[0]) {
 }
 
 /**
@@ -29,7 +29,8 @@ StateHandler::StateHandler(): m_mainThread(osPriorityAboveNormal,1024), m_curren
 #endif
 
                 m_currentState->stop();
-                m_currentState = &mainMenu;
+              //  m_currentState = &mainMenu;
+               m_currentState = GlobalStates::stateList[0];
 
 #ifdef DEBUG
                 Serial.println("NU STARTAR STATEHANDLERS MAIN MENU");
@@ -39,7 +40,7 @@ StateHandler::StateHandler(): m_mainThread(osPriorityAboveNormal,1024), m_curren
                 break;
             case DISTANCE_GAME :
                 m_currentState->stop();
-                m_currentState = &distanceGame;
+                m_currentState = GlobalStates::stateList[1];
                 run();
                 break;
             default:
@@ -70,5 +71,5 @@ void StateHandler::run(){
 void StateHandler::init() {
      delay(300);
      run();
-     m_mainThread.start(callback(this,&StateHandler::updateState));
+     m_mainThread.start(mbed::callback(this,&StateHandler::updateState));
 }
