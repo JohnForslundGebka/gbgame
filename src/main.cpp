@@ -1,9 +1,10 @@
 #include <Arduino.h>
 #include "mbed.h"
-#include "rtos.h"
-#include "hardware/displayManager.h"
+//#include "rtos.h"
 #include "hardware/buttons.h"
 #include "states/stateHandler.h"
+#include "hardware/displayManager.h"
+
 //#define DEBUG
 using namespace mbed;
 using namespace rtos;
