@@ -1,10 +1,9 @@
 #include "mainMenu.h"
-#include "mbed.h"
 #include "rtos.h"
-#include "ui/images.h"
+
 using namespace mbed;
 using namespace rtos;
-using namespace std::chrono;
+
 
 EventFlags State::stateFlags;
 
@@ -84,6 +83,7 @@ void MainMenu::run() {
 
     m_displayManager.updateScreen(&canvas.c_text);
     m_displayManager.updateScreen(&canvas.c_hand);
+
 #ifdef DEBUG
     Serial.println("NU HAR MAIN MENU STATE GJORT FÄRDIGT SITT RUN");
 #endif
