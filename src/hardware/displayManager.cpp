@@ -27,7 +27,7 @@ DisplayManager& DisplayManager::getInstance() {
  */
 
 void DisplayManager::init() {
-    SPI.begin();
+    ::SPI.begin();
     m_display.begin(17000000); // Initialize display with a specific clock rate
     m_display.fillScreen(BLACK);
 }

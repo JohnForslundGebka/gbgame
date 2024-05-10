@@ -6,10 +6,9 @@
  */
 #ifndef GBGAME_MAINMENU_H
 #define GBGAME_MAINMENU_H
-#include "hardware/buttons.h"
 #include "core/state.h"
 #include "mainMenuUi.h"
-
+#include "hardware/buttons.h"
 
 class MainMenu : public State{
 public:
