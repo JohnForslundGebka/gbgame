@@ -57,13 +57,13 @@ void MainMenu::handleInput() {
 
             case Buttons::A_FLAG:
                 //set the stateFlags, to the state that the StateHandler should run
-                State::stateFlags.set(GlobalStates::stateList[m_selectedState]->getFlagName());
+                State::stateFlags.set(GlobalStates::mainMenuList[m_selectedState]->getFlagName());
                 break;
 
             default:
                 break;
         }
-        m_isDoneMoving.set(SCREEN_UPDATE_FLAG);
+        m_gameFlags.set(SCREEN_UPDATE_FLAG);
     }
 }
 
@@ -75,7 +75,7 @@ void MainMenu::update() {
     Serial.println("NU KÖRS UPDATE I MAINMENU STATE");
 #endif
 
-    while (m_isRunning && m_isDoneMoving.wait_any(SCREEN_UPDATE_FLAG,osWaitForever)){
+    while (m_isRunning && m_gameFlags.wait_any(SCREEN_UPDATE_FLAG,osWaitForever)){
         m_displayManager.updateScreen(m_pntrCanvas);
     }
 }

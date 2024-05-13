@@ -1,19 +1,19 @@
-#ifndef GBGAME_SUBMENUGAMESUI_H
-#define GBGAME_SUBMENUGAMESUI_H
+#ifndef GBGAME_GAMESUI_H
+#define GBGAME_GAMESUI_H
 #include "ui/canvas.h"
 #include "ui/images.h"
 #include "core/state.h"
 #include "states/globalStates.h"
 
-class Game; //forward declaration
+class Games; //forward declaration
 
-class SubMenuGamesUi {
+class GamesUI {
 public:
 
     Canvas c_canvas;
-    Game *parrentState;
+    Games *parentState;
 
-    explicit SubMenuGamesUi(Game *p);
+    explicit GamesUI(Games *p);
 
     String textField[5];
 
@@ -21,8 +21,6 @@ public:
     void updateTextFields();
     void draw();
 
-
-
 };
 
-#endif //GBGAME_SUBMENUGAMESUI_H
+#endif //GBGAME_GAMESUI_H

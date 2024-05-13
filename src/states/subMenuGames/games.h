@@ -3,13 +3,12 @@
 #include "ui/canvas.h"
 #include "ui/images.h"
 #include "core/state.h"
+#include "states/subMenuGames/gamesUi.h"
 #include "states/globalStates.h"
+#include "hardware/buttons.h"
 
 class Games : public State {
 public:
-
-    int m_selectedState{};
-
     void handleInput() override;
 
     void update() override;
@@ -19,9 +18,13 @@ public:
     void stop() override;
 
     explicit Games();
+    int m_selectedState{};
 private:
-    Thread* t_gfx;
-    Thread* t_move;
+    Canvas *m_pntrCanvas{};
+    GamesUI m_canvas;
+    Thread* t_gfx{};
+    Thread* t_move{};
+    class EventFlags m_gameFlags;
 };
 
 #endif //GBGAME_GAMES_H
