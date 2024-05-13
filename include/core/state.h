@@ -32,6 +32,8 @@ public:
     static EventFlags stateFlags;
 
     volatile bool m_isRunning = false;
+    //name of the state, to be used in menus
+    const String m_stateName;
 
     //flag used for exiting state
     uint32_t STOP_RUNNING = (1UL << 15);
@@ -45,8 +47,7 @@ public:
 protected:
     // Unique bit set for this instance
     uint32_t m_flagName;
-    //name of the state, to be used in menus
-    const String m_stateName;
+
   //  char stateName[15];  // C-style string that holds the name of the state
     static uint32_t instanceCounter;  // Tracks the number of instances
 };

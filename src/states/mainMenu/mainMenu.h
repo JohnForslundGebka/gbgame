@@ -21,17 +21,14 @@ public:
     void stop() override;
 
     explicit MainMenu();
+    int m_selectedState = 1;
 
 private:
-
      MainMenuUi canvas;
      Canvas *m_pntrCanvas;
-     int m_selectedState = 1;
-
 
      Thread* t_gfx;
      Thread* t_move;
      class EventFlags m_isDoneMoving;
-
 };
 #endif //GBGAME_MAINMENU_H

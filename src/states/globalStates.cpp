@@ -7,7 +7,9 @@
 namespace GlobalStates {
     MainMenu mainMenu;
     DistanceGame distanceGame;
-    State* stateList[2] = {&mainMenu, &distanceGame};
+
+    State* stateList[numberOfTotalStates] = {&mainMenu, &distanceGame};
+    State* mainMenuList[numberOfMainMenuStates] = {&distanceGame};
 
     const uint32_t ALL_STATE_FLAGS = mainMenu.getFlagName() | distanceGame.getFlagName();
 }

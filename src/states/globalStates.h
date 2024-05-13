@@ -6,11 +6,15 @@ class MainMenu;
 class DistanceGame;
 class State;
 
-
 namespace GlobalStates {
+
+    const int numberOfTotalStates = 2;
+    const int numberOfMainMenuStates = 4;
+
     extern MainMenu mainMenu;
     extern DistanceGame distanceGame;
-    extern State* stateList[2];
+    extern State* stateList[numberOfTotalStates];
+    extern State* mainMenuList[numberOfMainMenuStates];
 
     extern const uint32_t ALL_STATE_FLAGS;
 }

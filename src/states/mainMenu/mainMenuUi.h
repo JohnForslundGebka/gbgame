@@ -2,18 +2,24 @@
 #define GBGAME_MAINMENUUI_H
 #include "ui/canvas.h"
 #include "ui/images.h"
+#include "core/state.h"
+#include "states/globalStates.h"
+
+class MainMenu; // Forward declaration
 
 class MainMenuUi {
 public:
     Canvas c_hand;
     Canvas c_canvas;
 
-    MainMenuUi();
+    explicit MainMenuUi(MainMenu *parentState);
 
     void init();
 
+    String textField[5];
+    String stateNames[GlobalStates::numberOfMainMenuStates];
 
-    String stateTitles[5];
+    MainMenu *parentState;
 
 private:
     void moveUp();
