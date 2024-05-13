@@ -29,6 +29,6 @@ private:
 
      Thread* t_gfx;
      Thread* t_move;
-     class EventFlags m_isDoneMoving;
+     class EventFlags m_gameFlags;
 };
 #endif //GBGAME_MAINMENU_H

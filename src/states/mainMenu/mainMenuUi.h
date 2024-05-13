@@ -20,11 +20,13 @@ public:
     String stateNames[GlobalStates::numberOfMainMenuStates];
 
     MainMenu *parentState;
+    void drawText();
+    void updateTextFields();
+
+    void moveDown();
+    void moveUp();
 
 private:
-    void moveUp();
-    void moveDown();
-
 
 };
 #endif //GBGAME_MAINMENUUI_H
