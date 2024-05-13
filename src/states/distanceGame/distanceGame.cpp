@@ -6,16 +6,18 @@ using namespace rtos;
 using namespace std::chrono;
 
 // Constructor, initializes all necessary objects
-DistanceGame::DistanceGame(): m_canvas(this) {}
+DistanceGame::DistanceGame():  State(),  m_canvas(this) {}
 
 void DistanceGame::handleInput() {
 #ifdef DEBUG
      Serial.println("NU VÄNTAR JAG PÅ KNAPPAR");  
-#endif 
+#endif
 
     while (m_isRunning) {
 
         uint32_t result = Buttons::states.wait_any(Buttons::START_FLAG  | Buttons::A_FLAG, osWaitForever, false);
+
+        if (!m_isRunning) break;
 
         //debounce logic
         ThisThread::sleep_for(50ms);
@@ -36,10 +38,9 @@ void DistanceGame::handleInput() {
             case Buttons::START_FLAG:
                 #ifdef DEBUG
                     Serial.println("HEJ FRAN START");
-                #endif 
-                
-                m_isRunning = false;
-                State::stateFlags.set(MAIN_MENU);
+                #endif
+                 m_isRunning = false;
+                State::stateFlags.set(GlobalStates::stateList[0]->getFlagName());
                 break;
             default:
                 break;
@@ -52,7 +53,7 @@ void DistanceGame::handleInput() {
 void DistanceGame::update(){
     while (m_isRunning)
     {
-        m_gameFlags.wait_any(SCREEN_UPDATE_FLAG, osWaitForever);
+        m_gameFlags.wait_any(SCREEN_UPDATE_FLAG | STOP_RUNNING, osWaitForever);
         m_displayManager.updateScreen(&m_canvas.c_main);
     }
 }
@@ -92,10 +93,12 @@ void DistanceGame::game() {
         m_gameFlags.set(SCREEN_UPDATE_FLAG); 
 
         ThisThread::sleep_for(1000ms);
-        
+
+
         //Return to main manu when game finish
         m_isRunning = false;
-        State::stateFlags.set(MAIN_MENU);
+        State::stateFlags.set(GlobalStates::stateList[0]->getFlagName());
+
 
 #ifdef DEBUG
    Serial.println("NU HAR GAME KÖRTS KLART");  
@@ -121,15 +124,30 @@ void DistanceGame::run() {
 
 void DistanceGame::stop() {
 #ifdef DEBUG
-    Serial.println("NU STOPPAR JAG");
+    Serial.println("NU STOPPAR DISTANCEGAME");
 #endif
     m_isRunning = false;
-
+    //set flags, to not be stuck in waiting
+    Buttons::states.set(Buttons::START_FLAG | Buttons::A_FLAG);
+    m_gameFlags.set(SCREEN_UPDATE_FLAG | ADVANCE_GAME_FLAG);
+#ifdef DEBUG
+    Serial.println("AVSLUTAR TRÅDAR");
+#endif
     // Wait for threads to finish
-    t_gameLogic->join();               // CHANGE TO JOIN???
-    t_userInput->terminate();
-    t_screenUpdate->terminate();
+    if(t_gameLogic) t_gameLogic->join();
+#ifdef DEBUG
+    Serial.println("AVSLUTAT GAME LOGIC");
+#endif
+    t_userInput->join();
+#ifdef DEBUG
+    Serial.println("AVSLUTAT USER INPUT");
+#endif
+    t_screenUpdate->join();
+#ifdef DEBUG
+    Serial.println("AVSLUTAT SCREEN UPDARE");
+#endif
 
+   //delete pointers
     delete t_gameLogic;
     delete t_userInput;
     delete t_screenUpdate;
@@ -137,9 +155,16 @@ void DistanceGame::stop() {
     t_gameLogic = nullptr;
     t_screenUpdate = nullptr;
     t_userInput = nullptr;
+
+    //clear all flags before exiting
+    m_gameFlags.clear(SCREEN_UPDATE_FLAG | ADVANCE_GAME_FLAG);
+    Buttons::states.clear(Buttons::START_FLAG | Buttons::A_FLAG);
+
+    ThisThread::sleep_for(10ms);
+#ifdef DEBUG
+    Serial.println("HEJDA FRAN STOP I DISTANCEGAME");
+#endif
 }
-
-
 
 void DistanceGame::screenBlink() {
     while (m_isRunning) {  

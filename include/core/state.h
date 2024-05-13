@@ -17,6 +17,12 @@
 
 class State {
 public:
+
+    State() {
+        m_flagName = 1UL << instanceCounter;
+        instanceCounter++;
+    }
+
     //Virtual functions that handles inputs and updates
     virtual void handleInput() = 0;
     virtual void update() = 0;
@@ -24,9 +30,21 @@ public:
     virtual void stop() = 0;
     static EventFlags stateFlags;
 
+
+    uint32_t getFlagName() const {
+        return m_flagName;
+    }
+
     DisplayManager & m_displayManager = DisplayManager::getInstance();
     volatile bool m_isRunning = false;
+    uint32_t STOP_RUNNING = (1UL << 15);
+protected:
+    uint32_t m_flagName;
+    static uint32_t instanceCounter;  // Tracks the number of instances
+              // Unique bit set for this instance
 
 };
+
+
 
 #endif //GBGAME_STATE_H

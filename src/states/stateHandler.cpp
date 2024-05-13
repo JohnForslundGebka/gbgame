@@ -19,32 +19,20 @@ StateHandler::StateHandler(): m_mainThread(osPriorityAboveNormal,1024), m_curren
 #ifdef DEBUG
         Serial.println("NU KOM JAG IN I UPPDATESTATE I STATEHANDLER");
 #endif
-
-        uint32_t state = State::stateFlags.wait_any(MAIN_MENU | DISTANCE_GAME, osWaitForever, true);
-        switch (state){
-            case MAIN_MENU :
-
-#ifdef DEBUG
-                Serial.println("NU BÖRJAR JAG ATT BYTA STATE TILL MAIN MENU");
-#endif
-
+        uint32_t state = State::stateFlags.wait_any(GlobalStates::ALL_STATE_FLAGS, osWaitForever, true);
+        for(auto &checkedState : GlobalStates::stateList)
+        {
+            if (state == checkedState->getFlagName())
+            {
+                 #ifdef DEBUG
+                  Serial.println("NU HITTADE JAG STATES FRAN LISTAN");
+                 #endif
                 m_currentState->stop();
-              //  m_currentState = &mainMenu;
-               m_currentState = GlobalStates::stateList[0];
-
-#ifdef DEBUG
-                Serial.println("NU STARTAR STATEHANDLERS MAIN MENU");
-#endif
-
+                m_currentState = checkedState;
                 run();
+                state = 0;
                 break;
-            case DISTANCE_GAME :
-                m_currentState->stop();
-                m_currentState = GlobalStates::stateList[1];
-                run();
-                break;
-            default:
-                break;
+            }
         }
     }
 }

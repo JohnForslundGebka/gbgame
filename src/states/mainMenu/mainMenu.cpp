@@ -39,7 +39,7 @@ void MainMenu::handleInput() {
                 switch (m_selectedState) {  //start the selected state
                     case 1:
                         //set the stateFlags, to the state that the StateHandler should run
-                        State::stateFlags.set(DISTANCE_GAME);
+                        State::stateFlags.set(GlobalStates::stateList[1]->getFlagName());
                         break;
                     default:
                         break;
@@ -101,6 +101,6 @@ void MainMenu::stop() {
     t_move = nullptr;
 }
 
-MainMenu::MainMenu() {
+MainMenu::MainMenu() : State() {
     canvas.init();
 }

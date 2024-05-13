@@ -11,11 +11,13 @@ using namespace mbed;
 using namespace rtos;
 using namespace std::chrono;
 
+uint32_t State::instanceCounter = 0;
 DisplayManager& dm = DisplayManager::getInstance();
 Buttons button;
 StateHandler stateHandler;
 
 void setup() {
+    Serial.begin(115200);
     dm.init();
     stateHandler.init();
 }
