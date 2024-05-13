@@ -14,6 +14,8 @@ public:
 
     void stop() override;
 
+    void game();
+
     explicit Settings();
 
     int m_selectedState{};

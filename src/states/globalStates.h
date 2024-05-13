@@ -11,9 +11,9 @@ class Settings;
 namespace GlobalStates {
 
     const int numberOfTotalStates = 4;
-    const int numberOfMainMenuStates = 1;
+    const int numberOfMainMenuStates = 2;
     const int numberOfGameStates = 1;
-    const int numberOfSettingsStates = 1;
+    const int numberOfSettingsStates = 3;
 
     //all different states on the machine
     extern MainMenu mainMenu;

@@ -14,10 +14,10 @@ namespace GlobalStates {
 
     State* stateList[numberOfTotalStates] = {&mainMenu, &distanceGame, &games, &settings};
 
-    State* mainMenuList[numberOfMainMenuStates] = {&games};
+    State* mainMenuList[numberOfMainMenuStates] = {&games,&settings};
     State* gameList[numberOfGameStates] = {&distanceGame};
-    State* settingsList[numberOfSettingsStates] ={};
-    
+    State* settingsList[numberOfSettingsStates];
+
     const uint32_t ALL_STATE_FLAGS = mainMenu.getFlagName() |
                                  distanceGame.getFlagName() |
                                         games.getFlagName() |

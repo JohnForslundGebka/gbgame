@@ -12,10 +12,10 @@ public:
     Canvas c_canvas;
     explicit SettingsUi(Settings *p);
 
-    String textField[5];
+    String textField[3];
 
     void init();
-    void draw();
+    void updateText();
 private:
     Settings *parentState;
     void updateTextFields();
