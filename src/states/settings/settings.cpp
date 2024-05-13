@@ -59,11 +59,31 @@ void Settings::update() {
 }
 
 void Settings::run() {
+    m_isRunning = true;
 
+    t_gfx = new Thread;
+    t_move = new Thread;
+
+    t_gfx->start(callback(this, &Settings::update));
+    t_move->start(callback(this, &Settings::handleInput));
+
+    t_move->set_priority(osPriorityBelowNormal1);
+
+    m_canvas.init();
+
+    m_displayManager.updateScreen(&m_canvas.c_canvas);
 }
 
 void Settings::stop() {
+    m_isRunning = false;
+    t_gfx->join();
+    t_move->join();
+    delete t_gfx;
+    delete t_move;
 
+    Buttons::states.clear(Buttons::ALL_FLAG);
+    t_gfx = nullptr;
+    t_move = nullptr;
 }
 
 Settings::Settings() : State("Settings"), m_canvas(this) {

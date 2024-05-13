@@ -1,4 +1,5 @@
 #include "settingsUi.h"
+#include "settings.h"
 
 SettingsUi::SettingsUi(Settings *p) : c_canvas(128,128,0,0), parentState(p){
 
