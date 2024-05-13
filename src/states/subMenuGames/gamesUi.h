@@ -9,7 +9,6 @@ class Games; //forward declaration
 
 class GamesUI {
 public:
-
     Canvas c_canvas;
     Games *parentState;
 

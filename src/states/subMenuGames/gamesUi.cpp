@@ -50,25 +50,22 @@ void GamesUI::updateTextFields() {
 }
 
 void GamesUI::draw() {
-
-
     c_canvas.C.fillScreen(BLACK);
 
     c_canvas.C.setTextColor(0xFFFF);
     c_canvas.C.setTextSize(2);
     c_canvas.C.setTextWrap(false);
     c_canvas.C.setCursor(18, 0);
-    c_canvas.C.print("-Games-");
+    c_canvas.C.print("-Games-");  //title
 
     c_canvas.C.drawLine(1, 18, 128, 18, 0xFFFF);
     c_canvas.C.drawBitmap(1, 1, image_light_bits, 16, 16, 0xFFEA);
 
     c_canvas.C.drawBitmap(2, 64, image_hand_notice_bits, 16, 11, 0x555);
-
+    //center choice
     c_canvas.C.setTextColor(0xA800);
     c_canvas.C.setCursor(27, 62);
     c_canvas.C.print(textField[0]);
-
 
     c_canvas.C.setTextColor(0xFFFF);
     c_canvas.C.setTextSize(1);

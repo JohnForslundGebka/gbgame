@@ -77,7 +77,6 @@ void MainMenuUi::drawText() {
 }
 
 void MainMenuUi::updateTextFields() {
-
     int counter = parentState->m_selectedState;
 
     for (int i = 0; i < 5; i++){

@@ -17,7 +17,6 @@ public:
     void init();
 
     String textField[5];
-    String stateNames[GlobalStates::numberOfMainMenuStates];
 
     MainMenu *parentState;
     void drawText();
