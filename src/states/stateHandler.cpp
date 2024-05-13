@@ -13,24 +13,23 @@ StateHandler::StateHandler(): m_mainThread(osPriorityAboveNormal,1024), m_curren
  */
 
 
-
 [[noreturn]] void StateHandler::updateState() {
     while (true){
 #ifdef DEBUG
         Serial.println("NU KOM JAG IN I UPPDATESTATE I STATEHANDLER");
 #endif
-        uint32_t state = State::stateFlags.wait_any(GlobalStates::ALL_STATE_FLAGS, osWaitForever, true);
-        for(auto &checkedState : GlobalStates::stateList)
+        uint32_t result = State::stateFlags.wait_any(GlobalStates::ALL_STATE_FLAGS, osWaitForever, true);
+        for(auto &state : GlobalStates::stateList)
         {
-            if (state == checkedState->getFlagName())
+            if (result == state->getFlagName())
             {
                  #ifdef DEBUG
                   Serial.println("NU HITTADE JAG STATES FRAN LISTAN");
                  #endif
                 m_currentState->stop();
-                m_currentState = checkedState;
+                m_currentState = state;
                 run();
-                state = 0;
+                result = 0;
                 break;
             }
         }
@@ -55,7 +54,6 @@ void StateHandler::run(){
  *
  *
  */
-
 void StateHandler::init() {
      delay(300);
      run();

@@ -37,14 +37,15 @@ public:
 
     DisplayManager & m_displayManager = DisplayManager::getInstance();
     volatile bool m_isRunning = false;
+
+    //flag used for exiting state
     uint32_t STOP_RUNNING = (1UL << 15);
+
 protected:
+    // Unique bit set for this instance
     uint32_t m_flagName;
     static uint32_t instanceCounter;  // Tracks the number of instances
-              // Unique bit set for this instance
 
 };
-
-
 
 #endif //GBGAME_STATE_H

@@ -36,14 +36,9 @@ void MainMenu::handleInput() {
                 break;
 
             case Buttons::A_FLAG:
-                switch (m_selectedState) {  //start the selected state
-                    case 1:
-                        //set the stateFlags, to the state that the StateHandler should run
-                        State::stateFlags.set(GlobalStates::stateList[1]->getFlagName());
-                        break;
-                    default:
-                        break;
-                }
+                //set the stateFlags, to the state that the StateHandler should run
+                State::stateFlags.set(GlobalStates::stateList[m_selectedState]->getFlagName());
+                break;
 
             default:
                 break;
