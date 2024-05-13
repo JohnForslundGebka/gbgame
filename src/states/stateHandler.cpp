@@ -27,6 +27,7 @@ StateHandler::StateHandler(): m_mainThread(osPriorityAboveNormal,1024), m_curren
                   Serial.println("NU HITTADE JAG STATES FRAN LISTAN");
                  #endif
                 m_currentState->stop();
+
                 m_currentState = state;
                 run();
                 result = 0;

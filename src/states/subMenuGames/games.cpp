@@ -1,5 +1,7 @@
 #include "games.h"
 #include "gamesUi.h"
+#include "mbed.h"
+#include "rtos.h"
 
 void Games::handleInput() {
     using namespace std::chrono;
@@ -9,7 +11,6 @@ void Games::handleInput() {
         uint32_t m_result = Buttons::states.wait_any(Buttons::UP_FLAG | Buttons::DOWN_FLAG | Buttons::A_FLAG, osWaitForever, false);
 
         if (!m_isRunning) break;
-
         //debounce logic
         ThisThread::sleep_for(50ms);
         if(Buttons::states.get() == 0)
@@ -84,6 +85,7 @@ void Games::stop() {
     delete t_gfx;
     delete t_move;
 
+    Buttons::states.clear(Buttons::ALL_FLAG);
     t_gfx = nullptr;
     t_move = nullptr;
 }

@@ -10,7 +10,7 @@ class Games;
 namespace GlobalStates {
 
     const int numberOfTotalStates = 3;
-    const int numberOfMainMenuStates = 2;
+    const int numberOfMainMenuStates = 1;
     const int numberOfGameStates = 1;
 
     extern MainMenu mainMenu;

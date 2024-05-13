@@ -113,6 +113,7 @@ void MainMenu::stop() {
     delete t_gfx;
     delete t_move;
 
+    Buttons::states.clear(Buttons::ALL_FLAG);
     t_gfx = nullptr;
     t_move = nullptr;
 }
