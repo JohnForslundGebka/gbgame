@@ -18,6 +18,7 @@
 class State {
 public:
 
+    //Constructor
     State() {
         m_flagName = 1UL << instanceCounter;
         instanceCounter++;
