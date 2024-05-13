@@ -6,16 +6,19 @@
 class MainMenuUi {
 public:
     Canvas c_hand;
-    Canvas c_text;
+    Canvas c_canvas;
 
     MainMenuUi();
 
     void init();
 
-private:
 
-    void drawHand();
-    void drawText();
+    String stateTitles[5];
+
+private:
+    void moveUp();
+    void moveDown();
+
 
 };
 #endif //GBGAME_MAINMENUUI_H
