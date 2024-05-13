@@ -21,10 +21,10 @@ public:
     void stop() override;
 
     explicit MainMenu();
-    int m_selectedState = 1;
+    int m_selectedState = 0;
 
 private:
-     MainMenuUi canvas;
+     MainMenuUi m_canvas;
      Canvas *m_pntrCanvas;
 
      Thread* t_gfx;

@@ -22,17 +22,17 @@ void MainMenu::handleInput() {
         // Handle input and update positions
         switch(m_result){
             case Buttons::UP_FLAG:
-                canvas.c_hand.setY(max(30, canvas.c_hand.getY() - 20)); //update coordinates of hand
                 if (m_selectedState > 1)
                     m_selectedState--;
-                m_pntrCanvas = &canvas.c_hand;
+                m_canvas.init();
+                m_pntrCanvas = &m_canvas.c_hand;
                 break;
 
             case Buttons::DOWN_FLAG:
-                canvas.c_hand.setY(min(50, canvas.c_hand.getY() + 20)); //update coordinates of hand
                 if (m_selectedState < 2)
                     m_selectedState++;
-                m_pntrCanvas = &canvas.c_hand;
+                m_canvas.init();
+                m_pntrCanvas = &m_canvas.c_canvas;
                 break;
 
             case Buttons::A_FLAG:
@@ -44,7 +44,6 @@ void MainMenu::handleInput() {
                 break;
         }
         m_isDoneMoving.set(SCREEN_UPDATE_FLAG);
-        canvas.c_hand.updatePos();
     }
 }
 
@@ -77,8 +76,10 @@ void MainMenu::run() {
 
     t_move->set_priority(osPriorityBelowNormal1);
 
-    m_displayManager.updateScreen(&canvas.c_text);
-    m_displayManager.updateScreen(&canvas.c_hand);
+    m_canvas.init();
+
+    m_displayManager.updateScreen(&m_canvas.c_canvas);
+//    m_displayManager.updateScreen(&canvas.c_hand);
 
 #ifdef DEBUG
     Serial.println("NU HAR MAIN MENU STATE GJORT FÄRDIGT SITT RUN");
@@ -96,6 +97,5 @@ void MainMenu::stop() {
     t_move = nullptr;
 }
 
-MainMenu::MainMenu() : State("Main Menu") {
-    canvas.init();
+MainMenu::MainMenu() : State("Main Menu"), m_canvas(this) {
 }
