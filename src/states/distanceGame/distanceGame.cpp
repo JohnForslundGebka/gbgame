@@ -6,7 +6,7 @@ using namespace rtos;
 using namespace std::chrono;
 
 // Constructor, initializes all necessary objects
-DistanceGame::DistanceGame():  State(),  m_canvas(this) {}
+DistanceGame::DistanceGame():  State("Measury"),  m_canvas(this) {}
 
 void DistanceGame::handleInput() {
 #ifdef DEBUG

@@ -96,6 +96,6 @@ void MainMenu::stop() {
     t_move = nullptr;
 }
 
-MainMenu::MainMenu() : State() {
+MainMenu::MainMenu() : State("Main Menu") {
     canvas.init();
 }
