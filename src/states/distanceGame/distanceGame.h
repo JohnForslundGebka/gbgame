@@ -38,6 +38,8 @@ private:
     Thread *t_userInput{};        //Thread that handles user input
     Thread *t_screenUpdate{};     //This thread is responsible for updating the screen when the SCREEN_UPDATE_FLAG is set (highest priority)
 
+
+
     rtos::EventFlags m_gameFlags;    //Contains flags ADVANCE_GAME_FLAG and SCREEN_UPDATE_FLAG
 
     //Canvas object for drawing the screens

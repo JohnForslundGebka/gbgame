@@ -72,17 +72,21 @@ void DistanceGame::game() {
 #ifdef DEBUG
     Serial.println("NU GÖR JAG THREAD");
 #endif
-        rtos::Thread t_screenBlink;
-      //  t_screenBlink.set_priority(osPriorityBelowNormal);
-        t_screenBlink.start(mbed::callback(this, &DistanceGame::screenBlink));
+
+
+     m_canvas.drawScreen1();
+    m_gameFlags.set(SCREEN_UPDATE_FLAG);
+     ThisThread::sleep_for(50ms);
+//    Thread t_screenBlink;
+//    t_screenBlink.start(callback(this, &DistanceGame::screenBlink));
 
 #ifdef DEBUG
     Serial.println("NU VANTAR JAG 1");
 #endif    
         //Waits for user to press A to measure distance
-        m_gameFlags.wait_any(ADVANCE_GAME_FLAG, osWaitForever, false);
+        m_gameFlags.wait_any(ADVANCE_GAME_FLAG, osWaitForever, true);
         
-        t_screenBlink.join();
+      //   t_screenBlink.join();
 
         //Measures distance and calculates how far off the user was.
         m_measured = ultrasonic.readDistance();
@@ -90,7 +94,8 @@ void DistanceGame::game() {
     
         //Draws screen2 with the results and sets the flag to update screen
         m_canvas.drawScreen2();
-        m_gameFlags.set(SCREEN_UPDATE_FLAG); 
+        m_gameFlags.set(SCREEN_UPDATE_FLAG);
+
 
         //Waits for button A press to finish the game
         m_gameFlags.wait_any(ADVANCE_GAME_FLAG, osWaitForever, true);
@@ -131,13 +136,13 @@ void DistanceGame::run() {
     t_screenUpdate = new Thread;
     t_userInput = new Thread;
 
-     t_gameLogic->start(mbed::callback(this, &DistanceGame::game),osPriorityNormal);
+  //  t_userInput->set_priority(osPriorityBelowNormal);
+
+    t_gameLogic->start(mbed::callback(this, &DistanceGame::game));
 
     t_userInput->start(mbed::callback(this, &DistanceGame::handleInput));
-    osStatus status = t_screenUpdate->start(mbed::callback(this, &DistanceGame::update));
-    if (status != osOK) {
-        Serial.println("Failed to start screen thread");
-    }
+    t_screenUpdate->start(mbed::callback(this, &DistanceGame::update));
+
 #ifdef DEBUG
     Serial.println("NU RUN JAG FÄRDIGT");
 #endif
@@ -173,9 +178,11 @@ void DistanceGame::stop() {
     delete t_userInput;
     delete t_screenUpdate;
 
+
     t_gameLogic = nullptr;
     t_screenUpdate = nullptr;
     t_userInput = nullptr;
+
 
     //clear all flags before exiting
     m_gameFlags.clear(SCREEN_UPDATE_FLAG | ADVANCE_GAME_FLAG);
