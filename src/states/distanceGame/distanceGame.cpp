@@ -122,6 +122,7 @@ void DistanceGame::run() {
 #ifdef DEBUG
     Serial.println("NU RUN JAG");
 #endif
+
     t_gameLogic = new Thread;
     t_screenUpdate = new Thread;
     t_userInput = new Thread;
