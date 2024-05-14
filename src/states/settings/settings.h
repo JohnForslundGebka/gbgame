@@ -15,6 +15,7 @@ public:
     void stop() override;
 
     void game();
+    void newHandPos();
 
     explicit Settings();
 

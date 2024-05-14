@@ -11,12 +11,16 @@ class SettingsUi {
 public:
     Canvas c_handPos0;
     Canvas c_handPos1and2;
+
     explicit SettingsUi(Settings *p);
 
     String textField[3];
 
     void init();
     void updateText();
+    void drawHandPos1();
+    void drawHandPos2();
+
 private:
     Settings *parentState;
     void updateTextFields();

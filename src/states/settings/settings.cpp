@@ -4,7 +4,7 @@
 void Settings::handleInput() {
     using namespace std::chrono;
     while (m_isRunning){
-        uint32_t input = Buttons::states.wait_any(Buttons::UP_FLAG | Buttons::DOWN_FLAG | Buttons::A_FLAG | Buttons::LEFT_FLAG | Buttons::RIGHT_FLAG, osWaitForever, false);
+        uint32_t input = Buttons::states.wait_any(Buttons::UP_FLAG | Buttons::DOWN_FLAG | Buttons::A_FLAG | Buttons::LEFT_FLAG | Buttons::RIGHT_FLAG | Buttons::START_FLAG, osWaitForever, false);
         if (!m_isRunning) break;
         //debounce logic
         ThisThread::sleep_for(50ms);
@@ -13,11 +13,24 @@ void Settings::handleInput() {
 
         //change the hand state
         if(input==Buttons::UP_FLAG){
-            if(m_handPos >= 0)
+            if(m_handPos >= 0){
                 m_handPos--;
+                newHandPos();
+                Buttons::states.clear(Buttons::ALL_FLAG);
+                continue;
+            }
         } else if (input==Buttons::DOWN_FLAG){
-            if(m_handPos <= 2)
+            if(m_handPos <= 2) {
                 m_handPos++;
+                newHandPos();
+                Buttons::states.clear(Buttons::ALL_FLAG);
+                continue;
+            }
+        }
+
+        if(input==Buttons::START_FLAG){
+            m_isRunning = false;
+            State::stateFlags.set(GlobalStates::stateList[0]->getFlagName());
         }
 
 
@@ -33,7 +46,6 @@ void Settings::handleInput() {
                         m_selectedState--;
 
                     m_canvas.updateText();
-                    m_pntrCanvas = &m_canvas.c_handPos0;
                     Buttons::states.clear(Buttons::ALL_FLAG);
                     break;
                 }
@@ -60,19 +72,45 @@ void Settings::handleInput() {
             case 1:  //if the hand is in position 1
                 if(input==Buttons::A_FLAG)
                     m_vibraOn = !m_vibraOn;
+                m_canvas.drawHandPos1();
                 Buttons::states.clear(Buttons::ALL_FLAG);
                 break;
 
             case 2:
                 if(input==Buttons::A_FLAG)
                     m_soundOn = !m_soundOn;
+                m_canvas.drawHandPos2();
                 Buttons::states.clear(Buttons::ALL_FLAG);
                 break;
             default:
                 break;
         }
+
         m_gameFlags.set(SCREEN_UPDATE_FLAG);
     }
+}
+
+void Settings::newHandPos() {
+
+    switch(m_handPos)
+    {
+        case 0:
+            m_canvas.updateText();
+            m_pntrCanvas = &m_canvas.c_handPos0;
+            break;
+        case 1:
+            m_canvas.drawHandPos1();
+            m_pntrCanvas = &m_canvas.c_handPos1and2;
+            break;
+        case 2:
+            m_canvas.drawHandPos2();
+            m_pntrCanvas = &m_canvas.c_handPos1and2;
+            break;
+        default:
+            break;
+    }
+    m_gameFlags.set(SCREEN_UPDATE_FLAG);
+
 }
 
 void Settings::update() {
@@ -92,6 +130,8 @@ void Settings::run() {
     t_gameLogic = new Thread;
     t_gfx = new Thread;
     t_move = new Thread;
+
+    m_pntrCanvas = &m_canvas.c_handPos0;
 
   //  t_gameLogic->start(callback(this, &Settings::game));
     t_gfx->start(callback(this, &Settings::update));

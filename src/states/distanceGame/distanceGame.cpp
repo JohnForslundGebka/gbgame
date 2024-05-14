@@ -1,5 +1,7 @@
 #include "distanceGame.h"
 #include "distanceGameUi.h"
+#include "rtos.h"
+#include "mbed.h"
 
 using namespace mbed;
 using namespace rtos;

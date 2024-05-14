@@ -84,7 +84,7 @@ void Games::stop() {
     delete t_gfx;
     delete t_move;
 
-    Buttons::states.clear(Buttons::ALL_FLAG);
+    Buttons::states.clear(Buttons::A_FLAG);
     t_gfx = nullptr;
     t_move = nullptr;
 }
