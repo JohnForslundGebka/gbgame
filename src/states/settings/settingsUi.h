@@ -9,7 +9,8 @@ class Settings; //forward declaration
 
 class SettingsUi {
 public:
-    Canvas c_canvas;
+    Canvas c_handPos0;
+    Canvas c_handPos1and2;
     explicit SettingsUi(Settings *p);
 
     String textField[3];
