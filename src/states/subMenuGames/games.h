@@ -22,8 +22,8 @@ public:
 private:
     Canvas *m_pntrCanvas{};
     GamesUI m_canvas;
-    Thread* t_gfx{};
-    Thread* t_move{};
+    Thread* t_gfx = nullptr;
+    Thread* t_move= nullptr;
     class EventFlags m_gameFlags;
 };
 

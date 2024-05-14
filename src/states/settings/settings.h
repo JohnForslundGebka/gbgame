@@ -14,7 +14,6 @@ public:
 
     void stop() override;
 
-    void game();
     void newHandPos();
 
     explicit Settings();
@@ -28,9 +27,8 @@ private:
     SettingsUi m_canvas;
     Canvas *m_pntrCanvas{};
 
-    Thread* t_gfx{};
-    Thread* t_move{};
-   // Thread *t_gameLogic{};        //Thread that handles the game logic/order
+    Thread* t_gfx = nullptr;
+    Thread* t_move= nullptr;
 
     class EventFlags m_gameFlags;
 

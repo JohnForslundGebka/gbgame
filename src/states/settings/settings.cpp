@@ -119,10 +119,7 @@ void Settings::update() {
     }
 }
 
-void Settings::game() {
 
-
-}
 
 void Settings::run() {
     m_isRunning = true;

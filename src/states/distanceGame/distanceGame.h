@@ -34,9 +34,9 @@ using namespace std::chrono;
 class DistanceGame : public State {
 private:
     Ultrasonic ultrasonic;     //Object that initializes the ultrasonic sensor and a method that reads the distance
-    Thread *t_gameLogic{};        //Thread that handles the game logic/order
-    Thread *t_userInput{};        //Thread that handles user input
-    Thread *t_screenUpdate{};     //This thread is responsible for updating the screen when the SCREEN_UPDATE_FLAG is set (highest priority)
+    Thread *t_gameLogic = nullptr;        //Thread that handles the game logic/order
+    Thread *t_userInput= nullptr;      //Thread that handles user input
+    Thread *t_screenUpdate= nullptr;  //This thread is responsible for updating the screen when the SCREEN_UPDATE_FLAG is set (highest priority)
 
 
 
