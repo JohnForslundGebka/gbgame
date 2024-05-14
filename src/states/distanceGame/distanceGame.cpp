@@ -55,7 +55,7 @@ void DistanceGame::handleInput() {
 void DistanceGame::update(){
     while (m_isRunning)
     {
-        m_gameFlags.wait_any(SCREEN_UPDATE_FLAG | STOP_RUNNING, osWaitForever);
+        m_gameFlags.wait_any(SCREEN_UPDATE_FLAG, osWaitForever);
         m_displayManager.updateScreen(&m_canvas.c_main);
     }
 }
@@ -73,7 +73,7 @@ void DistanceGame::game() {
         t_screenBlink.start(callback(this, &DistanceGame::screenBlink));
 
 #ifdef DEBUG
-    Serial.println("NU VANTAR JAG");
+    Serial.println("NU VANTAR JAG 1");
 #endif    
         //Waits for user to press A to measure distance
         m_gameFlags.wait_any(ADVANCE_GAME_FLAG, osWaitForever, false);
@@ -96,8 +96,12 @@ void DistanceGame::game() {
 
         ThisThread::sleep_for(1000ms);
 
+#ifdef DEBUG
+    Serial.println("NU AR GAME KLART");
+#endif
 
-        //Return to main manu when game finish
+
+    //Return to main manu when game finish
         m_isRunning = false;
         State::stateFlags.set(GlobalStates::stateList[0]->getFlagName());
 
