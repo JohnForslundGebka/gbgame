@@ -69,8 +69,12 @@ void DistanceGame::game() {
         m_targetLength = random(10, 100);
 
         //Creates and starts a thread that blink the screen text "button A"
-        Thread t_screenBlink;
-        t_screenBlink.start(callback(this, &DistanceGame::screenBlink));
+#ifdef DEBUG
+    Serial.println("NU GÖR JAG THREAD");
+#endif
+        rtos::Thread t_screenBlink;
+      //  t_screenBlink.set_priority(osPriorityBelowNormal);
+        t_screenBlink.start(mbed::callback(this, &DistanceGame::screenBlink));
 
 #ifdef DEBUG
     Serial.println("NU VANTAR JAG 1");
