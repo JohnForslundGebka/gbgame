@@ -116,6 +116,9 @@ void DistanceGame::run() {
     //Starts the threads
     m_isRunning = true;
 
+    if(m_isRunning)
+        Serial.println("RUNNING IS TRUE");
+
 #ifdef DEBUG
     Serial.println("NU RUN JAG");
 #endif
@@ -126,6 +129,9 @@ void DistanceGame::run() {
     t_gameLogic->start(callback(this, &DistanceGame::game));
     t_userInput->start(callback(this, &DistanceGame::handleInput));
     t_screenUpdate->start(callback(this, &DistanceGame::update));
+#ifdef DEBUG
+    Serial.println("NU RUN JAG FÄRDIGT");
+#endif
 }
 
 void DistanceGame::stop() {
@@ -173,7 +179,11 @@ void DistanceGame::stop() {
 }
 
 void DistanceGame::screenBlink() {
-    while (m_isRunning) {  
+    while (m_isRunning) {
+#ifdef DEBUG
+        Serial.println("NU BLINKAR JAG");
+#endif
+
         if (m_gameFlags.get() & ADVANCE_GAME_FLAG) {
             m_gameFlags.clear(ADVANCE_GAME_FLAG);
             break;  // Exit loop if the flag is set

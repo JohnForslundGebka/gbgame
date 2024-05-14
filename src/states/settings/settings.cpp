@@ -127,7 +127,7 @@ void Settings::game() {
 void Settings::run() {
     m_isRunning = true;
 
-    t_gameLogic = new Thread;
+  //  t_gameLogic = new Thread;
     t_gfx = new Thread;
     t_move = new Thread;
 

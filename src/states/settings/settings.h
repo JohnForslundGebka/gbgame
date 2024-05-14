@@ -30,7 +30,7 @@ private:
 
     Thread* t_gfx{};
     Thread* t_move{};
-    Thread *t_gameLogic{};        //Thread that handles the game logic/order
+   // Thread *t_gameLogic{};        //Thread that handles the game logic/order
 
     class EventFlags m_gameFlags;
 
