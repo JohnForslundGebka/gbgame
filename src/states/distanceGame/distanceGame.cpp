@@ -131,9 +131,13 @@ void DistanceGame::run() {
     t_screenUpdate = new Thread;
     t_userInput = new Thread;
 
-    t_gameLogic->start(callback(this, &DistanceGame::game));
-    t_userInput->start(callback(this, &DistanceGame::handleInput));
-    t_screenUpdate->start(callback(this, &DistanceGame::update));
+     t_gameLogic->start(mbed::callback(this, &DistanceGame::game),osPriorityNormal);
+
+    t_userInput->start(mbed::callback(this, &DistanceGame::handleInput));
+    osStatus status = t_screenUpdate->start(mbed::callback(this, &DistanceGame::update));
+    if (status != osOK) {
+        Serial.println("Failed to start screen thread");
+    }
 #ifdef DEBUG
     Serial.println("NU RUN JAG FÄRDIGT");
 #endif
