@@ -12,23 +12,16 @@ StateHandler::StateHandler(): m_mainThread(osPriorityAboveNormal,1024), m_curren
  * @param State::stateFlags is a static variable located in the state.h base class
  */
 
-
 [[noreturn]] void StateHandler::updateState() {
     while (true){
-#ifdef DEBUG
-        Serial.println("NU KOM JAG IN I UPPDATESTATE I STATEHANDLER");
-#endif
+        //Here the stateHandler will loop through all states until it fins the one that has flagged
         uint32_t result = State::stateFlags.wait_any(GlobalStates::ALL_STATE_FLAGS, osWaitForever, true);
-        for(auto &state : GlobalStates::stateList)
+        for(auto &newState : GlobalStates::stateList)
         {
-            if (result == state->getFlagName())
+            if (result == newState->getFlagName()) //if the state is found, stop the last state and start the new
             {
-                 #ifdef DEBUG
-                  Serial.println("NU HITTADE JAG STATES FRAN LISTAN");
-                 #endif
                 m_currentState->stop();
-
-                m_currentState = state;
+                m_currentState = newState;
                 run();
                 result = 0;
                 break;

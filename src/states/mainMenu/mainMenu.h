@@ -24,11 +24,11 @@ public:
     int m_selectedState{};
 
 private:
-     MainMenuUi m_canvas;
-     Canvas *m_pntrCanvas{};
+     MainMenuUi *m_canvas = nullptr;
+     Canvas *m_pntrCanvas = nullptr;
 
-     Thread* t_gfx{};
-     Thread* t_move{};
+     Thread* t_gfx = nullptr;
+     Thread* t_move = nullptr;
      class EventFlags m_gameFlags;
 };
 #endif //GBGAME_MAINMENU_H

@@ -21,7 +21,7 @@ public:
     int m_selectedState{};
 private:
     Canvas *m_pntrCanvas{};
-    GamesUI m_canvas;
+    GamesUI *m_canvas = nullptr;
     Thread* t_gfx = nullptr;
     Thread* t_move= nullptr;
     class EventFlags m_gameFlags;

@@ -14,7 +14,6 @@ void DistanceGame::handleInput() {
 #ifdef DEBUG
      Serial.println("NU VÄNTAR JAG PÅ KNAPPAR");  
 #endif
-
     while (m_isRunning) {
 
         uint32_t result = Buttons::states.wait_any(Buttons::START_FLAG  | Buttons::A_FLAG, osWaitForever, false);
@@ -33,8 +32,7 @@ void DistanceGame::handleInput() {
             case Buttons::A_FLAG :
                 #ifdef DEBUG
                      Serial.println("HEJ FRAN A");
-                #endif 
-                
+                #endif
                 m_gameFlags.set(ADVANCE_GAME_FLAG);
                 break;
             case Buttons::START_FLAG:
@@ -56,7 +54,7 @@ void DistanceGame::update(){
     while (m_isRunning)
     {
         m_gameFlags.wait_any(SCREEN_UPDATE_FLAG, osWaitForever);
-        m_displayManager.updateScreen(&m_canvas.c_main);
+        m_displayManager.updateScreen(&m_canvas->c_main);
     }
 }
 
@@ -181,6 +179,9 @@ void DistanceGame::stop() {
 #ifdef DEBUG
     Serial.println("AVSLUTAT SCREEN UPDARE");
 #endif
+
+    delete m_canvas; // Properly delete the m_canvas when stopping
+    m_canvas = nullptr;
 
 
     //clear all flags before exiting

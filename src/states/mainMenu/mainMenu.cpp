@@ -39,8 +39,8 @@ void MainMenu::handleInput() {
                     m_selectedState = (GlobalStates::numberOfMainMenuStates - 1);
                 else
                     m_selectedState--;
-                m_canvas.moveUp();
-                m_pntrCanvas = &m_canvas.c_canvas;
+                m_canvas->moveUp();
+                m_pntrCanvas = &m_canvas->c_canvas;
                 break;
 
             case Buttons::DOWN_FLAG:
@@ -51,8 +51,8 @@ void MainMenu::handleInput() {
                     m_selectedState = (GlobalStates::numberOfMainMenuStates - 1);
                 else
                     m_selectedState++;
-                m_canvas.moveDown();
-                m_pntrCanvas = &m_canvas.c_canvas;
+                m_canvas->moveDown();
+                m_pntrCanvas = &m_canvas->c_canvas;
                 break;
 
             case Buttons::A_FLAG:
@@ -90,17 +90,17 @@ void MainMenu::run() {
 
     t_gfx = new Thread;
     t_move = new Thread;
+    m_canvas = new MainMenuUi(this);
 
     t_gfx->start(callback(this, &MainMenu::update));
     t_move->start(callback(this, &MainMenu::handleInput));
 
     t_move->set_priority(osPriorityBelowNormal1);
 
-    m_canvas.init();
+    m_canvas->init();
 
-    m_displayManager.updateScreen(&m_canvas.c_canvas);
-//    m_displayManager.updateScreen(&canvas.c_hand);
-
+    m_displayManager.updateScreen(&m_canvas->c_canvas);
+    
 #ifdef DEBUG
     Serial.println("NU HAR MAIN MENU STATE GJORT FÄRDIGT SITT RUN");
 #endif
@@ -108,15 +108,21 @@ void MainMenu::run() {
 
 void MainMenu::stop() {
     m_isRunning = false;
-    t_gfx->join();
-    t_move->join();
-    delete t_gfx;
-    delete t_move;
+    if (t_gfx) {
+        t_gfx->join();
+        delete t_gfx;
+        t_gfx = nullptr;
+    }
+    if (t_move) {
+        t_move->join();
+        delete t_move;
+        t_move = nullptr;
+    }
 
+    delete m_canvas; // Properly delete the m_canvas when stopping
+    m_canvas = nullptr;
     Buttons::states.clear(Buttons::ALL_FLAG);
-    t_gfx = nullptr;
-    t_move = nullptr;
 }
 
-MainMenu::MainMenu() : State("Main Menu"), m_canvas(this) {
+MainMenu::MainMenu() : State("Main Menu"){
 }

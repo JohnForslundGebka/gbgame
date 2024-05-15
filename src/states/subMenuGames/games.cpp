@@ -25,8 +25,8 @@ void Games::handleInput() {
                     m_selectedState = (GlobalStates::numberOfGameStates - 1);
                 else
                     m_selectedState--;
-                m_canvas.draw();
-                m_pntrCanvas = &m_canvas.c_canvas;
+                m_canvas->draw();
+                m_pntrCanvas = &m_canvas->c_canvas;
                 break;
 
             case Buttons::DOWN_FLAG:
@@ -37,8 +37,8 @@ void Games::handleInput() {
                     m_selectedState = (GlobalStates::numberOfGameStates - 1);
                 else
                     m_selectedState++;
-                m_canvas.draw();
-                m_pntrCanvas = &m_canvas.c_canvas;
+                m_canvas->draw();
+                m_pntrCanvas = &m_canvas->c_canvas;
                 break;
 
             case Buttons::A_FLAG:
@@ -66,27 +66,34 @@ void Games::run() {
 
     t_gfx = new Thread;
     t_move = new Thread;
+    m_canvas = new GamesUI(this);
 
     t_gfx->start(callback(this, &Games::update));
     t_move->start(callback(this, &Games::handleInput));
 
     t_move->set_priority(osPriorityBelowNormal1);
 
-    m_canvas.init();
+    m_canvas->init();
 
-    m_displayManager.updateScreen(&m_canvas.c_canvas);
+    m_displayManager.updateScreen(&m_canvas->c_canvas);
 }
 
 void Games::stop() {
     m_isRunning = false;
-    t_gfx->join();
-    t_move->join();
-    delete t_gfx;
-    delete t_move;
+    if (t_gfx) {
+        t_gfx->join();
+        delete t_gfx;
+        t_gfx = nullptr;
+    }
+    if (t_move) {
+        t_move->join();
+        delete t_move;
+        t_move = nullptr;
+    }
 
-    Buttons::states.clear(Buttons::A_FLAG);
-    t_gfx = nullptr;
-    t_move = nullptr;
+    delete m_canvas; // Properly delete the m_canvas when stopping
+    m_canvas = nullptr;
+    Buttons::states.clear(Buttons::ALL_FLAG);
 }
 
-Games::Games() : State("Games"), m_canvas(this) {}
+Games::Games() : State("Games"){}
