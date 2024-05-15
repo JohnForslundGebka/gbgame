@@ -2,6 +2,8 @@
 #include "rtos.h"
 
 void Settings::handleInput() {
+    using namespace rtos;
+    using namespace mbed;
     using namespace std::chrono;
     while (m_isRunning){
         uint32_t input = Buttons::states.wait_any(Buttons::UP_FLAG | Buttons::DOWN_FLAG | Buttons::A_FLAG | Buttons::LEFT_FLAG | Buttons::RIGHT_FLAG | Buttons::START_FLAG, osWaitForever, false);
@@ -117,6 +119,8 @@ void Settings::update() {
 }
 
 void Settings::run() {
+    using namespace rtos;
+    using namespace mbed;
     m_isRunning = true;
 
     if (m_canvas != nullptr) {

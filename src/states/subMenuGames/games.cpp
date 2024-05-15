@@ -3,6 +3,8 @@
 #include "rtos.h"
 
 void Games::handleInput() {
+    using namespace rtos;
+    using namespace mbed;
     using namespace std::chrono;
 
     while (m_isRunning){
@@ -62,10 +64,12 @@ void Games::update() {
 }
 
 void Games::run() {
+    using namespace rtos;
+    using namespace mbed;
     m_isRunning = true;
 
-    t_gfx = new Thread;
-    t_move = new Thread;
+    t_gfx = new rtos::Thread;
+    t_move = new rtos::Thread;
     m_canvas = new GamesUI(this);
 
     t_gfx->start(callback(this, &Games::update));

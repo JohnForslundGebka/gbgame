@@ -21,15 +21,14 @@
 #include <bitset>
 
 
-using namespace mbed;
-using namespace rtos;
 
 class Buttons {
+
 public:
     Buttons();  // Constructor to initialize all buttons
 
     // EventFlags object for button states
-    static EventFlags states;
+    static rtos::EventFlags states;
 
     //Enums for flag names
     enum ButtonFlags {
@@ -49,13 +48,13 @@ public:
 private:
   
     // InterruptIn object for each button
-    InterruptIn buttonUp;
-    InterruptIn buttonLeft;
-    InterruptIn buttonRight;
-    InterruptIn buttonStart;
-    InterruptIn buttonA;
-    InterruptIn buttonB;
-    InterruptIn buttonDown;
+    mbed::InterruptIn buttonUp;
+    mbed::InterruptIn buttonLeft;
+    mbed::InterruptIn buttonRight;
+    mbed::InterruptIn buttonStart;
+    mbed::InterruptIn buttonA;
+    mbed::InterruptIn buttonB;
+    mbed::InterruptIn buttonDown;
     
 };
 

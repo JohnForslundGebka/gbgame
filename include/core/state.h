@@ -29,7 +29,7 @@ public:
     virtual void run() = 0;
     virtual void stop() = 0;
 
-    static EventFlags stateFlags;
+    static rtos::EventFlags stateFlags;
 
     volatile bool m_isRunning = false;
     //name of the state, to be used in menus

@@ -27,8 +27,8 @@ private:
      MainMenuUi *m_canvas = nullptr;
      Canvas *m_pntrCanvas = nullptr;
 
-     Thread* t_gfx = nullptr;
-     Thread* t_move = nullptr;
-     class EventFlags m_gameFlags;
+     rtos::Thread* t_gfx = nullptr;
+     rtos::Thread* t_move = nullptr;
+     class rtos::EventFlags m_gameFlags;
 };
 #endif //GBGAME_MAINMENU_H

@@ -29,9 +29,9 @@ public:
 private:
     Canvas *m_pntrCanvas{};
     GamesUI *m_canvas = nullptr;
-    Thread* t_gfx = nullptr;
-    Thread* t_move= nullptr;
-    class EventFlags m_gameFlags;
+    rtos::Thread* t_gfx = nullptr;
+    rtos::Thread* t_move= nullptr;
+    class rtos::EventFlags m_gameFlags;
 };
 
 #endif //GBGAME_GAMES_H

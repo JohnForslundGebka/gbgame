@@ -3,25 +3,26 @@
 #include "rtos.h"
 #include "mbed.h"
 
-using namespace mbed;
-using namespace rtos;
-using namespace std::chrono;
+
 
 // Constructor, initializes all necessary objects
 DistanceGame::DistanceGame():  State("Measury"){}
 
 void DistanceGame::handleInput() {
+    using namespace rtos;
+    using namespace mbed;
 #ifdef DEBUG
      Serial.println("NU VÄNTAR JAG PÅ KNAPPAR");  
 #endif
     while (m_isRunning) {
+        using namespace std::chrono;
 
         uint32_t result = Buttons::states.wait_any(Buttons::START_FLAG  | Buttons::A_FLAG, osWaitForever, false);
 
         if (!m_isRunning) break;
 
         //debounce logic
-        ThisThread::sleep_for(50ms);
+        rtos::ThisThread::sleep_for(50ms);
         if(Buttons::states.get() == 0)
             continue;
 
@@ -59,6 +60,9 @@ void DistanceGame::update(){
 }
 
 void DistanceGame::game() {
+    using namespace rtos;
+    using namespace mbed;
+    using namespace std::chrono;
 #ifdef DEBUG
     Serial.println("NU BORJAR JAG");
 #endif
@@ -73,9 +77,9 @@ void DistanceGame::game() {
      m_canvas->drawScreen1();
      m_gameFlags.set(SCREEN_UPDATE_FLAG);
     //Creates and starts a thread that blink the screen text "button A"
-     ThisThread::sleep_for(50ms);
+     rtos::ThisThread::sleep_for(50ms);
      Thread t_screenBlink;
-     t_screenBlink.start(callback(this, &DistanceGame::screenBlink));
+     t_screenBlink.start(mbed::callback(this, &DistanceGame::screenBlink));
 
 #ifdef DEBUG
     Serial.println("NU VANTAR JAG 1");
@@ -100,7 +104,7 @@ void DistanceGame::game() {
         m_canvas->drawScreen3();
         m_gameFlags.set(SCREEN_UPDATE_FLAG);
 
-        ThisThread::sleep_for(1000ms);
+        rtos::ThisThread::sleep_for(1000ms);
 
 #ifdef DEBUG
     Serial.println("NU AR GAME KLART");
@@ -119,6 +123,8 @@ void DistanceGame::game() {
 }
 
 void DistanceGame::run() {
+    using namespace rtos;
+    using namespace mbed;
     //Starts the threads
     m_isRunning = true;
 
@@ -144,6 +150,7 @@ void DistanceGame::run() {
 }
 
 void DistanceGame::stop() {
+    using namespace std::chrono;
 #ifdef DEBUG
     Serial.println("NU STOPPAR DISTANCEGAME");
 #endif
@@ -188,13 +195,14 @@ void DistanceGame::stop() {
     m_gameFlags.clear(SCREEN_UPDATE_FLAG | ADVANCE_GAME_FLAG);
     Buttons::states.clear(Buttons::START_FLAG | Buttons::A_FLAG);
 
-    ThisThread::sleep_for(10ms);
+    rtos::ThisThread::sleep_for(10ms);
 #ifdef DEBUG
     Serial.println("HEJDA FRAN STOP I DISTANCEGAME");
 #endif
 }
 
 void DistanceGame::screenBlink() {
+    using namespace std::chrono;
     while (m_isRunning) {
 #ifdef DEBUG
         Serial.println("NU BLINKAR JAG");
@@ -207,11 +215,11 @@ void DistanceGame::screenBlink() {
         textColor = WHITE;
         m_canvas->drawScreen1();
         m_gameFlags.set(SCREEN_UPDATE_FLAG);
-        ThisThread::sleep_for(300ms);
+        rtos::ThisThread::sleep_for(300ms);
         textColor = BLACK;
         m_canvas->drawScreen1();
         m_gameFlags.set(SCREEN_UPDATE_FLAG);
-        ThisThread::sleep_for(300ms);
+        rtos::ThisThread::sleep_for(300ms);
     }
 }
 

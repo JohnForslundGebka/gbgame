@@ -29,7 +29,7 @@ public:
 
 private:
     // Main thread object
-     Thread m_mainThread;
+     rtos::Thread m_mainThread;
 
     //Pointer to the current state that is running at the moment
     State* m_currentState;

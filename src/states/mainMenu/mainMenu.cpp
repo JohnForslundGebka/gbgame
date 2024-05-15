@@ -2,16 +2,16 @@
 #include "mbed.h"
 #include "rtos.h"
 
-using namespace mbed;
-using namespace rtos;
 
 
-EventFlags State::stateFlags;
+rtos::EventFlags State::stateFlags;
 
 /**
  * Handles button input to navigate through menu items.
  */
 void MainMenu::handleInput() {
+    using namespace rtos;
+    using namespace mbed;
     using namespace std::chrono;
 
 #ifdef DEBUG
@@ -83,6 +83,8 @@ void MainMenu::update() {
  * Initializes and runs the main menu.
  */
 void MainMenu::run() {
+    using namespace rtos;
+    using namespace mbed;
 #ifdef DEBUG
     Serial.println("NU KÖRS MAIN MENU STATE");
 #endif
@@ -92,8 +94,8 @@ void MainMenu::run() {
     t_move = new Thread;
     m_canvas = new MainMenuUi(this);
 
-    t_gfx->start(callback(this, &MainMenu::update));
-    t_move->start(callback(this, &MainMenu::handleInput));
+    t_gfx->start(mbed::callback(this, &MainMenu::update));
+    t_move->start(mbed::callback(this, &MainMenu::handleInput));
 
     t_move->set_priority(osPriorityBelowNormal1);
 

@@ -16,7 +16,7 @@
 #include "core/macros.h"
 #include "ui/canvas.h"
 
-using namespace rtos;
+
 class DisplayManager {
 
 public:
@@ -41,7 +41,7 @@ public:
 private:
 
     Adafruit_SSD1351 m_display = Adafruit_SSD1351(m_ScreenWidth, m_ScreenHeight, &::SPI, CS_PIN, DC_PIN, RST_PIN);
-    Mutex m_displayMutex;
+    rtos::Mutex m_displayMutex;
     //constructor
     DisplayManager();
 

@@ -27,10 +27,10 @@ private:
     SettingsUi* m_canvas = nullptr;
     Canvas *m_pntrCanvas{};
 
-    Thread* t_gfx = nullptr;
-    Thread* t_move= nullptr;
+    rtos::Thread* t_gfx = nullptr;
+    rtos::Thread* t_move= nullptr;
 
-    class EventFlags m_gameFlags;
+    class rtos::EventFlags m_gameFlags;
 
     const uint32_t handMove = (1UL << 5);
 

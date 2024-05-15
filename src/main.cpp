@@ -19,11 +19,9 @@ void setup() {
     Serial.begin(115200);
     dm.init();
     stateHandler.init();
-    delay(1000);
 }
 
 void loop() {
     using namespace std::chrono;
-   ThisThread::sleep_for(seconds(3));
-
+    rtos::ThisThread::sleep_for(seconds(3));
 }
