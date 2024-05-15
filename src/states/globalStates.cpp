@@ -5,8 +5,9 @@
 #include "states/subMenuGames/games.h"
 #include "states/settings/settings.h"
 
-//all available states
+
 namespace GlobalStates {
+    //all available states
     MainMenu mainMenu;
     DistanceGame distanceGame;
     Games games;
@@ -18,6 +19,7 @@ namespace GlobalStates {
     State* gameList[numberOfGameStates] = {&distanceGame};
     State* settingsList[numberOfSettingsStates];
 
+    //variable used be the State handler to change state
     const uint32_t ALL_STATE_FLAGS = mainMenu.getFlagName() |
                                  distanceGame.getFlagName() |
                                         games.getFlagName() |

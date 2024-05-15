@@ -139,7 +139,6 @@ void Settings::run() {
     m_displayManager.updateScreen(&m_canvas->c_handPos0);
 }
 
-
 void Settings::stop() {
 
     m_isRunning = false;

@@ -122,6 +122,7 @@ void MainMenu::stop() {
     delete m_canvas; // Properly delete the m_canvas when stopping
     m_canvas = nullptr;
     Buttons::states.clear(Buttons::ALL_FLAG);
+
 }
 
 MainMenu::MainMenu() : State("Main Menu"){

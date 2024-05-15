@@ -8,9 +8,6 @@
 #include "states/stateHandler.h"
 
 //#define DEBUG
-using namespace mbed;
-using namespace rtos;
-using namespace std::chrono;
 
 uint32_t State::instanceCounter = 0;
 DisplayManager& dm = DisplayManager::getInstance();
@@ -26,6 +23,7 @@ void setup() {
 }
 
 void loop() {
+    using namespace std::chrono;
    ThisThread::sleep_for(seconds(3));
 
 }

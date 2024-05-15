@@ -1,3 +1,10 @@
+
+/**
+ * @brief namespace that contains all instances of states
+ *
+ *
+ * @param stateList is an array of all possible states
+ */
 #ifndef GBGAME_GAMES_H
 #define GBGAME_GAMES_H
 #include "ui/canvas.h"

@@ -1,3 +1,10 @@
+
+/**
+ * @brief namespace that contains all instances of states
+ *
+ *
+ * @param stateList is an array of all possible states
+ */
 #ifndef GBGAME_GLOBALSTATES_H
 #define GBGAME_GLOBALSTATES_H
 #include <cstdint>
