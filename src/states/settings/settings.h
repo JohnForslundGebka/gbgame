@@ -24,7 +24,7 @@ public:
     volatile bool m_vibraOn = false;
     volatile bool m_soundOn = false;
 private:
-    SettingsUi m_canvas;
+    SettingsUi* m_canvas = nullptr;
     Canvas *m_pntrCanvas{};
 
     Thread* t_gfx = nullptr;

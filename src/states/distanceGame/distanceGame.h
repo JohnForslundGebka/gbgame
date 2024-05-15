@@ -35,15 +35,15 @@ class DistanceGame : public State {
 private:
     Ultrasonic ultrasonic;     //Object that initializes the ultrasonic sensor and a method that reads the distance
     Thread *t_gameLogic = nullptr;        //Thread that handles the game logic/order
-    Thread *t_userInput= nullptr;      //Thread that handles user input
-    Thread *t_screenUpdate= nullptr;  //This thread is responsible for updating the screen when the SCREEN_UPDATE_FLAG is set (highest priority)
+    Thread *t_userInput = nullptr;      //Thread that handles user input
+    Thread *t_screenUpdate = nullptr;  //This thread is responsible for updating the screen when the SCREEN_UPDATE_FLAG is set (highest priority)
 
 
 
     rtos::EventFlags m_gameFlags;    //Contains flags ADVANCE_GAME_FLAG and SCREEN_UPDATE_FLAG
 
     //Canvas object for drawing the screens
-    DistanceGameUi m_canvas;
+    DistanceGameUi *m_canvas = nullptr;
 
 public:
     DistanceGame();

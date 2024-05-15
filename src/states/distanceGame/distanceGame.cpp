@@ -8,7 +8,7 @@ using namespace rtos;
 using namespace std::chrono;
 
 // Constructor, initializes all necessary objects
-DistanceGame::DistanceGame():  State("Measury"),  m_canvas(this) {}
+DistanceGame::DistanceGame():  State("Measury"){}
 
 void DistanceGame::handleInput() {
 #ifdef DEBUG
@@ -68,40 +68,39 @@ void DistanceGame::game() {
         randomSeed(millis());
         m_targetLength = random(10, 100);
 
-        //Creates and starts a thread that blink the screen text "button A"
 #ifdef DEBUG
     Serial.println("NU GÖR JAG THREAD");
 #endif
 
-
-     m_canvas.drawScreen1();
-    m_gameFlags.set(SCREEN_UPDATE_FLAG);
+     m_canvas->drawScreen1();
+     m_gameFlags.set(SCREEN_UPDATE_FLAG);
+    //Creates and starts a thread that blink the screen text "button A"
      ThisThread::sleep_for(50ms);
-//    Thread t_screenBlink;
-//    t_screenBlink.start(callback(this, &DistanceGame::screenBlink));
+     Thread t_screenBlink;
+     t_screenBlink.start(callback(this, &DistanceGame::screenBlink));
 
 #ifdef DEBUG
     Serial.println("NU VANTAR JAG 1");
-#endif    
+#endif
         //Waits for user to press A to measure distance
         m_gameFlags.wait_any(ADVANCE_GAME_FLAG, osWaitForever, true);
-        
-      //   t_screenBlink.join();
+
+        t_screenBlink.join();
 
         //Measures distance and calculates how far off the user was.
         m_measured = ultrasonic.readDistance();
         m_score = abs(m_targetLength - m_measured);
-    
+
         //Draws screen2 with the results and sets the flag to update screen
-        m_canvas.drawScreen2();
+        m_canvas->drawScreen2();
         m_gameFlags.set(SCREEN_UPDATE_FLAG);
 
 
         //Waits for button A press to finish the game
         m_gameFlags.wait_any(ADVANCE_GAME_FLAG, osWaitForever, true);
 
-        m_canvas.drawScreen3();
-        m_gameFlags.set(SCREEN_UPDATE_FLAG); 
+        m_canvas->drawScreen3();
+        m_gameFlags.set(SCREEN_UPDATE_FLAG);
 
         ThisThread::sleep_for(1000ms);
 
@@ -116,8 +115,8 @@ void DistanceGame::game() {
 
 
 #ifdef DEBUG
-   Serial.println("NU HAR GAME KÖRTS KLART");  
-#endif 
+   Serial.println("NU HAR GAME KÖRTS KLART");
+#endif
 
 }
 
@@ -125,8 +124,7 @@ void DistanceGame::run() {
     //Starts the threads
     m_isRunning = true;
 
-    if(m_isRunning)
-        Serial.println("RUNNING IS TRUE");
+
 
 #ifdef DEBUG
     Serial.println("NU RUN JAG");
@@ -135,11 +133,10 @@ void DistanceGame::run() {
     t_gameLogic = new Thread;
     t_screenUpdate = new Thread;
     t_userInput = new Thread;
+    m_canvas = new DistanceGameUi(this);
 
-  //  t_userInput->set_priority(osPriorityBelowNormal);
 
     t_gameLogic->start(mbed::callback(this, &DistanceGame::game));
-
     t_userInput->start(mbed::callback(this, &DistanceGame::handleInput));
     t_screenUpdate->start(mbed::callback(this, &DistanceGame::update));
 
@@ -159,29 +156,31 @@ void DistanceGame::stop() {
 #ifdef DEBUG
     Serial.println("AVSLUTAR TRÅDAR");
 #endif
-    // Wait for threads to finish
-    if(t_gameLogic) t_gameLogic->join();
+    // Finnish threads and clean upp pointers
+    if(t_gameLogic) {
+        t_gameLogic->join();
+        delete t_gameLogic;
+        t_gameLogic = nullptr;
+    }
 #ifdef DEBUG
     Serial.println("AVSLUTAT GAME LOGIC");
 #endif
-    t_userInput->join();
+    if(t_userInput){
+        t_userInput->join();
+        delete t_userInput;
+        t_userInput = nullptr;
+    }
 #ifdef DEBUG
     Serial.println("AVSLUTAT USER INPUT");
 #endif
-    t_screenUpdate->join();
+    if(t_screenUpdate){
+        t_screenUpdate->join();
+        delete t_screenUpdate;
+        t_screenUpdate = nullptr;
+    }
 #ifdef DEBUG
     Serial.println("AVSLUTAT SCREEN UPDARE");
 #endif
-
-   //delete pointers
-    delete t_gameLogic;
-    delete t_userInput;
-    delete t_screenUpdate;
-
-
-    t_gameLogic = nullptr;
-    t_screenUpdate = nullptr;
-    t_userInput = nullptr;
 
 
     //clear all flags before exiting
@@ -199,21 +198,17 @@ void DistanceGame::screenBlink() {
 #ifdef DEBUG
         Serial.println("NU BLINKAR JAG");
 #endif
-
         if (m_gameFlags.get() & ADVANCE_GAME_FLAG) {
             m_gameFlags.clear(ADVANCE_GAME_FLAG);
-            break;  // Exit loop if the flag is set
+            break;
         }
 
-        // Set the text color to white and draw screen
         textColor = WHITE;
-        m_canvas.drawScreen1();
+        m_canvas->drawScreen1();
         m_gameFlags.set(SCREEN_UPDATE_FLAG);
         ThisThread::sleep_for(300ms);
-
-        // Set the text color to black and draw screen
         textColor = BLACK;
-        m_canvas.drawScreen1();
+        m_canvas->drawScreen1();
         m_gameFlags.set(SCREEN_UPDATE_FLAG);
         ThisThread::sleep_for(300ms);
     }

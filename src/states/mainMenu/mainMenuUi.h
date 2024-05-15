@@ -9,7 +9,6 @@ class MainMenu; // Forward declaration
 
 class MainMenuUi {
 public:
-    Canvas c_hand;
     Canvas c_canvas;
 
     explicit MainMenuUi(MainMenu *parentState);

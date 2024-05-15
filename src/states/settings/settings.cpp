@@ -45,7 +45,7 @@ void Settings::handleInput() {
                     else
                         m_selectedState--;
 
-                    m_canvas.updateText();
+                    m_canvas->updateText();
                     Buttons::states.clear(Buttons::ALL_FLAG);
                     break;
                 }
@@ -58,7 +58,7 @@ void Settings::handleInput() {
                     else
                         m_selectedState++;
 
-                    m_canvas.updateText();
+                    m_canvas->updateText();
                     Buttons::states.clear(Buttons::ALL_FLAG);
                     break;
                 }
@@ -72,14 +72,14 @@ void Settings::handleInput() {
             case 1:  //if the hand is in position 1
                 if(input==Buttons::A_FLAG)
                     m_vibraOn = !m_vibraOn;
-                m_canvas.drawHandPos1();
+                m_canvas->drawHandPos1();
                 Buttons::states.clear(Buttons::ALL_FLAG);
                 break;
 
             case 2:
                 if(input==Buttons::A_FLAG)
                     m_soundOn = !m_soundOn;
-                m_canvas.drawHandPos2();
+                m_canvas->drawHandPos2();
                 Buttons::states.clear(Buttons::ALL_FLAG);
                 break;
             default:
@@ -91,68 +91,74 @@ void Settings::handleInput() {
 }
 
 void Settings::newHandPos() {
-
-    switch(m_handPos)
-    {
+    switch(m_handPos) {
         case 0:
-            m_canvas.updateText();
-            m_pntrCanvas = &m_canvas.c_handPos0;
+            m_canvas->updateText();
+            m_pntrCanvas = &m_canvas->c_handPos0;
             break;
         case 1:
-            m_canvas.drawHandPos1();
-            m_pntrCanvas = &m_canvas.c_handPos1and2;
+            m_canvas->drawHandPos1();
+            m_pntrCanvas = &m_canvas->c_handPos1and2;
             break;
         case 2:
-            m_canvas.drawHandPos2();
-            m_pntrCanvas = &m_canvas.c_handPos1and2;
+            m_canvas->drawHandPos2();
+            m_pntrCanvas = &m_canvas->c_handPos1and2;
             break;
         default:
             break;
     }
     m_gameFlags.set(SCREEN_UPDATE_FLAG);
-
 }
 
 void Settings::update() {
-    while (m_isRunning && m_gameFlags.wait_any(SCREEN_UPDATE_FLAG,osWaitForever)){
+    while (m_isRunning && m_gameFlags.wait_any(SCREEN_UPDATE_FLAG, osWaitForever)) {
         m_displayManager.updateScreen(m_pntrCanvas);
     }
 }
 
-
-
 void Settings::run() {
     m_isRunning = true;
 
-  //  t_gameLogic = new Thread;
+    if (m_canvas != nullptr) {
+        delete m_canvas; // Safeguard against memory leaks if run() is called more than once
+    }
+
+    m_canvas = new SettingsUi(this); // Allocate new SettingsUi
+
+    m_pntrCanvas = &m_canvas->c_handPos0; // Adjusted to use pointer access
+
     t_gfx = new Thread;
     t_move = new Thread;
 
-    m_pntrCanvas = &m_canvas.c_handPos0;
-
-  //  t_gameLogic->start(callback(this, &Settings::game));
     t_gfx->start(callback(this, &Settings::update));
     t_move->start(callback(this, &Settings::handleInput));
 
-    t_move->set_priority(osPriorityBelowNormal1);
+    t_move->set_priority(osPriorityBelowNormal);
 
-    m_canvas.init();
-
-    m_displayManager.updateScreen(&m_canvas.c_handPos0);
+    m_canvas->init(); // Assuming init() is a method of SettingsUi
+    m_displayManager.updateScreen(&m_canvas->c_handPos0);
 }
+
 
 void Settings::stop() {
+
     m_isRunning = false;
-    t_gfx->join();
-    t_move->join();
-    delete t_gfx;
-    delete t_move;
+    if (t_gfx) {
+        t_gfx->join();
+        delete t_gfx;
+        t_gfx = nullptr;
+    }
+    if (t_move) {
+        t_move->join();
+        delete t_move;
+        t_move = nullptr;
+    }
+
+    delete m_canvas; // Properly delete the m_canvas when stopping
+    m_canvas = nullptr;
 
     Buttons::states.clear(Buttons::ALL_FLAG);
-    t_gfx = nullptr;
-    t_move = nullptr;
 }
-
-Settings::Settings() : State("Settings"), m_canvas(this) {
+Settings::Settings() : State("Settings"){
 
 }

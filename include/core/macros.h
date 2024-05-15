@@ -26,7 +26,7 @@
 #define MAIN_MENU (1UL << 1)
 #define DISTANCE_GAME (1UL << 2)
 
-#define DEBUG
+//#define DEBUG
 
 
 #endif //GBGAME_MACROS_H

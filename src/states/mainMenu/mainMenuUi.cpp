@@ -2,7 +2,7 @@
 #include "mainMenu.h"
 
 
-MainMenuUi::MainMenuUi(MainMenu *p) : c_hand(16,11,7,30), c_canvas(128,128,0,0), parentState(p) {}
+MainMenuUi::MainMenuUi(MainMenu *p) : c_canvas(128,128,0,0), parentState(p) {}
 
 void MainMenuUi::init() {
 
