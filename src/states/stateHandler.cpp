@@ -1,7 +1,7 @@
 #include "stateHandler.h"
-#include "core/state.h"
 
-StateHandler::StateHandler(): m_mainThread(osPriorityAboveNormal,1024), m_currentState(&mainMenu) {
+
+StateHandler::StateHandler(): m_mainThread(osPriorityAboveNormal,1024), m_currentState(GlobalStates::stateList[0]) {
 }
 
 /**
@@ -12,38 +12,20 @@ StateHandler::StateHandler(): m_mainThread(osPriorityAboveNormal,1024), m_curren
  * @param State::stateFlags is a static variable located in the state.h base class
  */
 
-
-
 [[noreturn]] void StateHandler::updateState() {
     while (true){
-#ifdef DEBUG
-        Serial.println("NU KOM JAG IN I UPPDATESTATE I STATEHANDLER");
-#endif
-
-        uint32_t state = State::stateFlags.wait_any(MAIN_MENU | DISTANCE_GAME, osWaitForever, true);
-        switch (state){
-            case MAIN_MENU :
-
-#ifdef DEBUG
-                Serial.println("NU BÖRJAR JAG ATT BYTA STATE TILL MAIN MENU");
-#endif
-
+        //Here the stateHandler will loop through all states until it fins the one that has flagged
+        uint32_t result = State::stateFlags.wait_any(GlobalStates::ALL_STATE_FLAGS, osWaitForever, true);
+        for(auto &newState : GlobalStates::stateList)
+        {
+            if (result == newState->getFlagName()) //if the state is found, stop the last state and start the new
+            {
                 m_currentState->stop();
-                m_currentState = &mainMenu;
-
-#ifdef DEBUG
-                Serial.println("NU STARTAR STATEHANDLERS MAIN MENU");
-#endif
-
+                m_currentState = newState;
                 run();
+                result = 0;
                 break;
-            case DISTANCE_GAME :
-                m_currentState->stop();
-                m_currentState = &distanceGame;
-                run();
-                break;
-            default:
-                break;
+            }
         }
     }
 }
@@ -66,9 +48,8 @@ void StateHandler::run(){
  *
  *
  */
-
 void StateHandler::init() {
      delay(300);
      run();
-     m_mainThread.start(callback(this,&StateHandler::updateState));
+     m_mainThread.start(mbed::callback(this,&StateHandler::updateState));
 }

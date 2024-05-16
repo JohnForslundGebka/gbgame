@@ -4,15 +4,11 @@
  *
  * Is used to select different states to start
  */
-
 #ifndef GBGAME_MAINMENU_H
 #define GBGAME_MAINMENU_H
 #include "core/state.h"
-#include "ui/canvas.h"
-#include "ui/mainMenu/canvasMainMenu1.h"
-#include "ui/mainMenu/canvasMainMenu2.h"
+#include "mainMenuUi.h"
 #include "hardware/buttons.h"
-
 
 class MainMenu : public State{
 public:
@@ -25,17 +21,14 @@ public:
     void stop() override;
 
     explicit MainMenu();
+    int m_selectedState{};
 
 private:
-     CanvasMainMenu1 m_textCanvas;
-     CanvasMainMenu2 m_handCanvas;
-     Canvas *m_pntrCanvas;
-     int m_selectedState = 1;
+     MainMenuUi *m_canvas = nullptr;
+     Canvas *m_pntrCanvas = nullptr;
 
-
-     Thread* t_gfx;
-     Thread* t_move;
-     class EventFlags m_isDoneMoving;
-
+     rtos::Thread* t_gfx = nullptr;
+     rtos::Thread* t_move = nullptr;
+     class rtos::EventFlags m_gameFlags;
 };
 #endif //GBGAME_MAINMENU_H
