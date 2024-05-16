@@ -11,9 +11,9 @@
 
 class MainMenu;
 class DistanceGame;
-class State;
 class Games;
 class Settings;
+class State;
 
 namespace GlobalStates {
 

@@ -13,6 +13,7 @@ namespace GlobalStates {
     Games games;
     Settings settings;
 
+
     State* stateList[numberOfTotalStates] = {&mainMenu, &distanceGame, &games, &settings};
 
     State* mainMenuList[numberOfMainMenuStates] = {&games,&settings};
