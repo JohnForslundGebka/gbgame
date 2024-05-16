@@ -28,5 +28,13 @@
 
 //#define DEBUG
 
+enum class index {
+    ARRAY_MAIN_MENU,
+    ARRAY_DISTANCE_GAME,
+    ARRAY_GAMES,
+    ARRAY_SETTINGS,
+    ARRAY_MIC_GAME
+};
+
 
 #endif //GBGAME_MACROS_H
