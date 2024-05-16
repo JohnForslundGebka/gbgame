@@ -1,7 +1,8 @@
 #include "stateHandler.h"
 
 
-StateHandler::StateHandler(): m_mainThread(osPriorityAboveNormal,1024), m_currentState(GlobalStates::stateList[0]) {
+StateHandler::StateHandler(): m_mainThread(osPriorityAboveNormal,1024), 
+                            m_currentState(GlobalStates::stateList[static_cast<int>(index::ARRAY_MIC_GAME)]) {
 }
 
 /**

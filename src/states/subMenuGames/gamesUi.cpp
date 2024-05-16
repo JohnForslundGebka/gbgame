@@ -50,6 +50,7 @@ void GamesUI::updateTextFields() {
 }
 
 void GamesUI::draw() {
+    updateTextFields();
     c_canvas.C.fillScreen(BLACK);
 
     c_canvas.C.setTextColor(0xFFFF);
