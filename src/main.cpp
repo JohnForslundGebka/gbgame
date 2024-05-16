@@ -6,6 +6,7 @@
 #include "hardware/buttons.h"
 #include "states/mainMenu/mainMenu.h"
 #include "states/stateHandler.h"
+#include "core/settings.h"
 
 //#define DEBUG
 
