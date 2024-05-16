@@ -13,6 +13,7 @@ class MainMenu;
 class DistanceGame;
 class Games;
 class Settings;
+//this is just the base class that is used by the arrays
 class State;
 
 namespace GlobalStates {

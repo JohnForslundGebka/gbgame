@@ -8,6 +8,7 @@
 #include "states/stateHandler.h"
 #include "core/settings.h"
 #include "wifi/dataTransmit.h"
+#include "functionality/scores.h"
 
 //#define DEBUG
 
