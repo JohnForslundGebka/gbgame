@@ -7,6 +7,7 @@
 #include "states/mainMenu/mainMenu.h"
 #include "states/stateHandler.h"
 #include "core/settings.h"
+#include "wifi/dataTransmit.h"
 
 //#define DEBUG
 
