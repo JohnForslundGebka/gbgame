@@ -45,12 +45,12 @@ void MainMenu::handleInput() {
 
             case Buttons::DOWN_FLAG:
                 Buttons::states.clear(Buttons::DOWN_FLAG);
-                if(m_selectedState == (GlobalStates::numberOfMainMenuStates - 1))
-                    m_selectedState = 0;
-                else if (m_selectedState == 0)
-                    m_selectedState = (GlobalStates::numberOfMainMenuStates - 1);
-                else
-                    m_selectedState++;
+                if(m_selectedState == (GlobalStates::numberOfMainMenuStates - 1)){
+                    m_selectedState = 0;}
+                else if (m_selectedState == 0){
+                    m_selectedState = (GlobalStates::numberOfMainMenuStates - 1);}
+                else{
+                    m_selectedState++;}
                 m_canvas->moveDown();
                 m_pntrCanvas = &m_canvas->c_canvas;
                 break;
