@@ -2,6 +2,7 @@
 #include "gamesUi.h"
 #include "rtos.h"
 
+
 void Games::handleInput() {
     using namespace rtos;
     using namespace mbed;
@@ -9,6 +10,7 @@ void Games::handleInput() {
 
     while (m_isRunning){
 
+        //the thread will pause until a new button press is detected
         uint32_t m_result = Buttons::states.wait_any(Buttons::UP_FLAG | Buttons::DOWN_FLAG | Buttons::A_FLAG, osWaitForever, false);
 
         if (!m_isRunning) break;
@@ -21,6 +23,7 @@ void Games::handleInput() {
         switch(m_result){
             case Buttons::UP_FLAG:
                 Buttons::states.clear(Buttons::UP_FLAG);
+                //makes sure the m_selectedState does not go "out of bounds"
                 if(m_selectedState == (GlobalStates::numberOfGameStates - 1))
                     m_selectedState = 0;
                 else if (m_selectedState == 0)
@@ -33,6 +36,7 @@ void Games::handleInput() {
 
             case Buttons::DOWN_FLAG:
                 Buttons::states.clear(Buttons::DOWN_FLAG);
+                //makes sure the m_selectedState does not go "out of bounds"
                 if(m_selectedState == (GlobalStates::numberOfGameStates - 1))
                     m_selectedState = 0;
                 else if (m_selectedState == 0)
@@ -45,7 +49,7 @@ void Games::handleInput() {
 
             case Buttons::A_FLAG:
                 //set the stateFlags, to the state that the StateHandler should run
-                State::stateFlags.set(GlobalStates::gameList[m_selectedState]->getFlagName());
+                State::stateFlags.set(GlobalStates::gameList[m_selectedState]->getFlagName()); //select which state to run based on the selected state variable
                 break;
 
             default:
@@ -83,6 +87,7 @@ void Games::run() {
 }
 
 void Games::stop() {
+    //clean upp all the threads and pointers
     m_isRunning = false;
     if (t_gfx) {
         t_gfx->join();
