@@ -1,6 +1,7 @@
 #ifndef GBGAME_DATATRANSMIT_H
 #define GBGAME_DATATRANSMIT_H
-
+#include "Firebase_Arduino_WiFiNINA.h"
+#include <WiFiNINA.h>
 
 class DataTransmit {
 public:
