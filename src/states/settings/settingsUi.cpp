@@ -105,6 +105,8 @@ void SettingsUi::updateText() {
 
 void SettingsUi::updateTextFields() {
 
+    //temporary code used for testing
+
     int counter = parentState->m_selectedState;
 
     textField[0] = "WiFi";

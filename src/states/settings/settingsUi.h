@@ -9,6 +9,13 @@ class Settings; //forward declaration
 
 class SettingsUi {
 public:
+    /**
+      *
+      * @brief canvases that will be used to draw gfx on the display
+      *
+      * @param c_handPos0
+      * @param c_handPos1and2
+      */
     Canvas c_handPos0;
     Canvas c_handPos1and2;
 

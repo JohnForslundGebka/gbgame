@@ -36,7 +36,7 @@ void Settings::handleInput() {
         }
 
 
-        // Handle input and update positions
+        // Once we have determined which state the hand is in, change different values depending on that
         switch(m_handPos){
             case 0: //if the hand is in position 0
                 if (input == Buttons::LEFT_FLAG) {
@@ -118,6 +118,7 @@ void Settings::update() {
     }
 }
 
+//clean upp threads and pointers
 void Settings::run() {
     using namespace rtos;
     using namespace mbed;
