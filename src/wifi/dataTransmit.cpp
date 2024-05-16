@@ -12,3 +12,7 @@ DataTransmit& DataTransmit::getInstance() {
     static DataTransmit instance; // Guaranteed to be destroyed and instantiated on first use.
     return instance;
 }
+
+void DataTransmit::init() {
+
+}
