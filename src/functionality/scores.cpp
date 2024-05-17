@@ -30,16 +30,3 @@ void Scores::init() {
     }
 }
 
-
-
-
-
-//int Scores::getHighestScore() const {
-//    if (scores.empty()) return 0; // Return 0 if no scores are present
-//    return *std::max_element(scores.begin(), scores.end());
-//}
-//
-//std::vector<int> Scores::getAllScores() const {
-//    return scores;
-//
-//}

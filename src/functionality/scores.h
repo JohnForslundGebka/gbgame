@@ -19,16 +19,12 @@ public:
     uint8_t leaderBoards[GlobalStates::numberOfGameStates][5];
 
     // Delete copy constructor and copy assignment operator
-
     Scores(const Scores&) = delete;
     Scores& operator=(const Scores&) = delete;
 
 private:
     Scores();  // Private constructor
     ~Scores(); // Private destructor
-   // std::vector<uint8_t> maxScores; // Vector to store scores
-  //  uint8_t maxScores[GlobalStates::numberOfGameStates];
-
 };
 
 
