@@ -35,7 +35,7 @@ void MicGameUI::updateWave() {
         //frequency = random(1, 3) / 100.0; 
         frequency = random(1, 3); 
         // Random amplitude between 10 and 30 pixels
-        amplitude = random(1, 20);
+        amplitude = random(1, 30);
     }
 
     // Shift all values to the left
@@ -53,5 +53,5 @@ void MicGameUI::updateWave() {
 }
 
 void MicGameUI::drawBall(int pos) {
-    
+
 }

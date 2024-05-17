@@ -18,7 +18,7 @@
 #include "hardware/displayManager.h"
 #include "hardware/ultrasonic.h"
 #include "micGameUi.h"
-
+#include "hardware/microphone.h"
 
 class MicGame : public State {
 private:
@@ -43,6 +43,8 @@ public:
 
     void game();               //Contains the logic for the game
 
+    Microphone mic;
+    
     int m_testNumber = 42; 
 
 };

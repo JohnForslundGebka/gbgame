@@ -75,6 +75,9 @@ void MicGame::game() {
         m_canvas->drawWaveform();
         m_gameFlags.set(SCREEN_UPDATE_FLAG);
         ThisThread::sleep_for(20ms);
+        // mic.onPDMdata();
+        mic.readValue();
+        Serial.println(mic.value);
     }
 
 
