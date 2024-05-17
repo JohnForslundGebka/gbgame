@@ -5,6 +5,8 @@
 #include "core/settings.h"
 #include "states/globalStates.h"
 #include <ArduinoJson.h>
+#include <unordered_map>
+#include <array>
 
 #define DATABASE_URL "gbgame-6141c-default-rtdb.europe-west1.firebasedatabase.app"
 #define DATABASE_SECRET "H3qt9cWGqH7hSVSP5lnuxj8VG1rPNpNj4xKWv3Wf"
@@ -16,9 +18,14 @@ public:
     // Delete copy constructor and assignment operator
     DataTransmit(const DataTransmit&) = delete;
     DataTransmit& operator=(const DataTransmit&) = delete;
-
     bool init();
-    void getDataToHighscore(std::pair<String,int>leaderBoards[GlobalStates::numberOfGameStates][5]);
+
+    // Define the type for the leaderboard entry
+    using LeaderboardEntry = std::pair<String, int>;
+    // Define the type for the scores array, containing 5 top scores
+    using ScoresArray = std::array<LeaderboardEntry, 5>;
+
+    void getDataToHighscore(std::unordered_map<uint32_t, ScoresArray> leaderBoards);
 
     FirebaseData fbdo;
 

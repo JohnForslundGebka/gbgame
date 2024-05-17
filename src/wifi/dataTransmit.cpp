@@ -1,4 +1,7 @@
 #include "dataTransmit.h"
+#include "core/state.h"
+
+
 
 DataTransmit::DataTransmit() {
     // Constructor code here
@@ -57,11 +60,12 @@ bool DataTransmit::init() {
 #endif
 }
 
-void DataTransmit::getDataToHighscore(std::pair<String,int>leaderBoards[GlobalStates::numberOfGameStates][5]) {
-
-    String basePath = "/Leaderbord";  // Path to your leaderboard data in Firebase
+void DataTransmit::getDataToHighscore(std::unordered_map<uint32_t, ScoresArray> leaderBoards){
 
         for (int i = 0; i < GlobalStates::numberOfGameStates; i++) {
+            uint32_t gameKey = GlobalStates::gameList[i]->getFlagName();
+            String gameName = GlobalStates::gameList[i]->m_stateName;
+            String basePath = "/Leaderbord/" + gameName;  // Path to your leaderboard data in Firebase
 
             for (int j = 0; j < 5; j++) {
                 String fullPath = basePath + "/score_" + String(j + 1);
@@ -70,12 +74,11 @@ void DataTransmit::getDataToHighscore(std::pair<String,int>leaderBoards[GlobalSt
                         // Use JsonDocument
                         JsonDocument doc;
                         DeserializationError error = deserializeJson(doc, fbdo.jsonData());
-
                         if (!error) {
                             String name = doc["name"].as<String>();
                             int score = doc["score"].as<int>();
 
-                            leaderBoards[i][j] = std::make_pair(name, score);
+                            leaderBoards[gameKey][j] = std::make_pair(name, score);
                         } else {
                             Serial.print("deserializeJson() failed with code ");
                             Serial.println(error.c_str());
