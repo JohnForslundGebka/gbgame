@@ -12,16 +12,11 @@ class Scores {
 public:
     static Scores& getInstance(); // Method to get the singleton instance
 
-    void addScore(uint8_t score, State *gameThatWasPlayed);           // Add a score to the list
-
+    void addScore(uint8_t score, State *gameThatWasPlayed); // Add a score to the list
     void init();
 
-//    int getHighestScore() const;        // Get the highest score
-//    std::vector<uint8_t> getAllScores() const; // Retrieve all scores
-    //all the current leaderboards
-  //  std::vector<uint8_t> allLeaderboards[3];
-
     std::unordered_map<uint32_t,uint8_t>maxScores;
+    uint8_t leaderBoards[GlobalStates::numberOfGameStates][5];
 
     // Delete copy constructor and copy assignment operator
 

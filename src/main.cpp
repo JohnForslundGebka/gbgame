@@ -11,17 +11,18 @@
 #include "functionality/scores.h"
 
 //#define DEBUG
-
 uint32_t State::instanceCounter = 0;
 DisplayManager& dm = DisplayManager::getInstance();
 Buttons button;
 StateHandler stateHandler;
+Scores &scores = Scores::getInstance();
 
 
 void setup() {
     Serial.begin(115200);
     dm.init();
     stateHandler.init();
+    scores.init();
 }
 
 void loop() {
