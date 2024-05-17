@@ -71,8 +71,8 @@ void MicGame::game() {
     using namespace mbed;
     using namespace std::chrono;
 
-    while (true) {
-        m_canvas->drawScreen1();
+    while (m_isRunning) {
+        m_canvas->drawWaveform();
         m_gameFlags.set(SCREEN_UPDATE_FLAG);
         ThisThread::sleep_for(20ms);
     }

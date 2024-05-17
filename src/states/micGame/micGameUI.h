@@ -16,8 +16,10 @@ public:
 
     void init();
 
-    void drawScreen1();
+    void drawWaveform();
     void updateWave();
+
+    void drawBall(int pos);
 
 
 private:
