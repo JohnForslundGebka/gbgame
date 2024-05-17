@@ -15,10 +15,14 @@ Scores& Scores::getInstance() {
     return instance;
 }
 
-void Scores::addScore(uint8_t score,State *gameThatWasPlayed) {
+void Scores::addScore(int score,State *gameThatWasPlayed) {
 
-    if(score > maxScores.at(gameThatWasPlayed->getFlagName())){
-        maxScores.emplace(gameThatWasPlayed->getFlagName(),score);
+    uint32_t playedGame = gameThatWasPlayed->getFlagName();
+    if(score > maxScores[playedGame]){
+        maxScores[playedGame] = score;
+        Serial.println( );
+        Serial.print("NEW RECORD: SCORE WAS ");
+        Serial.println(score);
     }
 }
 
@@ -27,6 +31,20 @@ void Scores::init() {
     for(auto &game : GlobalStates::gameList)
     {
         maxScores.emplace(game->getFlagName(),0);
+    }
+}
+
+void Scores::getLeaderboardFromDatabase() {
+    dataTransmit.getDataToHighscore(leaderBoards);
+
+    Serial.print("PRINTING LEADERBOARD:------ ");
+    for (int i = 0; i < GlobalStates::numberOfGameStates; i++){
+
+        for(int j = 0; j < 5; j++){
+            Serial.print(leaderBoards[i][j].first);
+            Serial.print("    ---> ");
+            Serial.println(leaderBoards[i][j].second);
+        }
     }
 }
 

@@ -3,6 +3,8 @@
 #include "Firebase_Arduino_WiFiNINA.h"
 #include <WiFiNINA.h>
 #include "core/settings.h"
+#include "states/globalStates.h"
+#include <ArduinoJson.h>
 
 #define DATABASE_URL "gbgame-6141c-default-rtdb.europe-west1.firebasedatabase.app"
 #define DATABASE_SECRET "H3qt9cWGqH7hSVSP5lnuxj8VG1rPNpNj4xKWv3Wf"
@@ -16,6 +18,7 @@ public:
     DataTransmit& operator=(const DataTransmit&) = delete;
 
     bool init();
+    void getDataToHighscore(std::pair<String,int>leaderBoards[GlobalStates::numberOfGameStates][5]);
 
     FirebaseData fbdo;
 

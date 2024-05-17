@@ -2,6 +2,7 @@
 #include "distanceGameUi.h"
 #include "rtos.h"
 #include "mbed.h"
+#include "functionality/scores.h"
 
 
 
@@ -64,7 +65,9 @@ void DistanceGame::game() {
     using namespace mbed;
     using namespace std::chrono;
 
-    uint8_t m_totScore = 0;
+    int m_totScore = 0;
+
+    Scores &leaderBoard = Scores::getInstance();
 
 
 #ifdef DEBUG
@@ -125,16 +128,18 @@ void DistanceGame::game() {
 #endif
       }
 
+      Serial.print("YOUR SCORE WAS ");
       Serial.println(m_totScore);
+      leaderBoard.addScore(m_totScore,this);
+
 
       m_canvas->drawScreen3();
-     m_gameFlags.set(SCREEN_UPDATE_FLAG);
+      m_gameFlags.set(SCREEN_UPDATE_FLAG);
 
       rtos::ThisThread::sleep_for(1000ms);
-
-       //Return to main manu when game finish
-        m_isRunning = false;
-        State::stateFlags.set(GlobalStates::stateList[0]->getFlagName());
+      //Return to main manu when game finish
+      m_isRunning = false;
+      State::stateFlags.set(GlobalStates::stateList[0]->getFlagName());
 
 #ifdef DEBUG
    Serial.println("NU HAR GAME KÖRTS KLART");
@@ -147,8 +152,6 @@ void DistanceGame::run() {
     using namespace mbed;
     //Starts the threads
     m_isRunning = true;
-
-
 
 #ifdef DEBUG
     Serial.println("NU RUN JAG");

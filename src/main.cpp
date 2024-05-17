@@ -16,6 +16,7 @@ DisplayManager& dm = DisplayManager::getInstance();
 Buttons button;
 StateHandler stateHandler;
 Scores &scores = Scores::getInstance();
+DataTransmit &wifi = DataTransmit::getInstance();
 
 
 void setup() {
@@ -23,6 +24,9 @@ void setup() {
     dm.init();
     stateHandler.init();
     scores.init();
+    wifi.init();
+    delay(500);
+    scores.getLeaderboardFromDatabase();
 }
 
 void loop() {

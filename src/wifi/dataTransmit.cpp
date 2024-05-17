@@ -38,7 +38,6 @@ bool DataTransmit::init() {
         }
     }
 #endif
-
     while (WiFi.status() != WL_CONNECTED) {
         WiFi.begin(GlobalSettings::ssid, GlobalSettings::password);
         Serial.print(".");
@@ -56,4 +55,35 @@ bool DataTransmit::init() {
     Serial.println(WiFi.localIP());
     delay(1000);
 #endif
+}
+
+void DataTransmit::getDataToHighscore(std::pair<String,int>leaderBoards[GlobalStates::numberOfGameStates][5]) {
+
+    String basePath = "/Leaderbord";  // Path to your leaderboard data in Firebase
+
+        for (int i = 0; i < GlobalStates::numberOfGameStates; i++) {
+
+            for (int j = 0; j < 5; j++) {
+                String fullPath = basePath + "/score_" + String(j + 1);
+                if (Firebase.getJSON(fbdo, fullPath)) {
+                    if (fbdo.dataType() == "json") {
+                        // Use JsonDocument
+                        JsonDocument doc;
+                        DeserializationError error = deserializeJson(doc, fbdo.jsonData());
+
+                        if (!error) {
+                            String name = doc["name"].as<String>();
+                            int score = doc["score"].as<int>();
+
+                            leaderBoards[i][j] = std::make_pair(name, score);
+                        } else {
+                            Serial.print("deserializeJson() failed with code ");
+                            Serial.println(error.c_str());
+                        }
+                    }
+                } else {
+                    Serial.println("Failed to fetch data: " + fbdo.errorReason());
+                }
+            }
+        }
 }
