@@ -17,10 +17,15 @@ public:
     void init();
 
     void drawScreen1();
+    void updateWave();
+
 
 private:
-
-
+    static const int size = 128;
+    int arr[size];  // Waveform data
+    int lastXValue = 0;  // Last value for generating the next point
+    float frequency = 0.1;  // Initial frequency of the sine wave
+    float amplitude = 20;   // Initial amplitude of the sine wave
 };
 
 #endif //GBGAME_MIC_GAMEUI_H

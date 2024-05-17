@@ -54,10 +54,15 @@ void MicGame::handleInput() {
 
 //Updates the screen immediately when the SCREEN_UPDATE_FLAG is set (this thread has the highest priority)
 void MicGame::update(){
+    using namespace rtos;
+    using namespace mbed;
+    using namespace std::chrono;
+
     while (m_isRunning)
     {
         m_gameFlags.wait_any(SCREEN_UPDATE_FLAG, osWaitForever);
         m_displayManager.updateScreen(&m_canvas->c_main);
+        ThisThread::sleep_for(30ms);
     }
 }
 
@@ -66,14 +71,16 @@ void MicGame::game() {
     using namespace mbed;
     using namespace std::chrono;
 
-    m_canvas->drawScreen1();
-    m_gameFlags.set(SCREEN_UPDATE_FLAG);
+    while (true) {
+        m_canvas->drawScreen1();
+        m_gameFlags.set(SCREEN_UPDATE_FLAG);
+        ThisThread::sleep_for(20ms);
+    }
+
+
 
     //Waits for button A press to finish the game
     m_gameFlags.wait_any(ADVANCE_GAME_FLAG, osWaitForever, true);
-
-    rtos::ThisThread::sleep_for(1000ms);
-
     //Return to main menu when game finish
         m_isRunning = false;
         State::stateFlags.set(GlobalStates::stateList[0]->getFlagName());
