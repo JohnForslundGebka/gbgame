@@ -62,7 +62,7 @@ void MicGame::update(){
     {
         m_gameFlags.wait_any(SCREEN_UPDATE_FLAG, osWaitForever);
         m_displayManager.updateScreen(&m_canvas->c_main);
-        ThisThread::sleep_for(30ms);
+        //ThisThread::sleep_for(20ms);
     }
 }
 
@@ -72,11 +72,12 @@ void MicGame::game() {
     using namespace std::chrono;
 
     while (m_isRunning) {
-        m_canvas->drawWaveform();
-        m_gameFlags.set(SCREEN_UPDATE_FLAG);
-        ThisThread::sleep_for(20ms);
+        // m_canvas->drawWaveform();
+        // m_gameFlags.set(SCREEN_UPDATE_FLAG);
+        // ThisThread::sleep_for(30ms);
+
         // mic.onPDMdata();
-        mic.readValue();
+        mic.processAudioData();
         Serial.println(mic.value);
     }
 
@@ -105,12 +106,15 @@ void MicGame::run() {
     t_gameLogic = new Thread;
     t_screenUpdate = new Thread;
     t_userInput = new Thread;
-    m_canvas = new MicGameUI(this);
 
+    m_canvas = new MicGameUI(this);
 
     t_gameLogic->start(mbed::callback(this, &MicGame::game));
     t_userInput->start(mbed::callback(this, &MicGame::handleInput));
     t_screenUpdate->start(mbed::callback(this, &MicGame::update));
+
+    //initialize pdm.h library and mic object
+    mic.init();
 }
 
 void MicGame::stop() {

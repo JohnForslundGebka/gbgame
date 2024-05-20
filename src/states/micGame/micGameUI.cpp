@@ -14,13 +14,16 @@ MicGameUI::MicGameUI(MicGame *pGame) : parentState(pGame), c_main(128, 128, 0, 0
 void MicGameUI::init() {}
 
 void MicGameUI::drawWaveform() {
-    c_main.C.fillScreen(BLACK);
-    // for (int i = 1; i < size; ++i) {
-    //     c_main.C.drawLine(i - 1, arr[i - 1], i, arr[i], BLACK);
-    // }
 
-    updateWave();
-        // Draw the waveform from the array
+    // Draw the waveform BLACK from the array
+    for (int i = 1; i < size; ++i) {
+        c_main.C.drawLine(i - 1, arr[i - 1], i, arr[i], BLACK);
+    }
+
+    //Calculate new value from the waveform
+    updateWave();  
+
+        // Draw the waveform WHITE from the array
     for (int i = 1; i < size; ++i) {
         c_main.C.drawLine(i - 1, arr[i - 1], i, arr[i], WHITE);
     }
