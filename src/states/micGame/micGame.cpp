@@ -162,6 +162,12 @@ void MicGame::stop() {
         delete t_screenUpdate;
         t_screenUpdate = nullptr;
     }
+   
+    if(t_animateWaveform){
+        t_animateWaveform->join();
+        delete t_animateWaveform;
+        t_animateWaveform = nullptr;
+    }
 
 #ifdef DEBUG
     Serial.println("AVSLUTAT SCREEN UPDARE");
