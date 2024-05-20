@@ -19,8 +19,6 @@ public:
     void init();
 
     std::unordered_map<uint32_t,int>maxScores;
-    //  uint8_t leaderBoards[GlobalStates::numberOfGameStates][5];
-    //   std::pair<String,int>leaderBoards[GlobalStates::numberOfGameStates][5];
 
     // Define the type for the leaderboard entry
     using LeaderboardEntry = std::pair<String, int>;

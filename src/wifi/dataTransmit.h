@@ -25,8 +25,8 @@ public:
     // Define the type for the scores array, containing 5 top scores
     using ScoresArray = std::array<LeaderboardEntry, 5>;
 
-    void getDataToHighscore(std::unordered_map<uint32_t, ScoresArray> leaderBoards);
-    void sendHighscoreToData();
+    void getDataToHighscore(std::unordered_map<uint32_t, ScoresArray> &leaderBoards);
+    void sendHighscoreToData(std::unordered_map<uint32_t, ScoresArray> &leaderBoards);
 
     FirebaseData fbdo;
 

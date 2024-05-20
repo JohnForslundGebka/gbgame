@@ -43,7 +43,6 @@ void print_memory_info() {
     Serial.println(" ");
 }
 
-
 void setup() {
     Serial.begin(115200);
     dm.init();
@@ -55,6 +54,6 @@ void setup() {
 
 void loop() {
     using namespace std::chrono;
-    print_memory_info();
+   // print_memory_info();
     rtos::ThisThread::sleep_for(seconds(3));
 }

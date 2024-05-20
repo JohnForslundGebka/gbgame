@@ -60,7 +60,7 @@ bool DataTransmit::init() {
 #endif
 }
 
-void DataTransmit::getDataToHighscore(std::unordered_map<uint32_t, ScoresArray> leaderBoards){
+void DataTransmit::getDataToHighscore(std::unordered_map<uint32_t, ScoresArray> &leaderBoards){
 
         for (int i = 0; i < GlobalStates::numberOfGameStates; i++) {
             uint32_t gameKey = GlobalStates::gameList[i]->getFlagName();
@@ -69,15 +69,16 @@ void DataTransmit::getDataToHighscore(std::unordered_map<uint32_t, ScoresArray> 
 
             for (int j = 0; j < 5; j++) {
                 String fullPath = basePath + "/score_" + static_cast<String>(j + 1);
+
                 if (Firebase.getJSON(fbdo, fullPath)) {
                     if (fbdo.dataType() == "json") {
                         // Use JsonDocument
                         JsonDocument doc;
                         DeserializationError error = deserializeJson(doc, fbdo.jsonData());
                         if (!error) {
+
                             String name = doc["name"].as<String>();
                             int score = doc["score"].as<int>();
-
                             leaderBoards[gameKey][j] = std::make_pair(name, score);
                         } else {
                             Serial.print("deserializeJson() failed with code ");
@@ -89,8 +90,32 @@ void DataTransmit::getDataToHighscore(std::unordered_map<uint32_t, ScoresArray> 
                 }
             }
         }
+
 }
 
-void DataTransmit::sendHighscoreToData() {
+void DataTransmit::sendHighscoreToData(std::unordered_map<uint32_t, ScoresArray> &leaderBoards) {
 
+    //Do this for all the games in our gamestate list
+    for (int i = 0; i < GlobalStates::numberOfGameStates; i++){
+        uint32_t gameKey = GlobalStates::gameList[i]->getFlagName();
+        const String gameName = GlobalStates::gameList[i]->m_stateName;
+        String basePath = "/Leaderbord/" + gameName;  // Path to the leaderboard data in Firebase
+
+        //double check to see if the game has a highscore
+        if (leaderBoards.find(gameKey) != leaderBoards.end()) {
+            const ScoresArray &scores = leaderBoards.at(gameKey);
+
+
+            for (int j = 0; i < 5; i++) {
+                String fullPath = basePath + "/score_" + String(j + 1);
+                String jsonData = "{\"name\": \"" + scores[j].first + "\", \"score\": " + String(scores[j].second) + "}";
+
+                if (!Firebase.setJSON(fbdo, fullPath, jsonData)) {
+                    Serial.println("Failed to send data: " + fbdo.errorReason());
+                }
+            }
+        } else{
+            Serial.println("No data for that game");
+        }
+    }
 }

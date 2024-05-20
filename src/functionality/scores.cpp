@@ -33,14 +33,24 @@ void Scores::addScore(int score,State *gameThatWasPlayed) {
 
 void Scores::init() {
 
-    getLeaderboardFromDatabase();
-
     //set all the current scores to 0
+//    for (int i = 0; i < GlobalStates::numberOfGameStates; i++) {
+//        uint32_t gameKey = GlobalStates::gameList[i]->getFlagName();
+//        // Ensure each gameKey has a default ScoresArray
+//        ScoresArray defaultScores;
+//        for (auto& score : defaultScores) {
+//            score = std::make_pair("", 0);  // Default name and score
+//        }
+//        leaderBoards[gameKey] = defaultScores;
+//    }
+
     for(auto &game : GlobalStates::gameList)
     {
         uint32_t  playedGame = game->getFlagName();
         maxScores.emplace(playedGame,leaderBoards[playedGame][4].second);
     }
+
+    getLeaderboardFromDatabase();
 
 }
 
@@ -48,13 +58,14 @@ void Scores::getLeaderboardFromDatabase() {
     dataTransmit.getDataToHighscore(leaderBoards);
 
 #ifdef DEBUG
-    Serial.print("PRINTING LEADERBOARD:------ ");
+    Serial.print("PRINTING LEADERBOARD:");
     for (int i = 0; i < GlobalStates::numberOfGameStates; i++){
-
+        uint32_t gameKey = GlobalStates::gameList[i]->getFlagName();
+        Serial.println(" ");
         for(int j = 0; j < 5; j++){
-            Serial.print(leaderBoards[i][j].first);
+            Serial.print(leaderBoards[gameKey][j].first);
             Serial.print("    ---> ");
-            Serial.println(leaderBoards[i][j].second);
+            Serial.println(leaderBoards[gameKey][j].second);
         }
     }
 #endif
@@ -83,6 +94,6 @@ bool Scores::addScoreToDatabase(int newScore, uint32_t playedGame) {
 
     //make the 5th score the current highest score
     maxScores[playedGame] = leaderBoards[playedGame][4].second;
-
+    dataTransmit.sendHighscoreToData(leaderBoards);
     return true;
 }
