@@ -27,7 +27,8 @@ void MicGameUI::drawWaveform() {
     for (int i = 1; i < size; ++i) {
         c_main.C.drawLine(i - 1, arr[i - 1], i, arr[i], WHITE);
     }
-    // c_main.C.print(parentState->m_testNumber);
+
+    // c_main.C.print(parentState->m_ball);
 }
 
 void MicGameUI::updateWave() {
@@ -56,5 +57,6 @@ void MicGameUI::updateWave() {
 }
 
 void MicGameUI::drawBall(int pos) {
+    c_main.C.drawCircle(15, 64, 8, GREEN);
 
 }

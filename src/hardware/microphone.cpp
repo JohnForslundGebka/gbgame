@@ -24,14 +24,14 @@ void Microphone::processAudioData() {
         for (int i = 0; i < samplesRead; i++) {
             
             if (sampleBuffer[i] > 10000 || sampleBuffer[i] <= -10000) {
-                value++;
-                if (value > 2) {value = 1;}
+                m_value++;
+                if (m_value > 2) {m_value = 1;}
                 //delay(1000);
             }
         }
 
-        value--;
-        if (value < -1) {value = -1;}
+        m_value--;
+        if (m_value < -1) {m_value = -1;}
 
         samplesRead = 0; // Clear the read count
     }

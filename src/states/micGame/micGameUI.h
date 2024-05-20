@@ -20,6 +20,7 @@ public:
     void updateWave();
 
     void drawBall(int pos);
+    //int ballPos = 64;
 
 
 private:

@@ -25,6 +25,7 @@ private:
     rtos::Thread *t_gameLogic = nullptr;        //Thread that handles the game logic/order
     rtos::Thread *t_userInput = nullptr;      //Thread that handles user input
     rtos::Thread *t_screenUpdate = nullptr;  //This thread is responsible for updating the screen when the SCREEN_UPDATE_FLAG is set (highest priority)
+    rtos::Thread *t_animateWaveform = nullptr;  //This thread is responsible for updating the screen when the SCREEN_UPDATE_FLAG is set (highest priority)
 
 
 
@@ -42,10 +43,11 @@ public:
     void stop() override;
 
     void game();               //Contains the logic for the game
+    void animateWaveform();
 
     Microphone mic;
     
-    int m_testNumber = 42; 
+    int m_ballPos = 64; 
 
 };
 

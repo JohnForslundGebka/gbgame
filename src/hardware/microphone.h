@@ -10,7 +10,7 @@ public:
     void init();
     void processAudioData();
     static void onPDMdata();
-    int value = 0;
+    int m_value = 0;
 
 private:
     static const int channels = 1;
