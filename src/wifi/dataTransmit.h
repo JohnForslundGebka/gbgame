@@ -26,6 +26,7 @@ public:
     using ScoresArray = std::array<LeaderboardEntry, 5>;
 
     void getDataToHighscore(std::unordered_map<uint32_t, ScoresArray> leaderBoards);
+    void sendHighscoreToData();
 
     FirebaseData fbdo;
 

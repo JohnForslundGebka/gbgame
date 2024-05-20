@@ -18,6 +18,9 @@ Buttons button;
 StateHandler stateHandler;
 Scores &scores = Scores::getInstance();
 DataTransmit &wifi = DataTransmit::getInstance();
+
+bool wifiConnected = false;
+
 void print_memory_info() {
     mbed_stats_heap_t heap_stats;
     mbed_stats_heap_get(&heap_stats);
@@ -45,10 +48,9 @@ void setup() {
     Serial.begin(115200);
     dm.init();
     stateHandler.init();
+    wifiConnected = wifi.init();
     scores.init();
-    wifi.init();
     delay(500);
-    scores.getLeaderboardFromDatabase();
 }
 
 void loop() {

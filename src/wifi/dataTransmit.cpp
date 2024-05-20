@@ -65,10 +65,10 @@ void DataTransmit::getDataToHighscore(std::unordered_map<uint32_t, ScoresArray> 
         for (int i = 0; i < GlobalStates::numberOfGameStates; i++) {
             uint32_t gameKey = GlobalStates::gameList[i]->getFlagName();
             String gameName = GlobalStates::gameList[i]->m_stateName;
-            String basePath = "/Leaderbord/" + gameName;  // Path to your leaderboard data in Firebase
+            String basePath = "/Leaderbord/" + gameName;  // Path to the leaderboard data in Firebase
 
             for (int j = 0; j < 5; j++) {
-                String fullPath = basePath + "/score_" + String(j + 1);
+                String fullPath = basePath + "/score_" + static_cast<String>(j + 1);
                 if (Firebase.getJSON(fbdo, fullPath)) {
                     if (fbdo.dataType() == "json") {
                         // Use JsonDocument
@@ -89,4 +89,8 @@ void DataTransmit::getDataToHighscore(std::unordered_map<uint32_t, ScoresArray> 
                 }
             }
         }
+}
+
+void DataTransmit::sendHighscoreToData() {
+
 }

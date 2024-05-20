@@ -18,9 +18,13 @@ Scores& Scores::getInstance() {
 
 void Scores::addScore(int score,State *gameThatWasPlayed) {
 
+    bool wasAddedToLeaderboard = false;
+
     uint32_t playedGame = gameThatWasPlayed->getFlagName();
     if(score > maxScores[playedGame]){
-        maxScores[playedGame] = score;
+
+        wasAddedToLeaderboard = addScoreToDatabase(score,playedGame);
+
         Serial.println( );
         Serial.print("NEW RECORD: SCORE WAS ");
         Serial.println(score);
@@ -28,45 +32,57 @@ void Scores::addScore(int score,State *gameThatWasPlayed) {
 }
 
 void Scores::init() {
+
+    getLeaderboardFromDatabase();
+
     //set all the current scores to 0
     for(auto &game : GlobalStates::gameList)
     {
-        maxScores.emplace(game->getFlagName(),0);
+        uint32_t  playedGame = game->getFlagName();
+        maxScores.emplace(playedGame,leaderBoards[playedGame][4].second);
     }
-    getLeaderboardFromDatabase();
+
 }
 
 void Scores::getLeaderboardFromDatabase() {
     dataTransmit.getDataToHighscore(leaderBoards);
-//    Serial.print("PRINTING LEADERBOARD:------ ");
-//    for (int i = 0; i < GlobalStates::numberOfGameStates; i++){
-//
-//        for(int j = 0; j < 5; j++){
-//            Serial.print(leaderBoards[i][j].first);
-//            Serial.print("    ---> ");
-//            Serial.println(leaderBoards[i][j].second);
-//        }
-//    }
-}
 
-void Scores::addScoreToDatabase(State *gameThatWasPlayed) {
-    uint32_t playedGame = gameThatWasPlayed->getFlagName();
-    int score = maxScores[playedGame];
-    int currentMax = leaderBoards[playedGame][4].second;
+#ifdef DEBUG
+    Serial.print("PRINTING LEADERBOARD:------ ");
+    for (int i = 0; i < GlobalStates::numberOfGameStates; i++){
 
-    if (score > currentMax) {
-        for (int i = 3; i >= 0; i--) {
-
-            if (score > leaderBoards[playedGame][i].second && i != 0) {
-                continue;
-            } else if(i == 0){
-                if (score > leaderBoards[playedGame][0].second){
-                    leaderBoards[playedGame][0] = std::make_pair(GlobalSettings::userName, score);
-                }
-            } else {
-                leaderBoards[playedGame][i+1] = std::make_pair(GlobalSettings::userName, score);
-            }
+        for(int j = 0; j < 5; j++){
+            Serial.print(leaderBoards[i][j].first);
+            Serial.print("    ---> ");
+            Serial.println(leaderBoards[i][j].second);
         }
     }
+#endif
+}
 
+bool Scores::addScoreToDatabase(int newScore, uint32_t playedGame) {
+
+    //update the leaderboard from Database
+    getLeaderboardFromDatabase();
+
+    //Early exit if the new score is not higher than the lowest score on the board.
+    if (newScore <= leaderBoards[playedGame][4].second) {
+        maxScores[playedGame] = leaderBoards[playedGame][4].second;
+        return false;
+    }
+
+    //the starting position of our iteration through the list
+    int pos = 4;
+
+    while (pos > 0 && newScore > leaderBoards[playedGame][pos - 1].second) {
+        leaderBoards[playedGame][pos] = leaderBoards[playedGame][pos - 1]; // Shift scores down
+        pos--;
+    }
+    // Insert the new score at the found position
+    leaderBoards[playedGame][pos] = std::make_pair(GlobalSettings::userName, newScore);
+
+    //make the 5th score the current highest score
+    maxScores[playedGame] = leaderBoards[playedGame][4].second;
+
+    return true;
 }
