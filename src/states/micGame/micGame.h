@@ -42,18 +42,18 @@ public:
     void update() override;
     void stop() override;
 
-    void game();               //Contains the logic for the game
-    void animateWaveform();
-    void updatePosition(int change);
+    void game();                          //Contains the logic for the game
+    void animateWaveform();               //Function that animates the waveform in a thread
+    void updatePosition(int change);      //Updates the new ball position
 
-    void incrementCounter();
+    void incrementCounter();              //Increments m_timerCounter by 1 every second, used for game length and score
 
-    Microphone mic;
+    Microphone mic;                       //object with all mic funtionality
     
-    bool m_runWaveform = true;
-    int m_position = 64; 
-    int m_score = 0;
-    volatile int m_timeCounter = 0;
+    bool m_runWaveform = true;            //Used for exiting waveform animation
+    int m_position = 64;                  //Position of the ball
+    int m_score = 0;                      //User score, increments every second the waveform crosses the ball
+    volatile int m_timeCounter = 0;       //Counts the seconds since state started
 
 };
 

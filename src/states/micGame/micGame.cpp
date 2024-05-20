@@ -97,30 +97,30 @@ void MicGame::game() {
             }
         }
         
-        // mic.onPDMdata();
+        //Process the audioBuffer setting the Microphone::m_value variable
         mic.processAudioData();
 
-        //Updates the position of the ball based of the mic.
+        //Updates the position of the ball based on the mic input.
         updatePosition(mic.m_value);
-        
-        Serial.println(mic.m_value);
-        
+                
         //Finish game when time limit is reached
-       if (m_timeCounter == GAME_LENGTH) {
-        break;
-       }
+        if (m_timeCounter == GAME_LENGTH) {
+            break;
+        }
     }
 
     //Detach timer
     ticker.detach();
 
-    //Serial.println("Nu har det gått 3 sec");
+    //Exit the waveform loop for proper termination of thread
     m_runWaveform = false;
 
+    //Draw the last screen showing the score
     m_canvas->drawScreen3();
 
-    //Waits for button A press to finish the game
+    //Waits for button A press to exit the game
     m_gameFlags.wait_any(ADVANCE_GAME_FLAG, osWaitForever, true);
+
     //Return to main menu when game finish
     m_isRunning = false;
     State::stateFlags.set(GlobalStates::stateList[0]->getFlagName());
@@ -214,12 +214,8 @@ void MicGame::stop() {
     }
 
 
-
-
-
     delete m_canvas; // Properly delete the m_canvas when stopping
     m_canvas = nullptr;
-
 
     //clear all flags before exiting
     m_gameFlags.clear(SCREEN_UPDATE_FLAG | ADVANCE_GAME_FLAG);
@@ -240,16 +236,17 @@ void MicGame::animateWaveform() {
     while (m_isRunning && m_runWaveform) {
         m_canvas->drawWaveform();
         m_gameFlags.set(SCREEN_UPDATE_FLAG);
-        ThisThread::sleep_for(10ms);
+        ThisThread::sleep_for(10ms);                //Update frequency
     }
 }
 
 //Function that attaches to the timer interrupt ticker and increments time counter
 void MicGame::incrementCounter() {
     m_timeCounter++;
-    //printf("Counter: %d\n", m_timeCounter);
 }
 
+
+//Updates the ball position based on mic input, adjust sleep_for parameter to change speed
 void MicGame::updatePosition(int change) {
     //Serial.println(change);
     if (change < 0) {                   //Move down when no sound
@@ -257,7 +254,7 @@ void MicGame::updatePosition(int change) {
         if(m_position > 100) {
             m_position = 100;
         }
-        rtos::ThisThread::sleep_for(30);
+        rtos::ThisThread::sleep_for(20);
     }
     else {                              //Move ball UP when recieving sound
         m_position--;
@@ -266,6 +263,4 @@ void MicGame::updatePosition(int change) {
         }
         rtos::ThisThread::sleep_for(3);
     }
-    
-    //Serial.println(m_position);
 }
