@@ -24,6 +24,6 @@ void setup() {
 
 void loop() {
     using namespace std::chrono;
-    //rtos::ThisThread::sleep_for(seconds(3));
+    rtos::ThisThread::sleep_for(seconds(3));
 
 }

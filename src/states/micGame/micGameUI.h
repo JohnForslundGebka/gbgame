@@ -19,9 +19,11 @@ public:
     void drawWaveform();
     void updateWave();
 
-    void drawBall(int pos);
-    //int ballPos = 64;
+    bool isWaveformInCircle(int circleX, int circleY, int radius);
 
+
+    int m_lastBallPos;
+    int m_lastScore = 0;
 
 private:
     static const int size = 128;

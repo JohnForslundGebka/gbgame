@@ -19,7 +19,8 @@ void MicGame::handleInput() {
     while (m_isRunning) {
         using namespace std::chrono;
 
-        uint32_t result = Buttons::states.wait_any(Buttons::START_FLAG  | Buttons::A_FLAG, osWaitForever, false);
+        uint32_t result = Buttons::states.wait_any(Buttons::START_FLAG  | Buttons::A_FLAG 
+                                                 | Buttons::UP_FLAG | Buttons::DOWN_FLAG , osWaitForever, false);
 
         if (!m_isRunning) break;
 
@@ -45,6 +46,13 @@ void MicGame::handleInput() {
                  m_isRunning = false;
                 State::stateFlags.set(GlobalStates::stateList[static_cast<int>(index::ARRAY_MAIN_MENU)]->getFlagName());
                 break;
+            case Buttons::UP_FLAG:
+                m_position--;
+                break;
+            case Buttons::DOWN_FLAG:
+                m_position++;
+                break;
+    
             default:
                 break;
         }
@@ -71,24 +79,36 @@ void MicGame::game() {
     using namespace mbed;
     using namespace std::chrono;
 
+    int lastTime = 0;
+
+    Ticker ticker;
+    ticker.attach([this]() { this->incrementCounter(); }, 1s);
+    
+
+
     while (m_isRunning) {
-        // m_canvas->drawWaveform();
-        // m_gameFlags.set(SCREEN_UPDATE_FLAG);
-        // ThisThread::sleep_for(30ms);
-        m_canvas->drawBall(m_ballPos);
+        
+        if (m_canvas->isWaveformInCircle(15, m_position, 8)) {
+            m_score++;
+        Serial.println(m_timeCounter);
+            if (m_timeCounter > lastTime) {
+                m_score++;
+                lastTime = m_timeCounter;
+            }
+        }
+        
         // mic.onPDMdata();
         mic.processAudioData();
-        //Serial.println(m_mic.value);
-        m_ballPos += mic.m_value;
+        Serial.println(mic.m_value);
     }
 
 
 
     //Waits for button A press to finish the game
-    m_gameFlags.wait_any(ADVANCE_GAME_FLAG, osWaitForever, true);
+    //m_gameFlags.wait_any(ADVANCE_GAME_FLAG, osWaitForever, true);
     //Return to main menu when game finish
-        m_isRunning = false;
-        State::stateFlags.set(GlobalStates::stateList[0]->getFlagName());
+    m_isRunning = false;
+    State::stateFlags.set(GlobalStates::stateList[0]->getFlagName());
 
 }
 
@@ -97,8 +117,7 @@ void MicGame::run() {
     using namespace mbed;
     //Starts the threads
     m_isRunning = true;
-
-
+    
 
 #ifdef DEBUG
     Serial.println("NU RUN JAG");
@@ -117,7 +136,7 @@ void MicGame::run() {
     t_animateWaveform->start(mbed::callback(this, &MicGame::animateWaveform));
 
     //initialize pdm.h library and mic object
-    mic.init();
+    //mic.init();
 }
 
 void MicGame::stop() {
@@ -200,5 +219,9 @@ void MicGame::animateWaveform() {
     }
 }
 
+void MicGame::incrementCounter() {
+    m_timeCounter++;
+    //printf("Counter: %d\n", m_timeCounter);
+}
 
 

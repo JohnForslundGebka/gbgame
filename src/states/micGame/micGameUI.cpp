@@ -11,11 +11,27 @@ MicGameUI::MicGameUI(MicGame *pGame) : parentState(pGame), c_main(128, 128, 0, 0
     }
 }
 
-void MicGameUI::init() {}
+void MicGameUI::init() { m_lastScore = 0; }
 
 void MicGameUI::drawWaveform() {
 
-    // Draw the waveform BLACK from the array
+    //If score changed, print new score
+    if(m_lastScore == 0 || m_lastScore != parentState->m_score) {
+        c_main.C.fillRect(60, 1, 128, 20, BLACK);
+        c_main.C.setTextColor(0xFABF);
+        c_main.C.setTextSize(2);
+        c_main.C.setTextWrap(false);
+        c_main.C.setCursor(5, 3);
+        c_main.C.print("Score:");
+        c_main.C.setCursor(75, 3);
+        c_main.C.print(parentState->m_score);
+
+        //Save last score
+        m_lastScore = parentState->m_score;
+    }
+
+
+    // Draw the previous waveform black, ereasing the last frame
     for (int i = 1; i < size; ++i) {
         c_main.C.drawLine(i - 1, arr[i - 1], i, arr[i], BLACK);
     }
@@ -23,12 +39,19 @@ void MicGameUI::drawWaveform() {
     //Calculate new value from the waveform
     updateWave();  
 
-        // Draw the waveform WHITE from the array
+    // Draw the waveform WHITE from the array
     for (int i = 1; i < size; ++i) {
         c_main.C.drawLine(i - 1, arr[i - 1], i, arr[i], WHITE);
     }
 
-    // c_main.C.print(parentState->m_ball);
+    //Erease and print the ball
+    int temp_pos = parentState->m_position;
+    c_main.C.fillCircle(15, m_lastBallPos, 8, BLACK);
+
+    c_main.C.fillCircle(15, temp_pos, 8, GREEN);
+    m_lastBallPos = temp_pos;
+        
+
 }
 
 void MicGameUI::updateWave() {
@@ -56,7 +79,22 @@ void MicGameUI::updateWave() {
     }
 }
 
-void MicGameUI::drawBall(int pos) {
-    c_main.C.drawCircle(15, 64, 8, GREEN);
+bool MicGameUI::isWaveformInCircle(int circleX, int circleY, int radius) {
+    // Calculate the square of the radius to use in comparisons, to avoid computing square roots.
+    int radiusSquared = radius * radius;
 
+    // Check only the relevant part of the waveform
+    for (int i = 14; i <= 30; ++i) {
+        // Calculate the square of the distance from the point to the circle's center
+        int dx = i - circleX;
+        int dy = arr[i] - circleY;
+        int distanceSquared = dx * dx + dy * dy;
+
+        // If the distance squared is less than or equal to the radius squared, the point is inside the circle
+        if (distanceSquared <= radiusSquared) {
+            return true;  // Return true immediately upon finding any point inside the circle
+        }
+    }
+
+    return false;  // If no points are inside the circle, return false
 }
