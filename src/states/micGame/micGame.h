@@ -44,10 +44,13 @@ public:
 
     void game();               //Contains the logic for the game
     void animateWaveform();
+    void updatePosition(int change);
+
     void incrementCounter();
 
     Microphone mic;
     
+    bool m_runWaveform = true;
     int m_position = 64; 
     int m_score = 0;
     volatile int m_timeCounter = 0;

@@ -98,3 +98,20 @@ bool MicGameUI::isWaveformInCircle(int circleX, int circleY, int radius) {
 
     return false;  // If no points are inside the circle, return false
 }
+
+//Exit screen
+void MicGameUI::drawScreen3() {
+    c_main.C.fillRect(0, 0, 128, 128, BLACK);
+
+    c_main.C.setTextColor(0xFFFF);
+    c_main.C.setTextSize(2);
+    c_main.C.setTextWrap(false);
+    c_main.C.setCursor(23, 3);
+    c_main.C.print("Press A");
+
+    c_main.C.setTextColor(0xFABF);
+    c_main.C.setCursor(10, 64);
+    c_main.C.print("Score:");
+    c_main.C.setCursor(85, 64);
+    c_main.C.print(parentState->m_score);
+}

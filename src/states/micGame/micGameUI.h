@@ -20,7 +20,8 @@ public:
     void updateWave();
 
     bool isWaveformInCircle(int circleX, int circleY, int radius);
-
+    
+    void drawScreen3();
 
     int m_lastBallPos;
     int m_lastScore = 0;

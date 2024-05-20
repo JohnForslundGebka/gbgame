@@ -8,6 +8,7 @@ class Microphone {
 public:
     Microphone();
     void init();
+    void end();
     void processAudioData();
     static void onPDMdata();
     int m_value = 0;

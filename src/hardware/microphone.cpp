@@ -7,8 +7,6 @@ volatile int Microphone::samplesRead = 0;
 Microphone::Microphone() {}
 
 void Microphone::init() {
-    // Serial.begin(9600);
-    // while (!Serial);
 
     PDM.onReceive(onPDMdata);
 
@@ -16,6 +14,12 @@ void Microphone::init() {
         Serial.println("Failed to start PDM!");
         while (1);
     }
+
+    //PDM.setGain(10);
+}
+
+void Microphone::end() {
+    PDM.end();
 }
 
 void Microphone::processAudioData() {
@@ -25,7 +29,6 @@ void Microphone::processAudioData() {
             
             if (sampleBuffer[i] > 10000 || sampleBuffer[i] <= -10000) {
                 m_value++;
-                //Serial.println(m_value);
 
                 if (m_value > 2) {m_value = 1;}
                 //delay(1000);
@@ -36,8 +39,8 @@ void Microphone::processAudioData() {
         if (m_value < -1) {m_value = -1;}
 
         samplesRead = 0; // Clear the read count
-        
-        
+
+        // Serial.println(m_value);
     }
     //Serial.println(m_value);
 }

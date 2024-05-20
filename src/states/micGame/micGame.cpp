@@ -79,18 +79,18 @@ void MicGame::game() {
     using namespace mbed;
     using namespace std::chrono;
 
-    int lastTime = 0;
+    const int GAME_LENGTH = 15;             //Length in seconds of a game
+    int lastTime = 0;                       //Keeps track of when to update score
 
+    //Creates and initialize a timer and attached a function that increments m_timeCounter every second
     Ticker ticker;
     ticker.attach([this]() { this->incrementCounter(); }, 1s);
     
-
-
     while (m_isRunning) {
         
+        //Checks if the waveform line crosses the circle
         if (m_canvas->isWaveformInCircle(15, m_position, 8)) {
-            m_score++;
-        Serial.println(m_timeCounter);
+
             if (m_timeCounter > lastTime) {
                 m_score++;
                 lastTime = m_timeCounter;
@@ -99,13 +99,28 @@ void MicGame::game() {
         
         // mic.onPDMdata();
         mic.processAudioData();
+
+        //Updates the position of the ball based of the mic.
+        updatePosition(mic.m_value);
+        
         Serial.println(mic.m_value);
+        
+        //Finish game when time limit is reached
+       if (m_timeCounter == GAME_LENGTH) {
+        break;
+       }
     }
 
+    //Detach timer
+    ticker.detach();
 
+    //Serial.println("Nu har det gått 3 sec");
+    m_runWaveform = false;
+
+    m_canvas->drawScreen3();
 
     //Waits for button A press to finish the game
-    //m_gameFlags.wait_any(ADVANCE_GAME_FLAG, osWaitForever, true);
+    m_gameFlags.wait_any(ADVANCE_GAME_FLAG, osWaitForever, true);
     //Return to main menu when game finish
     m_isRunning = false;
     State::stateFlags.set(GlobalStates::stateList[0]->getFlagName());
@@ -115,9 +130,15 @@ void MicGame::game() {
 void MicGame::run() {
     using namespace rtos;
     using namespace mbed;
+
+    //Reset the counters to 0
+    m_score = 0;
+    m_timeCounter = 0;
+
+
     //Starts the threads
     m_isRunning = true;
-    
+    m_runWaveform = true;
 
 #ifdef DEBUG
     Serial.println("NU RUN JAG");
@@ -136,7 +157,7 @@ void MicGame::run() {
     t_animateWaveform->start(mbed::callback(this, &MicGame::animateWaveform));
 
     //initialize pdm.h library and mic object
-    //mic.init();
+    mic.init();
 }
 
 void MicGame::stop() {
@@ -182,15 +203,19 @@ void MicGame::stop() {
         t_screenUpdate = nullptr;
     }
    
+#ifdef DEBUG
+    Serial.println("AVSLUTAT SCREEN UPDARE");
+#endif
+
     if(t_animateWaveform){
         t_animateWaveform->join();
         delete t_animateWaveform;
         t_animateWaveform = nullptr;
     }
 
-#ifdef DEBUG
-    Serial.println("AVSLUTAT SCREEN UPDARE");
-#endif
+
+
+
 
     delete m_canvas; // Properly delete the m_canvas when stopping
     m_canvas = nullptr;
@@ -207,21 +232,40 @@ void MicGame::stop() {
 #endif
 }
 
-
+//Runs in a separate thread to update the waveform and screen
 void MicGame::animateWaveform() {
     using namespace std::chrono;
     using namespace rtos;
 
-    while (m_isRunning) {
+    while (m_isRunning && m_runWaveform) {
         m_canvas->drawWaveform();
         m_gameFlags.set(SCREEN_UPDATE_FLAG);
-        ThisThread::sleep_for(30ms);
+        ThisThread::sleep_for(10ms);
     }
 }
 
+//Function that attaches to the timer interrupt ticker and increments time counter
 void MicGame::incrementCounter() {
     m_timeCounter++;
     //printf("Counter: %d\n", m_timeCounter);
 }
 
-
+void MicGame::updatePosition(int change) {
+    //Serial.println(change);
+    if (change < 0) {                   //Move down when no sound
+        m_position++;
+        if(m_position > 100) {
+            m_position = 100;
+        }
+        rtos::ThisThread::sleep_for(30);
+    }
+    else {                              //Move ball UP when recieving sound
+        m_position--;
+        if(m_position < 30) {
+            m_position = 30;
+        }
+        rtos::ThisThread::sleep_for(3);
+    }
+    
+    //Serial.println(m_position);
+}
