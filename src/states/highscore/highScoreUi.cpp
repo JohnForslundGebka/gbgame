@@ -1,6 +1,7 @@
 #include "highScoreUi.h"
 
 void HighScoreUi::init() {
+
     c_main.C.drawLine(0, 19, 128, 19, 0xFFFF);
     c_main.C.setTextColor(0xFFFF);
     c_main.C.setTextSize(2);
