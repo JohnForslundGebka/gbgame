@@ -50,12 +50,10 @@ void setup() {
     wifiConnected = wifi.init();
     scores.init();
     delay(2000);
-   // Serial.print("updating database");
-
 }
 
 void loop() {
     using namespace std::chrono;
-   // print_memory_info();
+    print_memory_info();
     rtos::ThisThread::sleep_for(seconds(3));
 }
