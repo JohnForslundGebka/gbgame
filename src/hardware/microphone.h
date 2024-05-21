@@ -1,3 +1,13 @@
+
+/**
+ * @brief This class handles the microphone on the nano RP2040 board.
+ * 
+ * @class Microphone contains the logic and initializes 
+ *        necessary library for reading the microphone.
+ *
+ */
+
+
 #ifndef MICROPHONE_H
 #define MICROPHONE_H
 

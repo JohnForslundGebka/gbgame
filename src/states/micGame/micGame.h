@@ -1,12 +1,13 @@
 
 /**
- * @brief 
+ * @brief This is the game "Voicy". You control the circle on the 
+ * screen by making noise or sound into the microphone. You get points for every second
+ * you stay on the waveform line.
  * 
- * @class 
+ * @class MicGame contains the logic and initializes everything necessary for the "Voicy" game.
  *
-
- * @param 
  */
+
 #ifndef GBGAME_micGame_H
 #define GBGAME_micGame_H
 #include <Arduino.h>
@@ -23,9 +24,9 @@
 class MicGame : public State {
 private:
     rtos::Thread *t_gameLogic = nullptr;        //Thread that handles the game logic/order
-    rtos::Thread *t_userInput = nullptr;      //Thread that handles user input
-    rtos::Thread *t_screenUpdate = nullptr;  //This thread is responsible for updating the screen when the SCREEN_UPDATE_FLAG is set (highest priority)
-    rtos::Thread *t_animateWaveform = nullptr;  //This thread is responsible for updating the screen when the SCREEN_UPDATE_FLAG is set (highest priority)
+    rtos::Thread *t_userInput = nullptr;        //Thread that handles user input
+    rtos::Thread *t_screenUpdate = nullptr;     //This thread is responsible for updating the screen when the SCREEN_UPDATE_FLAG is set (highest priority)
+    rtos::Thread *t_animateWaveform = nullptr;  //This thread animates the waveform on screen
 
 
 

@@ -3,8 +3,6 @@
 #include "rtos.h"
 #include "mbed.h"
 
-
-
 // Constructor, initializes the state with it's name "voicy"
 MicGame::MicGame():  State("Voicy"){}
 
@@ -164,7 +162,7 @@ void MicGame::stop() {
     using namespace std::chrono;
 
 #ifdef DEBUG
-    Serial.println("NU STOPPAR DISTANCEGAME");
+    Serial.println("NU STOPPAR MIC GAME");
 #endif
 
     m_isRunning = false;
@@ -216,6 +214,8 @@ void MicGame::stop() {
 
     delete m_canvas; // Properly delete the m_canvas when stopping
     m_canvas = nullptr;
+
+    mic.end();
 
     //clear all flags before exiting
     m_gameFlags.clear(SCREEN_UPDATE_FLAG | ADVANCE_GAME_FLAG);
