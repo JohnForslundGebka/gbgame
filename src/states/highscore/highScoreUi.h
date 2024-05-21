@@ -8,6 +8,9 @@
 class HighScore; // Forward declaration
 
 class HighScoreUi {
+    Canvas c_main;
+
+    void init();
 
 };
 

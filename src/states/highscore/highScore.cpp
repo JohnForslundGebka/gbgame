@@ -1,5 +1,5 @@
 #include "highScore.h"
-
+#include "highScoreUi.h"
 
 void HighScore::handleInput() {
 

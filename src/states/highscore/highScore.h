@@ -1,6 +1,7 @@
 #ifndef GBGAME_HIGHSCORE_H
 #define GBGAME_HIGHSCORE_H
 #include "core/state.h"
+#include "highScoreUi.h"
 
 class HighScore : public State{
 public:
