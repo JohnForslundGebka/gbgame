@@ -2,7 +2,6 @@
 #include "wifiMenu.h"
 
 WifiMenuUI::WifiMenuUI(WifiMenu *pGame) : parentState(pGame), c_main(128, 128, 0, 0) {
-    randomSeed(static_cast<int>(millis()));  // Seed the RNG
 }
 
 void WifiMenuUI::init() {}

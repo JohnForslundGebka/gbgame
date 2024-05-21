@@ -3,7 +3,7 @@
 #include "rtos.h"
 #include "mbed.h"
 
-// Constructor, initializes the state with it's name "voicy"
+// Constructor, initializes the state with it's name "Wifi Menu"
 WifiMenu::WifiMenu():  State("Wifi Menu"){}
 
 void WifiMenu::handleInput() {
@@ -74,7 +74,7 @@ void WifiMenu::game() {
     }
 
     //Draw the last screen showing the score
-    //m_canvas->drawScreen3();
+    m_canvas->drawScreen3();
 
     //Waits for button A press to exit the game
     m_gameFlags.wait_any(ADVANCE_GAME_FLAG, osWaitForever, true);

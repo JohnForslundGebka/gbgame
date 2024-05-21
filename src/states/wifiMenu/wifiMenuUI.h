@@ -1,5 +1,5 @@
-#ifndef GBGAME_MIC_GAMEUI_H
-#define GBGAME_MIC_GAMEUI_H
+#ifndef GBGAME_WIFI_MENU_UI_H
+#define GBGAME_WIFI_MENU_UI_H
 #include "ui/canvas.h"
 #include "core/macros.h"
 #include "core/state.h" // Include State but forward-declare DistanceGame
@@ -22,4 +22,4 @@ private:
 
 };
 
-#endif //GBGAME_MIC_GAMEUI_H
+#endif //GBGAME_WIFI_MENU_UI_H

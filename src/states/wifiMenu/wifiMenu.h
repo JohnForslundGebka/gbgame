@@ -5,8 +5,8 @@
  * @class
  */
 
-#ifndef GBGAME_micGame_H
-#define GBGAME_micGame_H
+#ifndef GBGAME_wifiMenu_H
+#define GBGAME_wifiMenu_H
 #include <Arduino.h>
 #include "core/macros.h"
 #include "mbed.h"
@@ -43,4 +43,4 @@ public:
 
 };
 
-#endif //GBGAME_micGame_H
+#endif //GBGAME_wifiMenu_H
