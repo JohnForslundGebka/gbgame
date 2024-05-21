@@ -41,6 +41,7 @@ namespace GlobalStates {
     extern State* settingsList[numberOfSettingsStates];
 
     extern const uint32_t ALL_STATE_FLAGS;
+    volatile static bool wifiIsConnected = false;
 }
 
 #endif //GBGAME_GLOBALSTATES_H
