@@ -17,8 +17,7 @@ void MicGame::handleInput() {
     while (m_isRunning) {
         using namespace std::chrono;
 
-        uint32_t result = Buttons::states.wait_any(Buttons::START_FLAG  | Buttons::A_FLAG 
-                                                 | Buttons::UP_FLAG | Buttons::DOWN_FLAG , osWaitForever, false);
+        uint32_t result = Buttons::states.wait_any(Buttons::START_FLAG  | Buttons::A_FLAG, osWaitForever, false);
 
         if (!m_isRunning) break;
 
@@ -44,13 +43,7 @@ void MicGame::handleInput() {
                  m_isRunning = false;
                 State::stateFlags.set(GlobalStates::stateList[static_cast<int>(index::ARRAY_MAIN_MENU)]->getFlagName());
                 break;
-            case Buttons::UP_FLAG:
-                m_position--;
-                break;
-            case Buttons::DOWN_FLAG:
-                m_position++;
-                break;
-    
+            
             default:
                 break;
         }
@@ -68,7 +61,6 @@ void MicGame::update(){
     {
         m_gameFlags.wait_any(SCREEN_UPDATE_FLAG, osWaitForever);
         m_displayManager.updateScreen(&m_canvas->c_main);
-        //ThisThread::sleep_for(20ms);
     }
 }
 
@@ -121,7 +113,7 @@ void MicGame::game() {
 
     //Return to main menu when game finish
     m_isRunning = false;
-    State::stateFlags.set(GlobalStates::stateList[0]->getFlagName());
+    State::stateFlags.set(GlobalStates::stateList[static_cast<int>(index::ARRAY_MAIN_MENU)]->getFlagName());
 
 }
 
@@ -248,7 +240,7 @@ void MicGame::incrementCounter() {
 
 //Updates the ball position based on mic input, adjust sleep_for parameter to change speed
 void MicGame::updatePosition(int change) {
-    //Serial.println(change);
+
     if (change < 0) {                   //Move down when no sound
         m_position++;
         if(m_position > 100) {
