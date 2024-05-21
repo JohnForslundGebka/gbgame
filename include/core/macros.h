@@ -28,5 +28,13 @@
 
 //#define DEBUG
 
+enum {
+    INDEX_MAIN_MENU,
+    INDEX_DISTANCE_GAME,
+    INDEX_GAMES,
+    INDEX_SETTINGS,
+    INDEX_MIC_GAME
+};
+
 
 #endif //GBGAME_MACROS_H
