@@ -49,7 +49,9 @@ void setup() {
     stateHandler.init();
     wifiConnected = wifi.init();
     scores.init();
-    delay(500);
+    delay(2000);
+   // Serial.print("updating database");
+
 }
 
 void loop() {

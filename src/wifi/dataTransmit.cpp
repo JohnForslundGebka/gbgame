@@ -50,6 +50,8 @@ bool DataTransmit::init() {
     Firebase.begin(DATABASE_URL, DATABASE_SECRET,GlobalSettings::ssid,GlobalSettings::password);
     Firebase.reconnectWiFi(true);
 
+    GlobalStates::wifiIsConnected = true;
+
     return (WiFi.status() == WL_CONNECTED);
 
 #ifdef DEBUG
@@ -98,17 +100,24 @@ void DataTransmit::sendHighscoreToData(std::unordered_map<uint32_t, ScoresArray>
     //Do this for all the games in our gamestate list
     for (int i = 0; i < GlobalStates::numberOfGameStates; i++){
         uint32_t gameKey = GlobalStates::gameList[i]->getFlagName();
-        const String gameName = GlobalStates::gameList[i]->m_stateName;
+        String gameName = GlobalStates::gameList[i]->m_stateName;
         String basePath = "/Leaderbord/" + gameName;  // Path to the leaderboard data in Firebase
 
         //double check to see if the game has a highscore
         if (leaderBoards.find(gameKey) != leaderBoards.end()) {
-            const ScoresArray &scores = leaderBoards.at(gameKey);
+            Serial.println("sending data to DB");
 
-
-            for (int j = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
                 String fullPath = basePath + "/score_" + String(j + 1);
-                String jsonData = "{\"name\": \"" + scores[j].first + "\", \"score\": " + String(scores[j].second) + "}";
+                JsonDocument doc;
+
+                doc["name"] = leaderBoards[gameKey][j].first;
+                doc["score"] = leaderBoards[gameKey][j].second;
+
+                // Serialize JSON to a string
+                String jsonData;
+                serializeJson(doc, jsonData);
+                Serial.println(jsonData);
 
                 if (!Firebase.setJSON(fbdo, fullPath, jsonData)) {
                     Serial.println("Failed to send data: " + fbdo.errorReason());

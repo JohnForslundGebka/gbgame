@@ -29,6 +29,7 @@ public:
     std::unordered_map<uint32_t, ScoresArray> leaderBoards;
 
 
+
     // Delete copy constructor and copy assignment operator
     Scores(const Scores&) = delete;
     Scores& operator=(const Scores&) = delete;

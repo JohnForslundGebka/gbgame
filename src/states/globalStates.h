@@ -18,6 +18,8 @@ class State;
 
 namespace GlobalStates {
 
+    volatile static bool wifiIsConnected = false;
+
     const int numberOfTotalStates = 4;
     const int numberOfMainMenuStates = 2;
     const int numberOfGameStates = 1;
