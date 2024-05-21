@@ -28,12 +28,12 @@
 
 //#define DEBUG
 
-enum class index {
-    ARRAY_MAIN_MENU,
-    ARRAY_DISTANCE_GAME,
-    ARRAY_GAMES,
-    ARRAY_SETTINGS,
-    ARRAY_MIC_GAME
+enum {
+    INDEX_MAIN_MENU,
+    INDEX_DISTANCE_GAME,
+    INDEX_GAMES,
+    INDEX_SETTINGS,
+    INDEX_MIC_GAME
 };
 
 

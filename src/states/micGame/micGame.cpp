@@ -41,7 +41,7 @@ void MicGame::handleInput() {
                     Serial.println("HEJ FRAN START");
                 #endif
                  m_isRunning = false;
-                State::stateFlags.set(GlobalStates::stateList[static_cast<int>(index::ARRAY_MAIN_MENU)]->getFlagName());
+                State::stateFlags.set(GlobalStates::stateList[INDEX_MAIN_MENU]->getFlagName());
                 break;
             
             default:
@@ -113,7 +113,7 @@ void MicGame::game() {
 
     //Return to main menu when game finish
     m_isRunning = false;
-    State::stateFlags.set(GlobalStates::stateList[static_cast<int>(index::ARRAY_MAIN_MENU)]->getFlagName());
+    State::stateFlags.set(GlobalStates::stateList[INDEX_MAIN_MENU]->getFlagName());
 
 }
 
