@@ -11,7 +11,7 @@ void Games::handleInput() {
     while (m_isRunning){
 
         //the thread will pause until a new button press is detected
-        uint32_t m_result = Buttons::states.wait_any(Buttons::UP_FLAG | Buttons::DOWN_FLAG | Buttons::A_FLAG, osWaitForever, false);
+        uint32_t m_result = Buttons::states.wait_any(Buttons::UP_FLAG | Buttons::DOWN_FLAG | Buttons::A_FLAG | Buttons::START_FLAG, osWaitForever, false);
 
         if (!m_isRunning) break;
         //debounce logic
@@ -50,6 +50,10 @@ void Games::handleInput() {
             case Buttons::A_FLAG:
                 //set the stateFlags, to the state that the StateHandler should run
                 State::stateFlags.set(GlobalStates::gameList[m_selectedState]->getFlagName()); //select which state to run based on the selected state variable
+                break;
+
+            case Buttons::START_FLAG:
+                State::stateFlags.set(GlobalStates::stateList[INDEX_MAIN_MENU]->getFlagName());
                 break;
 
             default:
