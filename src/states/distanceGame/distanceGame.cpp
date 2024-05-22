@@ -128,15 +128,23 @@ void DistanceGame::game() {
 #endif
       }
 
-      leaderBoard.addScore(m_totScore,this);
+        if (m_totScore > leaderBoard.maxScores[m_flagName]){
+            m_canvas->drawScreen4();
+            m_gameFlags.set(SCREEN_UPDATE_FLAG);
+            rtos::ThisThread::sleep_for(1s);
+        }
+      if(leaderBoard.addScore(m_totScore,this)){
+          m_isRunning = false;
+          State::stateFlags.set(GlobalStates::stateList[INDEX_NEW_HIGHSCORE]->getFlagName());
+      } else {
+          m_canvas->drawScreen3(m_totScore);
+          m_gameFlags.set(SCREEN_UPDATE_FLAG);
 
-      m_canvas->drawScreen3();
-      m_gameFlags.set(SCREEN_UPDATE_FLAG);
-
-      rtos::ThisThread::sleep_for(1000ms);
-      //Return to main manu when game finish
-      m_isRunning = false;
-      State::stateFlags.set(GlobalStates::stateList[0]->getFlagName());
+          rtos::ThisThread::sleep_for(1000ms);
+          //Return to main manu when game finish
+          m_isRunning = false;
+          State::stateFlags.set(GlobalStates::stateList[0]->getFlagName());
+      }
 
 #ifdef DEBUG
    Serial.println("NU HAR GAME KÖRTS KLART");

@@ -6,6 +6,7 @@
 #include "states/globalStates.h"
 #include "wifi/dataTransmit.h"
 #include "core/settings.h"
+#include "states/newHighscore/newHighscore.h"
 
 class State;
 

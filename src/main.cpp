@@ -58,7 +58,7 @@ void setup() {
     Serial.begin(115200);
     dm.init();
     stateHandler.init();
-   //  wifi.init();
+    wifi.init();
     scores.init();
     delay(2000);
 }

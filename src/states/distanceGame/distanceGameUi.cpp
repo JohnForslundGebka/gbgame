@@ -84,12 +84,38 @@ void DistanceGameUi::drawScreen2() {
     c_main.C.print("cm off!");
 }
 
-void DistanceGameUi::drawScreen3() {
+void DistanceGameUi::drawScreen3(int score) {
     c_main.C.fillRect(0, 0, 128, 128, BLACK);
 
+    c_main.C.drawBitmap(36, 74, image_Cry_dolph_bits, 55, 52, 0x555);
     c_main.C.setTextColor(0xFFFF);
     c_main.C.setTextSize(2);
     c_main.C.setTextWrap(false);
-    c_main.C.setCursor(17, 3);
-    c_main.C.print("Exiting...");
+    c_main.C.setCursor(11, 38);
+    c_main.C.print("Highscore");
+    c_main.C.setTextColor(0xA800);
+    c_main.C.setCursor(51, 23);
+    c_main.C.print("No");
+    c_main.C.setTextColor(0xFFFF);
+    c_main.C.setCursor(10, 57);
+    c_main.C.print("This Time");
+    c_main.C.setCursor(23, 5);
+    c_main.C.print(score);
+    c_main.C.setTextSize(1);
+    c_main.C.setCursor(63, 12);
+    c_main.C.print("Points");
+}
+
+void DistanceGameUi::drawScreen4() {
+
+    c_main.C.fillScreen(BLACK);
+    c_main.C.drawBitmap(44, 47, image_Restoring_bits, 38, 32, 0xFFFF);
+    c_main.C.drawBitmap(92, 20, image_cloud_upload_2_bits, 17, 16, 0xFFFF);
+    c_main.C.drawBitmap(16, 20, image_envelope_bits, 17, 16, 0xFFFF);
+    c_main.C.setTextColor(0xFFFF);
+    c_main.C.setTextSize(1);
+    c_main.C.setTextWrap(false);
+    c_main.C.setCursor(28, 89);
+    c_main.C.print("Checking score");
+    c_main.C.drawBitmap(56, 20, image_hour_glass_75_bits, 11, 16, 0xFFFF);
 }

@@ -1,6 +1,7 @@
 #include "newHighscore.h"
 #include "hardware/buttons.h"
 
+
 void NewHighscore::handleInput() {
 
     if(Buttons::states.wait_any(Buttons::A_FLAG,osWaitForever, true) == Buttons::A_FLAG){
@@ -33,7 +34,7 @@ void NewHighscore::run() {
     t_dance->start(callback(this,&NewHighscore::dance));
     t_move->set_priority(osPriorityBelowNormal);
 
-    m_gameFlags.set(SCREEN_UPDATE_FLAG);
+   // m_gameFlags.set(SCREEN_UPDATE_FLAG);
 }
 
 void NewHighscore::stop() {
@@ -71,6 +72,7 @@ void NewHighscore::dance() {
         m_pntrCanvas = &c_canvas->c_dancingMan;
         for (int i = 0; i < 4; i++) {
             c_canvas->drawDance(i);
+            m_gameFlags.set(SCREEN_UPDATE_FLAG);
             rtos::ThisThread::sleep_for(100ms);
         }
     }

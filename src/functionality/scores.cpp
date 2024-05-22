@@ -23,6 +23,7 @@ bool Scores::addScore(int score,State *gameThatWasPlayed) {
        //if the unit is connected to Wi-Fi, try to add the score to the leaderboard
           if (dataTransmit.wifiIsConnected) {
               if (addScoreToLeaderboard(score, playedGame)) {
+                  GlobalStates::newHighscore.setScore(score);
                   return true;
 #ifdef DEBUG
                   Serial.print("PRINTING LEADERBOARD AFTER UPDATE:");
@@ -39,6 +40,7 @@ bool Scores::addScore(int score,State *gameThatWasPlayed) {
               }
           } else {  // if the unit is not connected to Wi-Fi, just add the score locally
               addScoreToLeaderboard(score, playedGame);
+              GlobalStates::newHighscore.setScore(score);
               return true;
           }
       } else{
