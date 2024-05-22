@@ -2,6 +2,7 @@
 #include "micGameUI.h"
 #include "rtos.h"
 #include "mbed.h"
+#include "functionality/scores.h"
 
 // Constructor, initializes the state with it's name "voicy"
 MicGame::MicGame():  State("Voicy"){}
@@ -68,6 +69,8 @@ void MicGame::game() {
     using namespace rtos;
     using namespace mbed;
     using namespace std::chrono;
+    //class that is used for handling highscores and leaderboards
+    Scores &leaderBoard = Scores::getInstance();
 
     const int GAME_LENGTH = 15;             //Length in seconds of a game
     int lastTime = 0;                       //Keeps track of when to update score
@@ -105,16 +108,26 @@ void MicGame::game() {
     //Exit the waveform loop for proper termination of thread
     m_runWaveform = false;
 
+    //check if a new highscore was set
+    if (m_score > leaderBoard.maxScores[m_flagName]){
+        m_canvas->drawScreen4();
+        m_gameFlags.set(SCREEN_UPDATE_FLAG);
+        rtos::ThisThread::sleep_for(1s);
+    }
+
+    //check is highscore can get onto the leaderboard
+    if(leaderBoard.addScore(m_score,this)){
+        m_isRunning = false;
+        State::stateFlags.set(GlobalStates::stateList[INDEX_NEW_HIGHSCORE]->getFlagName());
+    } else{
     //Draw the last screen showing the score
     m_canvas->drawScreen3();
-
     //Waits for button A press to exit the game
     m_gameFlags.wait_any(ADVANCE_GAME_FLAG, osWaitForever, true);
-
-    //Return to main menu when game finish
+    //Return to the main menu when the game finishes
     m_isRunning = false;
     State::stateFlags.set(GlobalStates::stateList[INDEX_MAIN_MENU]->getFlagName());
-
+    }
 }
 
 void MicGame::run() {

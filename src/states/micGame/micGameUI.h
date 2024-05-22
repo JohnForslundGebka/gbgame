@@ -20,7 +20,8 @@ public:
     void updateWave();      // Generates and add the next value in the waveform array and shifts the array values
 
     bool isWaveformInCircle(int circleX, int circleY, int radius); //checks if the waveform crosses the circle
-    
+
+    void drawScreen4();           //draws the data loading screen
     void drawScreen3();           // Draws the exit/finish screen
 
     int m_lastBallPos;           //Variable used locally to update correctly

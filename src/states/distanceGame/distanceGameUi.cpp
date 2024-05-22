@@ -107,7 +107,6 @@ void DistanceGameUi::drawScreen3(int score) {
 }
 
 void DistanceGameUi::drawScreen4() {
-
     c_main.C.fillScreen(BLACK);
     c_main.C.drawBitmap(44, 47, image_Restoring_bits, 38, 32, 0xFFFF);
     c_main.C.drawBitmap(92, 20, image_cloud_upload_2_bits, 17, 16, 0xFFFF);

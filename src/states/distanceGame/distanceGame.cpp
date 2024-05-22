@@ -67,6 +67,7 @@ void DistanceGame::game() {
 
     int m_totScore = 0;
 
+    //class that is used for handling highscores and leaderboards
     Scores &leaderBoard = Scores::getInstance();
 
 
