@@ -140,10 +140,10 @@ void DistanceGame::game() {
           m_canvas->drawScreen3(m_totScore);
           m_gameFlags.set(SCREEN_UPDATE_FLAG);
 
-          rtos::ThisThread::sleep_for(1000ms);
+          rtos::ThisThread::sleep_for(3s);
           //Return to main manu when game finish
           m_isRunning = false;
-          State::stateFlags.set(GlobalStates::stateList[0]->getFlagName());
+          State::stateFlags.set(GlobalStates::stateList[INDEX_MAIN_MENU]->getFlagName());
       }
 
 #ifdef DEBUG
