@@ -19,6 +19,8 @@ public:
     void drawScreen1();           // Draws the first screen
     void drawScreen2();           // Draws new wifi screen
     void drawScreen3();           // Draws set name screen
+    void drawScreen4();           // Draws connecting screen
+    void drawScreenNetworks();           // Draws connecting screen
 
     char m_menuOptions[3][12] = {
         "Login last",

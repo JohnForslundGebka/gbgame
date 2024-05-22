@@ -16,6 +16,7 @@
 #include "hardware/displayManager.h"
 #include "hardware/ultrasonic.h"
 #include "wifiMenuUI.h"
+#include <vector>
 
 class WifiMenu : public State {
 private:
@@ -28,13 +29,24 @@ private:
     //Canvas object for drawing the screens
     WifiMenuUI *m_canvas = nullptr;
 
+    enum {
+        LOGIN_LAST,
+        NEW_WIFI,
+        SET_NAME
+    };
+
 public:
+    std::vector<String> m_networkList = {"Hej", "Netgear", "Asus", "Comhem"};
+
     char m_username[5] = {'A', 'A', 'A', 'A', '\0'};
-    char m_password[15] = {'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', '\0'};
-    char* p_selectedText = nullptr;
+    char m_password[15] = {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '\0'};
+    char *p_selectedText = m_username;
+
+    String string_password = " ";
 
     int m_option = 0;
     bool m_optionEntered = false;
+    bool m_execute = false;
 
     int m_selectedLetter = 0;
     int m_maxLetter = 4;
@@ -57,8 +69,7 @@ public:
     void checkLetterBounds(char &letter);
 
     void setASCIIBounds(int min, int max);
-
-
+    void updatePasswordString();
 
 };
 
