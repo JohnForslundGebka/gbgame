@@ -6,6 +6,7 @@
 #include "states/settings/settings.h"
 #include "states/micGame/micGame.h"
 #include "states/highscore/highScore.h"
+#include "states/newHighscore/newHighscore.h"
 
 
 namespace GlobalStates {
@@ -16,10 +17,10 @@ namespace GlobalStates {
     Settings settings;
     MicGame micGame;
     HighScore highScore;
+    NewHighscore newHighscore;
 
 
-
-    State* stateList[numberOfTotalStates] = {&mainMenu, &distanceGame, &games, &settings, &micGame, &highScore};
+    State* stateList[numberOfTotalStates] = {&mainMenu, &distanceGame, &games, &settings, &micGame, &highScore, &newHighscore};
 
     State* mainMenuList[numberOfMainMenuStates] = {&games,&settings,&highScore};
     State* gameList[numberOfGameStates] = {&distanceGame, &micGame};
@@ -31,5 +32,6 @@ namespace GlobalStates {
                                         games.getFlagName() |
                                      settings.getFlagName() |
                                      micGame.getFlagName()  |
-                                     highScore.getFlagName();
+                                     highScore.getFlagName()|
+                                     newHighscore.getFlagName();
 }
