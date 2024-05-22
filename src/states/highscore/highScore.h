@@ -14,6 +14,14 @@ public:
     void stop() override;
 
     explicit HighScore();
+
+    int m_selectedState = 0;
+private:
+    HighScoreUi *c_canvas = nullptr;
+
+    rtos::Thread* t_gfx = nullptr;
+    rtos::Thread* t_move= nullptr;
+    class rtos::EventFlags m_gameFlags;
 };
 
 

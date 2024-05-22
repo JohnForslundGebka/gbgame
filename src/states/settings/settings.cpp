@@ -140,7 +140,7 @@ void Settings::run() {
 
     t_move->set_priority(osPriorityBelowNormal);
 
-    m_canvas->init(); // Assuming init() is a method of SettingsUi
+    m_canvas->init();
     m_displayManager.updateScreen(&m_canvas->c_handPos0);
 }
 

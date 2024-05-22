@@ -20,9 +20,9 @@ void Scores::addScore(int score,State *gameThatWasPlayed) {
     uint32_t playedGame = gameThatWasPlayed->getFlagName();
       //if the user has set a new high score
       if(score > maxScores[playedGame]) {
-       //if the unit is connected to wifi, try to add the score to the leaderboard
-          if (GlobalStates::wifiIsConnected) {
-              if (addScoreToDatabase(score, playedGame)) {
+       //if the unit is connected to Wi-Fi, try to add the score to the leaderboard
+          if (dataTransmit.wifiIsConnected) {
+              if (addScoreToLeaderboard(score, playedGame)) {
                   //this is used for testing
 #ifdef DEBUG
                   Serial.print("PRINTING LEADERBOARD AFTER UPDATE:");
@@ -37,8 +37,8 @@ void Scores::addScore(int score,State *gameThatWasPlayed) {
                   }
 #endif
               }
-          } else {  // if the unit is not connected to wifi, just add the score locally
-                maxScores[playedGame] = score;
+          } else {  // if the unit is not connected to Wi-Fi, just add the score locally
+              addScoreToLeaderboard(score, playedGame);
           }
       }
 
@@ -46,21 +46,41 @@ void Scores::addScore(int score,State *gameThatWasPlayed) {
 
 void Scores::init() {
 
-    //if the unit is connected to wifi, update the leaderboard with the values from the database
-    if(GlobalStates::wifiIsConnected) {
+#ifdef DEBUG
+    if(dataTransmit.wifiIsConnected)
+    Serial.println("wifi is connected!!");
+#endif
+
+    //if the unit is connected to Wi-Fi, update the leaderboard with the values from the database
+    if(dataTransmit.wifiIsConnected) {
         //set all the current scores
         getLeaderboardFromDatabase();
 
-        //fill the local map with lowest score on the leaderboard
+        //fill the local map with the lowest score on the leaderboard
         for (auto &game: GlobalStates::gameList) {
             uint32_t playedGame = game->getFlagName();
             maxScores.emplace(playedGame, leaderBoards[playedGame][4].second);
         }
-    }else {  // is the unit is not connected to wifi, init everything to 0
-    //fill the local scores with 0
+    }else {
+#ifdef DEBUG
+        Serial.println("wifi is not connected!!");
+#endif
+        // is the unit is not connected to Wi-Fi, init everything to 0
+        //fill the local scores with 0
     for(auto &game:GlobalStates::gameList){
        uint32_t playedGame = game->getFlagName();
-       maxScores.emplace(playedGame,0);}
+       maxScores.emplace(playedGame,1);
+    }
+    //fill the map with temp values
+        for (auto & game : GlobalStates::gameList){
+            uint32_t gameKey = game->getFlagName();
+            int score = 5;
+            for (int j = 0; j < 5; j++){
+                leaderBoards[gameKey][j] = std::make_pair("-", score);
+                score--;
+            }
+        }
+
     }
 
 
@@ -83,13 +103,15 @@ void Scores::getLeaderboardFromDatabase() {
 #endif
 }
 
-bool Scores::addScoreToDatabase(int newScore, uint32_t playedGame) {
+bool Scores::addScoreToLeaderboard(int score, uint32_t playedGame) {
 
+    if(dataTransmit.wifiIsConnected){
     //update the leaderboard from Database
     getLeaderboardFromDatabase();
+    }
 
     //Early exit if the new score is not higher than the lowest score on the board.
-    if (newScore <= leaderBoards[playedGame][4].second) {
+    if (score <= leaderBoards[playedGame][4].second) {
         maxScores[playedGame] = leaderBoards[playedGame][4].second;
         return false;
     }
@@ -97,15 +119,17 @@ bool Scores::addScoreToDatabase(int newScore, uint32_t playedGame) {
     //the starting position of our iteration through the list
     int pos = 4;
 
-    while (pos > 0 && newScore > leaderBoards[playedGame][pos - 1].second) {
+    while (pos > 0 && score > leaderBoards[playedGame][pos - 1].second) {
         leaderBoards[playedGame][pos] = leaderBoards[playedGame][pos - 1]; // Shift scores down
         pos--;
     }
     // Insert the new score at the found position
-    leaderBoards[playedGame][pos] = std::make_pair(GlobalSettings::userName, newScore);
+    leaderBoards[playedGame][pos] = std::make_pair(GlobalSettings::userName, score);
 
     //make the 5th score the current highest score
     maxScores[playedGame] = leaderBoards[playedGame][4].second;
-    dataTransmit.sendHighscoreToData(leaderBoards);
+    if(dataTransmit.wifiIsConnected) {
+        dataTransmit.sendHighscoreToData(leaderBoards);
+    }
     return true;
 }

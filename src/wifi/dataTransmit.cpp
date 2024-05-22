@@ -4,11 +4,11 @@
 
 
 DataTransmit::DataTransmit() {
-    // Constructor code here
+
 }
 
 DataTransmit::~DataTransmit() {
-    // Destructor code here, if needed
+
 }
 
 DataTransmit& DataTransmit::getInstance() {
@@ -50,7 +50,7 @@ bool DataTransmit::init() {
     Firebase.begin(DATABASE_URL, DATABASE_SECRET,GlobalSettings::ssid,GlobalSettings::password);
     Firebase.reconnectWiFi(true);
 
-    GlobalStates::wifiIsConnected = true;
+    wifiIsConnected = true;
 
     return (WiFi.status() == WL_CONNECTED);
 

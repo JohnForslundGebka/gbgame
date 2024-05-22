@@ -19,7 +19,7 @@ StateHandler stateHandler;
 Scores &scores = Scores::getInstance();
 DataTransmit &wifi = DataTransmit::getInstance();
 
-bool wifiConnected = false;
+
 
 void print_memory_info() {
     mbed_stats_heap_t heap_stats;
@@ -43,28 +43,28 @@ void print_memory_info() {
     Serial.println(" ");
 
      //Stack statistics (aggregated)
-    mbed_stats_stack_t stack_stats;
-    mbed_stats_stack_get(&stack_stats);
-    Serial.println("Stack Statistics:");
-    Serial.print("Max stack size used: ");
-    Serial.println(stack_stats.max_size);
-    Serial.print("Reserved stack size: ");
-    Serial.println(stack_stats.reserved_size);
-
-    Serial.println("------------------------------------");
+//    mbed_stats_stack_t stack_stats;
+//    mbed_stats_stack_get(&stack_stats);
+//    Serial.println("Stack Statistics:");
+//    Serial.print("Max stack size used: ");
+//    Serial.println(stack_stats.max_size);
+//    Serial.print("Reserved stack size: ");
+//    Serial.println(stack_stats.reserved_size);
+//
+//    Serial.println("------------------------------------");
 }
 
 void setup() {
     Serial.begin(115200);
     dm.init();
     stateHandler.init();
-    wifiConnected = wifi.init();
+   //  wifi.init();
     scores.init();
     delay(2000);
 }
 
 void loop() {
     using namespace std::chrono;
-  //  print_memory_info();
+  //print_memory_info();
     rtos::ThisThread::sleep_for(seconds(3));
 }

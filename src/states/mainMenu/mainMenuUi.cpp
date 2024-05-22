@@ -42,7 +42,7 @@ void MainMenuUi::drawText() {
      updateTextFields();
      c_canvas.C.fillScreen(BLACK);
 
-     textField[0] = textField[4];
+    // textField[0] = textField[4];
 
     c_canvas.C.setTextColor(WHITE);
     c_canvas.C.setTextSize(2);
@@ -82,7 +82,7 @@ void MainMenuUi::updateTextFields() {
     for (int i = 0; i < 5; i++){
         textField[i] = GlobalStates::mainMenuList[counter]->m_stateName;
 
-        if(counter == (GlobalStates::numberOfMainMenuStates - 1))
+        if(counter == (GlobalStates::numberOfMainMenuStates))
             counter = 0;
         else
             counter++;

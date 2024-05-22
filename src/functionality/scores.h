@@ -14,7 +14,7 @@ public:
     static Scores& getInstance(); // Method to get the singleton instance
 
     void addScore(int score, State *gameThatWasPlayed); // Add a score to the list
-    bool addScoreToDatabase(int score, uint32_t playedGame);
+    bool addScoreToLeaderboard(int score, uint32_t playedGame);
     void getLeaderboardFromDatabase();
     void init();
 

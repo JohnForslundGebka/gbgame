@@ -19,6 +19,7 @@ public:
     DataTransmit(const DataTransmit&) = delete;
     DataTransmit& operator=(const DataTransmit&) = delete;
     bool init();
+    bool wifiIsConnected = false;
 
     // Define the type for the leaderboard entry
     using LeaderboardEntry = std::pair<String, int>;
