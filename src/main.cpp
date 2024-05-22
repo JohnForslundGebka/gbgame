@@ -31,11 +31,15 @@ void print_memory_info() {
 }
 
 //#define DEBUG
+//char m_username[5] = {'A', 'A', 'A', 'A', '\0'};
+
 
 uint32_t State::instanceCounter = 0;
 DisplayManager& dm = DisplayManager::getInstance();
 Buttons button;
 StateHandler stateHandler;
+
+
 
 
 
@@ -47,7 +51,7 @@ void setup() {
 
 void loop() {
     using namespace std::chrono;
-    print_memory_info();
+    //print_memory_info();
     rtos::ThisThread::sleep_for(seconds(3));
 
 }

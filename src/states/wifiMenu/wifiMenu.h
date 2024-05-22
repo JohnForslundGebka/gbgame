@@ -29,6 +29,21 @@ private:
     WifiMenuUI *m_canvas = nullptr;
 
 public:
+    char m_username[5] = {'A', 'A', 'A', 'A', '\0'};
+    char m_password[15] = {'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', '\0'};
+    char* p_selectedText = nullptr;
+
+    int m_option = 0;
+    bool m_optionEntered = false;
+
+    int m_selectedLetter = 0;
+    int m_maxLetter = 4;
+
+    int m_letterIncrement = 0;
+
+    int m_minASCII = 65;
+    int m_maxASCII = 122;
+
     WifiMenu();
 
     void run() override;
@@ -38,6 +53,10 @@ public:
 
     void game();                          //Contains the logic for the game
 
+    void setName();
+    void checkLetterBounds(char &letter);
+
+    void setASCIIBounds(int min, int max);
 
 
 
