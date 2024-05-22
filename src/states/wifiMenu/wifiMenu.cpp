@@ -139,14 +139,20 @@ void WifiMenu::game() {
         if (m_optionEntered && m_option == NEW_WIFI) {
             p_selectedText = m_password;
 
-            while (!m_execute) {
+            while (!m_networkSelected) {
                 m_canvas->drawScreenNetworks();
                 m_gameFlags.set(SCREEN_UPDATE_FLAG);
 
-                
+                uint32_t result = m_gameFlags.get();
+                if (result == ADVANCE_GAME_FLAG) {
+                    m_gameFlags.clear(ADVANCE_GAME_FLAG);
+                    m_networkSelected = true;
+                    break;
+                }
 
                 m_execute = false;
                 ThisThread::sleep_for(40);
+
             }
 
             m_maxLetter = 14;                //Max selectable letter in password

@@ -47,6 +47,7 @@ public:
     int m_option = 0;
     bool m_optionEntered = false;
     bool m_execute = false;
+    bool m_networkSelected = false;
 
     int m_selectedLetter = 0;
     int m_maxLetter = 4;

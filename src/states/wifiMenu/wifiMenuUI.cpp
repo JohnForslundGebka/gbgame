@@ -88,7 +88,7 @@ void WifiMenuUI::drawScreenNetworks() {
     c_main.C.setCursor(1, cursorPosition);
 
     for (int i = 0; i < parentState->m_networkList.size(); i++) {
-        if (parentState->m_option == i) {
+        if (parentState->m_selectedLetter == i) {
             c_main.C.setTextColor(GREEN);
         }
         else {
@@ -96,6 +96,9 @@ void WifiMenuUI::drawScreenNetworks() {
 
         }
         
+        Serial.println(parentState->m_selectedLetter);
+
+
         c_main.C.print(parentState->m_networkList[i]);
         c_main.C.setCursor(1, cursorPosition);
         cursorPosition += 9;
