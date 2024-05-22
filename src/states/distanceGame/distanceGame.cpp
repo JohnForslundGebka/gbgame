@@ -127,6 +127,7 @@ void DistanceGame::game() {
           Serial.println("NU AR GAME KLART");
 #endif
       }
+
       leaderBoard.addScore(m_totScore,this);
 
       m_canvas->drawScreen3();

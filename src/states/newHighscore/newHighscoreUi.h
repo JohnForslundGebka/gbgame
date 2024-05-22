@@ -14,6 +14,9 @@ public:
 
     explicit NewHighscoreUi(NewHighscore *parentState);
 
+    void drawText(int score);
+    void drawDance(int pose);
+
 };
 
 

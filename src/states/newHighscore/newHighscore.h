@@ -16,8 +16,14 @@ public:
     void stop() override;
 
     explicit NewHighscore();
+
+    void setScore(int score);
+
 private:
     NewHighscoreUi* c_canvas = nullptr;
+    Canvas* m_pntrCanvas = nullptr;
+
+    int m_score = 0;
 
     rtos::Thread* t_gfx = nullptr;
     rtos::Thread* t_move= nullptr;

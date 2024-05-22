@@ -14,7 +14,7 @@ Scores& Scores::getInstance() {
     return instance;
 }
 
-void Scores::addScore(int score,State *gameThatWasPlayed) {
+bool Scores::addScore(int score,State *gameThatWasPlayed) {
 
     //get the flag of the game the was played
     uint32_t playedGame = gameThatWasPlayed->getFlagName();
@@ -23,7 +23,7 @@ void Scores::addScore(int score,State *gameThatWasPlayed) {
        //if the unit is connected to Wi-Fi, try to add the score to the leaderboard
           if (dataTransmit.wifiIsConnected) {
               if (addScoreToLeaderboard(score, playedGame)) {
-                  //this is used for testing
+                  return true;
 #ifdef DEBUG
                   Serial.print("PRINTING LEADERBOARD AFTER UPDATE:");
                   for (int i = 0; i < GlobalStates::numberOfGameStates; i++) {
@@ -39,7 +39,10 @@ void Scores::addScore(int score,State *gameThatWasPlayed) {
               }
           } else {  // if the unit is not connected to Wi-Fi, just add the score locally
               addScoreToLeaderboard(score, playedGame);
+              return true;
           }
+      } else{
+          return false;
       }
 
 }
