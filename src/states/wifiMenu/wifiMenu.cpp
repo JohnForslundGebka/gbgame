@@ -30,6 +30,16 @@ void WifiMenu::handleInput() {
         // Handle input and update positions
         switch (result) {
             case Buttons::A_FLAG :
+                //Enters the selected option when A button pressed
+                //If an option is selected, A button executes whatever it is (login function etc.)
+                
+                if (m_optionEntered) {
+                    m_execute = true;
+                }   
+
+                if (!m_optionEntered){
+                    m_optionEntered = true;
+                }
                 m_gameFlags.set(ADVANCE_GAME_FLAG);
                 break;
 
@@ -41,30 +51,34 @@ void WifiMenu::handleInput() {
             case Buttons::UP_FLAG:
                 if (!m_optionEntered) {
                     m_option--;
-                    if (m_option < 0) {
-                        m_option = 0;
-                    }
-                } 
-                else {
+
+                    if (m_option < 0) { m_option = 0; }
+                }
+                else if (m_optionEntered && m_option == NEW_WIFI) {
+                    m_selectedNetwork--;
+                    if (m_selectedNetwork < 0) { m_selectedNetwork = 0; }
+                }
+
+                if (m_optionEntered) {
                     p_selectedText[m_selectedLetter]++;
                     checkLetterBounds(p_selectedText[m_selectedLetter]);
-                } 
-             
-                
+                }    
                 break;
 
             case Buttons::DOWN_FLAG:
                 if (!m_optionEntered) {
                     m_option++;
-                    if (m_option > 2) {
-                        m_option = 2;
-                    }
+                    if (m_option > m_optionMAX) { m_option = m_optionMAX; }
+                } 
+                else if (m_optionEntered && m_option == NEW_WIFI) {
+                    m_selectedNetwork++;
+                    if (m_selectedNetwork > m_networkList.size()) { m_selectedNetwork = m_networkList.size(); }
                 }
-                else {
+    
+                if (m_optionEntered) {
                     p_selectedText[m_selectedLetter]--;
                     checkLetterBounds(p_selectedText[m_selectedLetter]);
                 }
-
                 break;
 
             case Buttons::LEFT_FLAG:
@@ -109,6 +123,7 @@ void WifiMenu::update(){
     {
         m_gameFlags.wait_any(SCREEN_UPDATE_FLAG, osWaitForever);
         m_displayManager.updateScreen(&m_canvas->c_main);
+        //ThisThread::sleep_for(100ms); 
     }
 }
 
@@ -119,41 +134,32 @@ void WifiMenu::game() {
     
     while (m_isRunning) {
         
-        //Enters the selected option when A button pressed
-        //If an option is selected, A button executes whatever it is (login function etc.)
-        uint32_t result = m_gameFlags.get();
-        if (result == ADVANCE_GAME_FLAG) {
+        if (m_optionEntered && m_option == NEW_WIFI) {
+            
+            //Scan networks and add to vector
 
-            if (m_optionEntered) {
-                m_execute = true;
-            }   
+            //Sets the number of maximum selectable options
+            m_optionMAX = m_networkList.size() - 1;
 
-            if (!m_optionEntered){
-                m_optionEntered = true;
-            }     
+            m_canvas->drawScreenNetworks();
+            m_gameFlags.set(SCREEN_UPDATE_FLAG);
 
-            m_gameFlags.clear(ADVANCE_GAME_FLAG);
+            if (m_execute) {
+                // Save network name as string to use for login
+
+                Serial.println("Network selected");
+                m_execute = false;
+                m_optionEntered = false;
+                m_option = 0;
+            }
+
+            ThisThread::sleep_for(30);
         }
+        
 
         // Display the password screen and sets letter edit ranges
-        if (m_optionEntered && m_option == NEW_WIFI) {
+        if (m_optionEntered && m_option == PASSWORD) {
             p_selectedText = m_password;
-
-            while (!m_networkSelected) {
-                m_canvas->drawScreenNetworks();
-                m_gameFlags.set(SCREEN_UPDATE_FLAG);
-
-                uint32_t result = m_gameFlags.get();
-                if (result == ADVANCE_GAME_FLAG) {
-                    m_gameFlags.clear(ADVANCE_GAME_FLAG);
-                    m_networkSelected = true;
-                    break;
-                }
-
-                m_execute = false;
-                ThisThread::sleep_for(40);
-
-            }
 
             m_maxLetter = 14;                //Max selectable letter in password
             setASCIIBounds(40, 255);         //Sets ASCII range for letter input
@@ -172,7 +178,7 @@ void WifiMenu::game() {
                 Serial.println("Saving password");
 
                 //Clear flags and go back to wifi menu
-                //m_gameFlags.clear(ADVANCE_GAME_FLAG);
+                m_option = 0;
                 m_execute = false;
                 m_optionEntered = false; 
             }
@@ -189,6 +195,11 @@ void WifiMenu::game() {
             m_gameFlags.set(SCREEN_UPDATE_FLAG);
 
             if (m_execute) {
+                // Save name to flash memory
+                Serial.println("Save name to flash memory");
+
+                //Clear flags and go back to wifi menu
+                m_option = 0;
                 m_optionEntered = false;
                 m_execute = false;
             }
@@ -202,25 +213,26 @@ void WifiMenu::game() {
             m_canvas->drawScreen4();
             m_gameFlags.set(SCREEN_UPDATE_FLAG);
 
-            ThisThread::sleep_for(500);
-
+            ThisThread::sleep_for(500ms);
+            
+            //Clear flags and go back to wifi menu
+            m_option = 0;
+            m_execute = false;
             m_optionEntered = false;
         }
 
         else if (!m_optionEntered) {
+            m_optionMAX = 3;                //Sets maximum number of selectable options
 
             m_canvas->drawScreen1();
             m_gameFlags.set(SCREEN_UPDATE_FLAG);
         }
 
-        
-        ThisThread::sleep_for(50ms); 
+        Serial.println(m_option);
+        ThisThread::sleep_for(100ms); 
     }
 
     m_execute = false; 
-    
-    //Waits for button A press to exit the game
-    //m_gameFlags.wait_any(ADVANCE_GAME_FLAG, osWaitForever, true);
 
     //Return to main menu when game finish
     m_isRunning = false;
@@ -249,6 +261,8 @@ void WifiMenu::run() {
     t_gameLogic->start(mbed::callback(this, &WifiMenu::game));
     t_userInput->start(mbed::callback(this, &WifiMenu::handleInput));
     t_screenUpdate->start(mbed::callback(this, &WifiMenu::update));
+    
+    //t_userInput->set_priority(osPriorityAboveNormal1);
 
 }
 
@@ -313,7 +327,6 @@ void WifiMenu::stop() {
 #endif
 }
 
-
 void WifiMenu::setName() {
 
 }
@@ -331,7 +344,6 @@ void WifiMenu::setASCIIBounds(int min, int max) {
     m_minASCII = min;
     m_maxASCII = max;
 }
-
 
 void WifiMenu::updatePasswordString() {
     string_password = "";  // Clear existing string_password

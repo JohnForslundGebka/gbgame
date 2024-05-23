@@ -32,11 +32,12 @@ private:
     enum {
         LOGIN_LAST,
         NEW_WIFI,
+        PASSWORD,
         SET_NAME
     };
 
 public:
-    std::vector<String> m_networkList = {"Hej", "Netgear", "Asus", "Comhem"};
+    std::vector<String> m_networkList = {"Hej", "Netgear", "Asus", "Comhem", "COMHEM2", "hejhej"};
 
     char m_username[5] = {'A', 'A', 'A', 'A', '\0'};
     char m_password[15] = {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '\0'};
@@ -44,15 +45,17 @@ public:
 
     String string_password = " ";
 
-    int m_option = 0;
     bool m_optionEntered = false;
     bool m_execute = false;
-    bool m_networkSelected = false;
+
+    int m_option = 0;
+    int m_optionMAX = 3;
+
+    int m_selectedNetwork = 0; 
+
 
     int m_selectedLetter = 0;
     int m_maxLetter = 4;
-
-    int m_letterIncrement = 0;
 
     int m_minASCII = 65;
     int m_maxASCII = 122;

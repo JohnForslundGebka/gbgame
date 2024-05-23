@@ -22,10 +22,10 @@ void WifiMenuUI::drawScreen1() {
     c_main.C.drawLine(0, 20, 128, 20, WHITE);                                //Draw line under "Wifi"
 
     //Draw menu options
-    int cursorPosition = 35;
+    int cursorPosition = 31;
     c_main.C.setCursor(4, cursorPosition);
         
-    for (int i = 0; i < 3; i++) {
+    for (int i = 0; i < 4; i++) {
         if (parentState->m_option == i) {
             c_main.C.setTextColor(GREEN);
         } 
@@ -34,7 +34,7 @@ void WifiMenuUI::drawScreen1() {
         }
 
         c_main.C.print(m_menuOptions[i]);
-        cursorPosition += 30;
+        cursorPosition += 25;
         c_main.C.setCursor(4, cursorPosition);
     }
 }
@@ -79,7 +79,7 @@ void WifiMenuUI::drawScreenNetworks() {
 
     c_main.C.drawLine(0, 20, 128, 20, WHITE);    //Draw line under "Networks"
     
-    int cursorPosition = 23; 
+    int cursorPosition = 30; 
 
         //Draw list of networks   
     c_main.C.setTextColor(WHITE);
@@ -88,20 +88,21 @@ void WifiMenuUI::drawScreenNetworks() {
     c_main.C.setCursor(1, cursorPosition);
 
     for (int i = 0; i < parentState->m_networkList.size(); i++) {
-        if (parentState->m_selectedLetter == i) {
+
+        //Change the color to green when printing selected option
+        if (parentState->m_selectedNetwork == i) {
             c_main.C.setTextColor(GREEN);
         }
         else {
             c_main.C.setTextColor(WHITE);
 
         }
-        
-        Serial.println(parentState->m_selectedLetter);
-
-
+    
         c_main.C.print(parentState->m_networkList[i]);
-        c_main.C.setCursor(1, cursorPosition);
+        
+        //Update cursor position
         cursorPosition += 9;
+        c_main.C.setCursor(1, cursorPosition);
     } 
 }
 

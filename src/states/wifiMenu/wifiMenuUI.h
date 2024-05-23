@@ -22,9 +22,10 @@ public:
     void drawScreen4();           // Draws connecting screen
     void drawScreenNetworks();           // Draws connecting screen
 
-    char m_menuOptions[3][12] = {
-        "Login last",
-        " New wifi",
+    char m_menuOptions[4][12] = {
+        "  Login",
+        " Set wifi",
+        " Password",
         " Set name"
     };
 
