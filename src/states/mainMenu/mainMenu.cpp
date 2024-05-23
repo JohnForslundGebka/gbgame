@@ -37,7 +37,7 @@ void MainMenu::handleInput() {
                     // Wrap around to the last index if at the first index
                     m_selectedState = GlobalStates::numberOfMainMenuStates - 1;
                 } else {
-                    // Otherwise, just decrement normally
+                    // Otherwise, decrement normally
                     m_selectedState--;
                 }
                 m_canvas->moveUp();
@@ -60,6 +60,7 @@ void MainMenu::handleInput() {
             case Buttons::A_FLAG:
                 //set the stateFlags, to the state that the StateHandler should run
                 State::stateFlags.set(GlobalStates::mainMenuList[m_selectedState]->getFlagName());
+                m_selectedState = 0;
                 break;
 
             default:

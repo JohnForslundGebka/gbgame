@@ -11,7 +11,7 @@ void Games::handleInput() {
     while (m_isRunning){
 
         //the thread will pause until a new button press is detected
-        uint32_t m_result = Buttons::states.wait_any(Buttons::UP_FLAG | Buttons::DOWN_FLAG | Buttons::A_FLAG, osWaitForever, false);
+        uint32_t m_result = Buttons::states.wait_any(Buttons::UP_FLAG | Buttons::DOWN_FLAG | Buttons::A_FLAG | Buttons::START_FLAG, osWaitForever, false);
 
         if (!m_isRunning) break;
         //debounce logic
@@ -24,25 +24,26 @@ void Games::handleInput() {
             case Buttons::UP_FLAG:
                 Buttons::states.clear(Buttons::UP_FLAG);
                 //makes sure the m_selectedState does not go "out of bounds"
-                if(m_selectedState == (GlobalStates::numberOfGameStates - 1))
-                    m_selectedState = 0;
-                else if (m_selectedState == 0)
-                    m_selectedState = (GlobalStates::numberOfGameStates - 1);
-                else
+                if (m_selectedState == 0) {
+                    // Wrap around to the last index if at the first index
+                    m_selectedState = GlobalStates::numberOfGameStates - 1;
+                } else {
+                    // Otherwise, decrement normally
                     m_selectedState--;
+                }
                 m_canvas->draw();
                 m_pntrCanvas = &m_canvas->c_canvas;
                 break;
 
             case Buttons::DOWN_FLAG:
                 Buttons::states.clear(Buttons::DOWN_FLAG);
-                //makes sure the m_selectedState does not go "out of bounds"
-                if(m_selectedState == (GlobalStates::numberOfGameStates - 1))
+                if (m_selectedState == GlobalStates::numberOfGameStates - 1) {
+                    // Wrap around to the first index if at the last index
                     m_selectedState = 0;
-                else if (m_selectedState == 0)
-                    m_selectedState = (GlobalStates::numberOfGameStates - 1);
-                else
+                } else {
+                    // Otherwise, just increment normally
                     m_selectedState++;
+                }
                 m_canvas->draw();
                 m_pntrCanvas = &m_canvas->c_canvas;
                 break;
@@ -52,6 +53,10 @@ void Games::handleInput() {
                 State::stateFlags.set(GlobalStates::gameList[m_selectedState]->getFlagName()); //select which state to run based on the selected state variable
                 break;
 
+            case Buttons::START_FLAG:
+                 State::stateFlags.set(GlobalStates::gameList[INDEX_MAIN_MENU]->getFlagName());
+                 m_selectedState = 0;
+                 break;
             default:
                 break;
         }

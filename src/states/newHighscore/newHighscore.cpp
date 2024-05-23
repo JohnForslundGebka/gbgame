@@ -21,6 +21,7 @@ void NewHighscore::run() {
     using namespace mbed;
     m_isRunning = true;
 
+    //start threads
     c_canvas = new NewHighscoreUi(this);
     t_gfx = new Thread;
     t_move = new Thread;
@@ -68,10 +69,11 @@ void NewHighscore::stop() {
 
 void NewHighscore::dance() {
     using namespace std::chrono;
+    //change the animation of the dancing stick figure
     while(m_isRunning) {
         m_pntrCanvas = &c_canvas->c_dancingMan;
         for (int i = 0; i < 4; i++) {
-            c_canvas->drawDance(i);
+            c_canvas->drawDance(i); //function in the UI class that prints out arms in the different positions
             m_gameFlags.set(SCREEN_UPDATE_FLAG);
             rtos::ThisThread::sleep_for(100ms);
         }
