@@ -1,7 +1,7 @@
 #include "newHighscore.h"
 #include "hardware/buttons.h"
 
-
+//waits for button inputs, if the user presses A, will end the state and go back to main menu
 void NewHighscore::handleInput() {
 
     if(Buttons::states.wait_any(Buttons::A_FLAG,osWaitForever, true) == Buttons::A_FLAG){

@@ -44,7 +44,7 @@ bool DataTransmit::init() {
     while (WiFi.status() != WL_CONNECTED) {
         WiFi.begin(GlobalSettings::ssid, GlobalSettings::password);
         Serial.print(".");
-        delay(5000);  // Wait 5 seconds before retrying
+        rtos::ThisThread::sleep_for(std::chrono::seconds(3));  // Wait 3 seconds before retrying
     }
 
     Firebase.begin(DATABASE_URL, DATABASE_SECRET,GlobalSettings::ssid,GlobalSettings::password);
@@ -64,9 +64,10 @@ bool DataTransmit::init() {
 
 void DataTransmit::getDataToHighscore(std::unordered_map<uint32_t, ScoresArray> &leaderBoards){
 
-        for (int i = 0; i < GlobalStates::numberOfGameStates; i++) {
-            uint32_t gameKey = GlobalStates::gameList[i]->getFlagName();
-            String gameName = GlobalStates::gameList[i]->m_stateName;
+    //Do this for all the games in our gamestate list
+        for (const auto & i : GlobalStates::gameList) {
+            uint32_t gameKey = i->getFlagName();
+            String gameName = i->m_stateName;
             String basePath = "/Leaderbord/" + gameName;  // Path to the leaderboard data in Firebase
 
             for (int j = 0; j < 5; j++) {
