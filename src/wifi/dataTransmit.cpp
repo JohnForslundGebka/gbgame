@@ -20,7 +20,6 @@ bool DataTransmit::init() {
 
 #ifdef DEBUG
     Serial.println("Attempting to connect to WiFi network...");
-
     int n = WiFi.scanNetworks();
     Serial.println("Scan complete:");
     if (n == 0) {
