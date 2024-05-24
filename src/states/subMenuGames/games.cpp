@@ -57,6 +57,7 @@ void Games::handleInput() {
                  State::stateFlags.set(GlobalStates::gameList[INDEX_MAIN_MENU]->getFlagName());
                  m_selectedState = 0;
                  break;
+
             default:
                 break;
         }

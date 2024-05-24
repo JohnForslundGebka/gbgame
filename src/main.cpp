@@ -19,8 +19,6 @@ StateHandler stateHandler;
 Scores &scores = Scores::getInstance();
 DataTransmit &wifi = DataTransmit::getInstance();
 
-
-
 void print_memory_info() {
     mbed_stats_heap_t heap_stats;
     mbed_stats_heap_get(&heap_stats);
@@ -47,9 +45,9 @@ void setup() {
     Serial.begin(115200);
     dm.init();
     stateHandler.init();
-    wifi.init();
+   // wifi.init();
     scores.init();
-    delay(2000);
+  //  delay(2000);
 }
 
 void loop() {
