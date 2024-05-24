@@ -19,6 +19,7 @@
 #include <vector>
 #include "functionality/readWriteFlash.h"
 #include "core/settings.h"
+#include "wifi/dataTransmit.h"
 
 class WifiMenu : public State {
 private:
@@ -37,9 +38,9 @@ private:
         PASSWORD,
         SET_NAME
     };
-
+    DataTransmit &wifi = DataTransmit::getInstance();
 public:
-    std::vector<String> m_networkList = {"Hej", "Netgear", "Asus", "Comhem", "COMHEM2", "hejhej"};
+    std::vector<String> m_networkList;
 
     char m_username[5] = {'A', 'A', 'A', 'A', '\0'};
     char m_password[15] = {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '\0'};
@@ -50,6 +51,7 @@ public:
 
     bool m_optionEntered = false;
     bool m_execute = false;
+    bool m_getNetworks = true;
 
     int m_option = 0;
     int m_optionMAX = 3;

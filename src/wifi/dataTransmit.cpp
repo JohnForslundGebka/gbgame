@@ -41,12 +41,12 @@ bool DataTransmit::init() {
     }
 #endif
     while (WiFi.status() != WL_CONNECTED) {
-        WiFi.begin(GlobalSettings::ssid, GlobalSettings::password);
+        WiFi.begin(ssid, password);
         Serial.print(".");
         rtos::ThisThread::sleep_for(std::chrono::seconds(3));  // Wait 3 seconds before retrying
     }
 
-    Firebase.begin(DATABASE_URL, DATABASE_SECRET,GlobalSettings::ssid,GlobalSettings::password);
+    Firebase.begin(DATABASE_URL, DATABASE_SECRET,ssid,password);
     Firebase.reconnectWiFi(true);
 
     wifiIsConnected = true;
@@ -126,5 +126,20 @@ void DataTransmit::sendHighscoreToData(std::unordered_map<uint32_t, ScoresArray>
         } else{
             Serial.println("No data for that game");
         }
+    }
+}
+
+void DataTransmit::getNetworkNames(std::vector<String> &networkList) {
+
+    networkList.clear();
+    int n = WiFi.scanNetworks();
+    if (n == 0){
+        networkList.push_back("NO NETWORKS FOUND");
+        return;
+    }
+    for (int i = 0; i < n; ++i) {
+        networkList.emplace_back(WiFi.SSID(i));
+        Serial.println(WiFi.SSID(i));
+        delay(10);
     }
 }

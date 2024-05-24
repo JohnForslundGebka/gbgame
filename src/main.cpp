@@ -9,6 +9,7 @@
 #include "core/settings.h"
 #include "wifi/dataTransmit.h"
 #include "functionality/scores.h"
+#include "functionality/readWriteFlash.h"
 #include "mbed_stats.h"
 
 //#define DEBUG
@@ -47,12 +48,14 @@ void setup() {
     stateHandler.init();
    // wifi.init();
     scores.init();
-  //  delay(2000);
+   wifi.userName = flash::readFromFlash("username");
+   wifi.ssid = flash::readFromFlash("network");
+   wifi.password = flash::readFromFlash("password");
 }
 
 void loop() {
     using namespace std::chrono;
-    //print_memory_info();
-    rtos::ThisThread::sleep_for(seconds(3));
+   // Serial.println(wifi.ssid);
+    rtos::ThisThread::sleep_for(seconds(4));
 
 }

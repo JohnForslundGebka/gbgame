@@ -14,6 +14,7 @@
 #include <ArduinoJson.h>
 #include <unordered_map>
 #include <array>
+#include <vector>
 
 class DataTransmit {
 public:
@@ -36,8 +37,14 @@ public:
     //will take the local leaderboard and upload it to the airbase database
     void sendHighscoreToData(std::unordered_map<uint32_t, ScoresArray> &leaderBoards);
 
+    void getNetworkNames(std::vector<String> &networkList);
+
     //class that handles the connecting to the Firebase database
     FirebaseData fbdo;
+
+    String userName;
+    char* ssid;  // replace with your wifi ssid
+    char* password;  // replace with your wifi password
 private:
     DataTransmit();  // Private constructor
     ~DataTransmit(); // Private destructor

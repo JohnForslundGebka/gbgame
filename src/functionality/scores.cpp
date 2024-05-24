@@ -23,7 +23,7 @@ bool Scores::addScore(int score,State *gameThatWasPlayed) {
        //if the unit is connected to Wi-Fi, try to add the score to the leaderboard
           if (dataTransmit.wifiIsConnected) {
               if (addScoreToLeaderboard(score, playedGame)) {
-                 // GlobalStates::newHighscore.setScore(score);
+                  GlobalStates::newHighscore.setScore(score);
                   return true;
 #ifdef DEBUG
                   Serial.print("PRINTING LEADERBOARD AFTER UPDATE:");
@@ -40,7 +40,7 @@ bool Scores::addScore(int score,State *gameThatWasPlayed) {
               }
           } else {  // if the unit is not connected to Wi-Fi, just add the score locally
               addScoreToLeaderboard(score, playedGame);
-            //  GlobalStates::newHighscore.setScore(score);
+              GlobalStates::newHighscore.setScore(score);
               return true;
           }
       } else{
@@ -128,8 +128,11 @@ bool Scores::addScoreToLeaderboard(int score, uint32_t playedGame) {
         leaderBoards[playedGame][pos] = leaderBoards[playedGame][pos - 1]; // Shift scores down
         pos--;
     }
+
+    Serial.print("NU LÄGGER VI IN NAMNET I HIGHSCORE->");
+    Serial.println(dataTransmit.userName);
     // Insert the new score at the found position
-    leaderBoards[playedGame][pos] = std::make_pair(GlobalSettings::userName, score);
+    leaderBoards[playedGame][pos] = std::make_pair(dataTransmit.userName, score);
 
     //make the 5th score the current highest score
     maxScores[playedGame] = leaderBoards[playedGame][4].second;

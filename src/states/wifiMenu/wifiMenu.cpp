@@ -2,6 +2,8 @@
 #include "wifiMenuUI.h"
 #include "rtos.h"
 #include "mbed.h"
+#include <string>
+
 
 // Constructor, initializes the state with it's name "Wifi Menu"
 WifiMenu::WifiMenu():  State("Wifi Menu"){}
@@ -139,6 +141,10 @@ void WifiMenu::game() {
         if (m_optionEntered && m_option == NEW_WIFI) {
             
             //Scan networks and add to vector
+            if (m_getNetworks) {
+                wifi.getNetworkNames(m_networkList);
+                m_getNetworks = false;
+            }
 
             //Sets the number of maximum selectable options
             m_optionMAX = m_networkList.size() - 1;
@@ -149,13 +155,14 @@ void WifiMenu::game() {
             if (m_execute) {
                 // Save network name as string to use for login
                 m_saved_network = m_networkList[m_selectedNetwork].c_str();
-                
+                std::strncpy(wifi.ssid,m_saved_network.c_str(),m_saved_network.size());
 
                 if (flash::writeToFlash(m_saved_network, "network")) {
                     Serial.println("Network saved to flash");
                 }
 
                 Serial.println("Network selected");
+                m_getNetworks = true;
                 m_execute = false;
                 m_optionEntered = false;
                 m_option = 0;
@@ -175,11 +182,13 @@ void WifiMenu::game() {
             m_canvas->drawScreen2();
             m_gameFlags.set(SCREEN_UPDATE_FLAG);
 
+            //in here the password is saved to flash and to the data transmit class
             if (m_execute) {
                 //Null terminate the password and save it to the m_string_password string
                 m_password[m_selectedLetter + 1] = '\0';
                 updatePasswordString();
 
+                wifi.password = m_password;
                 //Save to password to flash
                 if (flash::writeToFlash(m_string_password, "password")) {
                     Serial.println("Password saved to flash");
@@ -202,7 +211,10 @@ void WifiMenu::game() {
             m_canvas->drawScreen3();
             m_gameFlags.set(SCREEN_UPDATE_FLAG);
 
+
             if (m_execute) {
+                //Here the username is saved to flash and update the GlobalSettings userName variable
+                wifi.userName = m_username;
                 // Save username to flash memory
                 std::string m_string_username(m_username);
                 if (flash::writeToFlash(m_string_username, "username")) {
@@ -224,7 +236,7 @@ void WifiMenu::game() {
             m_canvas->drawScreen4();
             m_gameFlags.set(SCREEN_UPDATE_FLAG);
 
-            ThisThread::sleep_for(500ms);
+            while(!wifi.init()){}
 
             //Clear flags and go back to wifi menu
             m_option = 0;
@@ -256,11 +268,11 @@ void WifiMenu::run() {
     if(m_firstRun){
         using namespace GlobalSettings;
 
-        userName = flash::readFromFlash("username");
-        ssid = flash::readFromFlash("network");  // replace with your wifi ssid
-        password = flash::readFromFlash("password");  // replace with your wifi password
+        wifi.userName = flash::readFromFlash("username");
+        wifi.ssid = flash::readFromFlash("network");  // replace with your wifi ssid
+        wifi.password = flash::readFromFlash("password");  // replace with your wifi password
 
-        userName.toCharArray(m_username, sizeof(m_username));
+        wifi.userName.toCharArray(m_username, sizeof(m_username));
 
         m_firstRun = false;
     }
