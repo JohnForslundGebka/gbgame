@@ -29,7 +29,7 @@ private:
     NewHighscoreUi* c_canvas = nullptr;
     Canvas* m_pntrCanvas = nullptr;
 
-    int m_score = 0;
+    int m_score = 46;
 
     //threads that will be running in this state
     rtos::Thread* t_gfx = nullptr;

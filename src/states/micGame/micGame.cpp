@@ -222,11 +222,12 @@ void MicGame::stop() {
 
     mic.end();
 
+
     //clear all flags before exiting
     m_gameFlags.clear(SCREEN_UPDATE_FLAG | ADVANCE_GAME_FLAG);
     Buttons::states.clear(Buttons::START_FLAG | Buttons::A_FLAG);
 
-    rtos::ThisThread::sleep_for(10ms);
+    rtos::ThisThread::sleep_for(900ms);
 
 #ifdef DEBUG
     Serial.println("HEJDA FRAN STOP I DISTANCEGAME");

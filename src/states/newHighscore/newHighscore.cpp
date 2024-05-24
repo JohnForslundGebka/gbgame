@@ -17,8 +17,10 @@ void NewHighscore::update() {
 }
 
 void NewHighscore::run() {
+    delay(2000);
     using namespace rtos;
     using namespace mbed;
+    using namespace std::chrono;
     m_isRunning = true;
 
     //start threads
@@ -27,15 +29,16 @@ void NewHighscore::run() {
     t_move = new Thread;
     t_dance = new Thread;
     c_canvas->drawText(m_score);
-    m_pntrCanvas = &c_canvas->c_text;
-    m_displayManager.updateScreen(m_pntrCanvas);
+
+    m_displayManager.updateScreen(&c_canvas->c_text);
+    rtos::ThisThread::sleep_for(500ms);
+
 
     t_gfx->start(callback(this, &NewHighscore::update));
     t_move->start(callback(this, &NewHighscore::handleInput));
     t_dance->start(callback(this,&NewHighscore::dance));
     t_move->set_priority(osPriorityBelowNormal);
 
-   // m_gameFlags.set(SCREEN_UPDATE_FLAG);
 }
 
 void NewHighscore::stop() {
@@ -69,13 +72,14 @@ void NewHighscore::stop() {
 
 void NewHighscore::dance() {
     using namespace std::chrono;
+    rtos::ThisThread::sleep_for(200ms);
     //change the animation of the dancing stick figure
+    m_pntrCanvas = &c_canvas->c_dancingMan;
     while(m_isRunning) {
-        m_pntrCanvas = &c_canvas->c_dancingMan;
         for (int i = 0; i < 4; i++) {
             c_canvas->drawDance(i); //function in the UI class that prints out arms in the different positions
             m_gameFlags.set(SCREEN_UPDATE_FLAG);
-            rtos::ThisThread::sleep_for(100ms);
+            rtos::ThisThread::sleep_for(200ms);
         }
     }
 }

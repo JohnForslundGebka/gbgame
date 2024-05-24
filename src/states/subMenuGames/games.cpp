@@ -54,9 +54,9 @@ void Games::handleInput() {
                 break;
 
             case Buttons::START_FLAG:
-                 State::stateFlags.set(GlobalStates::gameList[INDEX_MAIN_MENU]->getFlagName());
-                 m_selectedState = 0;
-                 break;
+                m_selectedState = 0;
+                State::stateFlags.set(GlobalStates::stateList[INDEX_MAIN_MENU]->getFlagName());
+                break;
 
             default:
                 break;

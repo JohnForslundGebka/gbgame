@@ -48,11 +48,12 @@ void NewHighscoreUi::drawText(int score) {
     c_text.C.print("NEW");
     c_text.C.setCursor(14, 49);
     c_text.C.print("HIGHSCORE");
-    c_text.C.drawBitmap(2, 117, image_Background_bits, 128, 11, 0xFFFF);
+  //  c_text.C.drawBitmap(2, 117, image_Background_bits, 128, 11, 0xFFFF);
     c_text.C.drawBitmap(34, 68, image_Space_bits, 65, 18, 0xA800);
-    c_text.C.drawBitmap(-1, 1, image_Background_1_bits, 128, 11, 0xFFFF);
+  //  c_text.C.drawBitmap(-1, 1, image_Background_1_bits, 128, 11, 0xFFFF);
     c_text.C.drawBitmap(12, 27, image_FaceCharging_bits, 29, 14, 0xFFEA);
     c_text.C.setCursor(47, 69);
     c_text.C.print(score);
     c_text.C.drawBitmap(96, 25, image_Smile_bits, 18, 18, 0x555);
+  //  delay(200);
 }
