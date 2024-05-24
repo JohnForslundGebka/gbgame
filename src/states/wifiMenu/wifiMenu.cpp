@@ -10,6 +10,8 @@ void WifiMenu::handleInput() {
     using namespace rtos;
     using namespace mbed;
 
+    m_optionEntered = false;
+
     while (m_isRunning) {
         using namespace std::chrono;
 
@@ -146,6 +148,12 @@ void WifiMenu::game() {
 
             if (m_execute) {
                 // Save network name as string to use for login
+                m_saved_network = m_networkList[m_selectedNetwork].c_str();
+                
+
+                if (flash::writeToFlash(m_saved_network, "network")) {
+                    Serial.println("Network saved to flash");
+                }
 
                 Serial.println("Network selected");
                 m_execute = false;
@@ -168,14 +176,14 @@ void WifiMenu::game() {
             m_gameFlags.set(SCREEN_UPDATE_FLAG);
 
             if (m_execute) {
+                //Null terminate the password and save it to the m_string_password string
                 m_password[m_selectedLetter + 1] = '\0';
                 updatePasswordString();
 
-                //Save to flash here
-
-                //Fire login function with the password
-                
-                Serial.println("Saving password");
+                //Save to password to flash
+                if (flash::writeToFlash(m_string_password, "password")) {
+                    Serial.println("Password saved to flash");
+                }
 
                 //Clear flags and go back to wifi menu
                 m_option = 0;
@@ -195,8 +203,11 @@ void WifiMenu::game() {
             m_gameFlags.set(SCREEN_UPDATE_FLAG);
 
             if (m_execute) {
-                // Save name to flash memory
-                Serial.println("Save name to flash memory");
+                // Save username to flash memory
+                std::string m_string_username(m_username);
+                if (flash::writeToFlash(m_string_username, "username")) {
+                    Serial.println("username saved to flash");
+                }
 
                 //Clear flags and go back to wifi menu
                 m_option = 0;
@@ -214,7 +225,7 @@ void WifiMenu::game() {
             m_gameFlags.set(SCREEN_UPDATE_FLAG);
 
             ThisThread::sleep_for(500ms);
-            
+
             //Clear flags and go back to wifi menu
             m_option = 0;
             m_execute = false;
@@ -228,7 +239,6 @@ void WifiMenu::game() {
             m_gameFlags.set(SCREEN_UPDATE_FLAG);
         }
 
-        Serial.println(m_option);
         ThisThread::sleep_for(100ms); 
     }
 
@@ -242,6 +252,18 @@ void WifiMenu::game() {
 void WifiMenu::run() {
     using namespace rtos;
     using namespace mbed;
+
+    if(m_firstRun){
+        using namespace GlobalSettings;
+
+        userName = flash::readFromFlash("username");
+        ssid = flash::readFromFlash("network");  // replace with your wifi ssid
+        password = flash::readFromFlash("password");  // replace with your wifi password
+
+        userName.toCharArray(m_username, sizeof(m_username));
+
+        m_firstRun = false;
+    }
 
     m_option = 0;
 
@@ -262,7 +284,7 @@ void WifiMenu::run() {
     t_userInput->start(mbed::callback(this, &WifiMenu::handleInput));
     t_screenUpdate->start(mbed::callback(this, &WifiMenu::update));
     
-    //t_userInput->set_priority(osPriorityAboveNormal1);
+    t_userInput->set_priority(osPriorityAboveNormal1);
 
 }
 
@@ -346,12 +368,12 @@ void WifiMenu::setASCIIBounds(int min, int max) {
 }
 
 void WifiMenu::updatePasswordString() {
-    string_password = "";  // Clear existing string_password
+    m_string_password = "";  // Clear existing string_password
     for (int i = 0; i < sizeof(m_password); i++) {
         if (m_password[i] == '\0') {
             break;  // Stop copying if a null terminator is found
         }
-        string_password += m_password[i];  // Append character to string
+        m_string_password += m_password[i];  // Append character to string
     }
 }
 

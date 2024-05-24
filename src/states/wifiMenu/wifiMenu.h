@@ -17,6 +17,8 @@
 #include "hardware/ultrasonic.h"
 #include "wifiMenuUI.h"
 #include <vector>
+#include "functionality/readWriteFlash.h"
+#include "core/settings.h"
 
 class WifiMenu : public State {
 private:
@@ -43,7 +45,8 @@ public:
     char m_password[15] = {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '\0'};
     char *p_selectedText = m_username;
 
-    String string_password = " ";
+    std::string m_string_password = " ";
+    std::string m_saved_network = " ";
 
     bool m_optionEntered = false;
     bool m_execute = false;
@@ -59,6 +62,8 @@ public:
 
     int m_minASCII = 65;
     int m_maxASCII = 122;
+
+    bool m_firstRun = true;
 
     WifiMenu();
 
