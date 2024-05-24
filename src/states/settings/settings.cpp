@@ -32,7 +32,7 @@ void Settings::handleInput() {
 
         if(input==Buttons::START_FLAG){
             m_isRunning = false;
-            State::stateFlags.set(GlobalStates::stateList[0]->getFlagName());
+            State::stateFlags.set(GlobalStates::stateList[INDEX_MAIN_MENU]->getFlagName());
         }
 
 

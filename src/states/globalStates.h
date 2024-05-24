@@ -16,6 +16,7 @@ class Settings;
 class MicGame;
 class HighScore;
 class NewHighscore;
+class WifiMenu;
 
 // Not a state, just the base class
 class State;
@@ -23,10 +24,10 @@ class State;
 
 namespace GlobalStates {
 
-    const int numberOfTotalStates = 7;
+    const int numberOfTotalStates = 8;
     const int numberOfMainMenuStates = 3;
     const int numberOfGameStates = 2;
-    const int numberOfSettingsStates = 3;
+    const int numberOfSettingsStates = 1;
 
     //all different states on the machine
     extern MainMenu mainMenu;
@@ -36,6 +37,7 @@ namespace GlobalStates {
     extern MicGame micGame;
     extern HighScore highScore;
     extern NewHighscore newHighscore;
+    extern WifiMenu wifiMenu;
 
 
     //arrays of different states, used for menus
@@ -45,7 +47,6 @@ namespace GlobalStates {
     extern State* settingsList[numberOfSettingsStates];
 
     extern const uint32_t ALL_STATE_FLAGS;
-
 }
 
 #endif //GBGAME_GLOBALSTATES_H
