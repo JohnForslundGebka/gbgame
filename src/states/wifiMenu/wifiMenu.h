@@ -38,8 +38,9 @@ private:
         PASSWORD,
         SET_NAME
     };
-    DataTransmit &wifi = DataTransmit::getInstance();
+
 public:
+    DataTransmit &wifi = DataTransmit::getInstance();
     std::vector<String> m_networkList;
 
     char m_username[5] = {'A', 'A', 'A', 'A', '\0'};

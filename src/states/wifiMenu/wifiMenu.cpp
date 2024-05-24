@@ -44,7 +44,6 @@ void WifiMenu::handleInput() {
                 if (!m_optionEntered){
                     m_optionEntered = true;
                 }
-                m_gameFlags.set(ADVANCE_GAME_FLAG);
                 break;
 
             case Buttons::START_FLAG:
@@ -113,6 +112,7 @@ void WifiMenu::handleInput() {
             default:
                 break;
         }
+        m_gameFlags.set(ADVANCE_GAME_FLAG);
         ThisThread::sleep_for(50ms);
     }
 }
@@ -137,11 +137,17 @@ void WifiMenu::game() {
     using namespace std::chrono;
     
     while (m_isRunning) {
+
+        m_gameFlags.wait_any(ADVANCE_GAME_FLAG,osWaitForever, true);
         
         if (m_optionEntered && m_option == NEW_WIFI) {
-            
+
+
             //Scan networks and add to vector
             if (m_getNetworks) {
+                m_canvas->drawNetworks();
+                m_gameFlags.set(SCREEN_UPDATE_FLAG);
+                rtos::ThisThread::sleep_for(40ms);
                 wifi.getNetworkNames(m_networkList);
                 m_getNetworks = false;
             }
@@ -225,6 +231,7 @@ void WifiMenu::game() {
                 m_option = 0;
                 m_optionEntered = false;
                 m_execute = false;
+                m_gameFlags.set(ADVANCE_GAME_FLAG);
             }
         }
 
@@ -236,12 +243,15 @@ void WifiMenu::game() {
             m_canvas->drawScreen4();
             m_gameFlags.set(SCREEN_UPDATE_FLAG);
 
-            while(!wifi.init()){}
+            wifi.init();
+            Serial.println("tried to connect...");
+
 
             //Clear flags and go back to wifi menu
             m_option = 0;
             m_execute = false;
             m_optionEntered = false;
+            m_gameFlags.set(ADVANCE_GAME_FLAG);
         }
 
         else if (!m_optionEntered) {
@@ -279,6 +289,8 @@ void WifiMenu::run() {
 
     m_option = 0;
 
+    m_gameFlags.set(ADVANCE_GAME_FLAG);
+
     //Starts the threads
     m_isRunning = true;
 
@@ -308,6 +320,7 @@ void WifiMenu::stop() {
 #endif
 
     m_isRunning = false;
+    m_getNetworks = true;
     //set flags, to not be stuck in waiting
     Buttons::states.set(Buttons::START_FLAG | Buttons::A_FLAG);
     m_gameFlags.set(SCREEN_UPDATE_FLAG | ADVANCE_GAME_FLAG);

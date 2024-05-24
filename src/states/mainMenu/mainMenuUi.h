@@ -5,6 +5,7 @@
 #include "core/state.h"
 #include "states/globalStates.h"
 
+
 class MainMenu; // Forward declaration
 
 class MainMenuUi {
@@ -23,6 +24,7 @@ public:
 
     void moveDown();
     void moveUp();
+
 
 private:
 

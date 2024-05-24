@@ -1,3 +1,4 @@
+
 #include "dataTransmit.h"
 #include "core/state.h"
 
@@ -17,6 +18,7 @@ DataTransmit& DataTransmit::getInstance() {
 }
 
 bool DataTransmit::init() {
+    using namespace std::chrono;
 
 #ifdef DEBUG
     Serial.println("Attempting to connect to WiFi network...");
@@ -40,17 +42,26 @@ bool DataTransmit::init() {
         }
     }
 #endif
-    while (WiFi.status() != WL_CONNECTED) {
+   int wifiTries = 0;
+
+    while (WiFi.status() != WL_CONNECTED ) {
         WiFi.begin(ssid, password);
         Serial.print(".");
         rtos::ThisThread::sleep_for(std::chrono::seconds(3));  // Wait 3 seconds before retrying
+        if (wifiTries == 6){
+            Serial.println("CONNECTION BAD");
+            return false;
+        } else {
+            wifiTries++;
+        }
     }
+
+
 
     Firebase.begin(DATABASE_URL, DATABASE_SECRET,ssid,password);
     Firebase.reconnectWiFi(true);
-
     wifiIsConnected = true;
-
+    Serial.println("CONNECTION GOOD");
     return (WiFi.status() == WL_CONNECTED);
 
 #ifdef DEBUG

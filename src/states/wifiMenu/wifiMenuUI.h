@@ -21,6 +21,7 @@ public:
     void drawScreen3();           // Draws set name screen
     void drawScreen4();           // Draws connecting screen
     void drawScreenNetworks();           // Draws connecting screen
+    void drawNetworks();
 
     char m_menuOptions[4][12] = {
         "  Login",

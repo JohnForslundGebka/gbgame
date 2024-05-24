@@ -1,10 +1,14 @@
 #include "mainMenuUi.h"
 #include "mainMenu.h"
+#include "wifi/dataTransmit.h"
 
 
-MainMenuUi::MainMenuUi(MainMenu *p) : c_canvas(128,128,0,0), parentState(p) {}
+MainMenuUi::MainMenuUi(MainMenu *p) : c_canvas(128,128,0,0), parentState(p) {
+}
 
 void MainMenuUi::init() {
+
+    DataTransmit &dataTransmit = DataTransmit::getInstance();
 
 
     updateTextFields();
@@ -16,7 +20,12 @@ void MainMenuUi::init() {
     c_canvas.C.print("-GbgGame-");
 
     c_canvas.C.drawLine(1, 18, 128, 18, 0xFFFF);
-    c_canvas.C.drawBitmap(1, 1, image_light_bits, 16, 16, 0xFFEA);
+    if(dataTransmit.wifiIsConnected) {
+        c_canvas.C.drawBitmap(1, 1, image_light_bits, 16, 16, BLUE);
+    } else {
+        c_canvas.C.drawBitmap(1, 1, image_light_bits, 16, 16, WHITE);
+    }
+
 
     c_canvas.C.drawBitmap(2, 64, image_hand_notice_bits, 16, 11, 0x555);
 
@@ -39,6 +48,7 @@ void MainMenuUi::init() {
 
 void MainMenuUi::drawText() {
 
+    DataTransmit &dataTransmit = DataTransmit::getInstance();
      updateTextFields();
      c_canvas.C.fillScreen(BLACK);
 
@@ -51,7 +61,11 @@ void MainMenuUi::drawText() {
     c_canvas.C.print("-GbgGame-");
 
     c_canvas.C.drawLine(1, 18, 128, 18, 0xFFFF);
-    c_canvas.C.drawBitmap(1, 1, image_light_bits, 16, 16, 0xFFEA);
+    if(dataTransmit.wifiIsConnected) {
+        c_canvas.C.drawBitmap(1, 1, image_light_bits, 16, 16, BLUE);
+    } else {
+        c_canvas.C.drawBitmap(1, 1, image_light_bits, 16, 16, WHITE);
+    }
     c_canvas.C.drawBitmap(2, 64, image_hand_notice_bits, 16, 11, 0x555);
 
 

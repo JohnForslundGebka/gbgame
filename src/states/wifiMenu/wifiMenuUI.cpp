@@ -10,7 +10,12 @@ void WifiMenuUI::init() {}
 void WifiMenuUI::drawScreen1() {
     c_main.C.fillRect(0, 0, 128, 128, BLACK);
 
-    c_main.C.drawBitmap(0, 0, image_wifi_3_bars_bits, 19, 16, 0xFFFF);       //Draw wifi symbol
+    //Draw wifi symbol
+    if(parentState->wifi.wifiIsConnected){
+    c_main.C.drawBitmap(0, 0, image_wifi_3_bars_bits, 19, 16, BLUE);
+    } else {
+        c_main.C.drawBitmap(0, 0, image_wifi_3_bars_bits, 19, 16, WHITE);
+    }
 
 
     c_main.C.setTextColor(WHITE);
@@ -148,4 +153,14 @@ void WifiMenuUI::drawScreen4() {
     c_main.C.print("Connecting..");
 }
 
+void WifiMenuUI::drawNetworks() {
+    c_main.C.fillScreen(BLACK);
+    c_main.C.drawBitmap(44, 47, image_Restoring_bits, 38, 32, 0xFFFF);
+    c_main.C.setTextColor(0xFFFF);
+    c_main.C.setTextSize(1);
+    c_main.C.setTextWrap(false);
+    c_main.C.setCursor(10, 89);
+    c_main.C.print("Searching for wifi");
+    c_main.C.drawBitmap(56, 20, image_hour_glass_75_bits, 11, 16, 0xFFFF);
+}
 
