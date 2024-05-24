@@ -14,6 +14,9 @@ class DistanceGame;
 class Games;
 class Settings;
 class MicGame;
+class HighScore;
+class NewHighscore;
+class WifiMenu;
 
 // Not a state, just the base class
 class State;
@@ -21,10 +24,10 @@ class State;
 
 namespace GlobalStates {
 
-    const int numberOfTotalStates = 5;
-    const int numberOfMainMenuStates = 2;
+    const int numberOfTotalStates = 8;
+    const int numberOfMainMenuStates = 3;
     const int numberOfGameStates = 2;
-    const int numberOfSettingsStates = 3;
+    const int numberOfSettingsStates = 1;
 
     //all different states on the machine
     extern MainMenu mainMenu;
@@ -32,6 +35,9 @@ namespace GlobalStates {
     extern Games games;
     extern Settings settings;
     extern MicGame micGame;
+    extern HighScore highScore;
+    extern NewHighscore newHighscore;
+    extern WifiMenu wifiMenu;
 
 
     //arrays of different states, used for menus

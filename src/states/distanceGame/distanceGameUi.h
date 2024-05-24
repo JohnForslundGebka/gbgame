@@ -18,7 +18,8 @@ public:
 
     void drawScreen1();
     void drawScreen2();
-    void drawScreen3();
+    void drawScreen3(int score);
+    void drawScreen4();
 
 private:
 

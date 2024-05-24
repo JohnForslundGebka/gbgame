@@ -23,8 +23,9 @@
 #define SCREEN_UPDATE_FLAG  (1UL << 1)
 #define ADVANCE_GAME_FLAG  (1UL << 2)
 
-#define MAIN_MENU (1UL << 1)
-#define DISTANCE_GAME (1UL << 2)
+//used for the firebase connection
+#define DATABASE_URL "gbgame-6141c-default-rtdb.europe-west1.firebasedatabase.app"
+#define DATABASE_SECRET "H3qt9cWGqH7hSVSP5lnuxj8VG1rPNpNj4xKWv3Wf"
 
 //#define DEBUG
 
@@ -33,7 +34,10 @@ enum {
     INDEX_DISTANCE_GAME,
     INDEX_GAMES,
     INDEX_SETTINGS,
-    INDEX_MIC_GAME
+    INDEX_MIC_GAME,
+    INDEX_HIGHSCORE,
+    INDEX_NEW_HIGHSCORE,
+    INDEX_WIFI_MENU
 };
 
 

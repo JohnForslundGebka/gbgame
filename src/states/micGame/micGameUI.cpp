@@ -115,3 +115,16 @@ void MicGameUI::drawScreen3() {
     c_main.C.setCursor(85, 64);
     c_main.C.print(parentState->m_score);
 }
+
+void MicGameUI::drawScreen4() {
+    c_main.C.fillScreen(BLACK);
+    c_main.C.drawBitmap(44, 47, image_Restoring_bits, 38, 32, 0xFFFF);
+    c_main.C.drawBitmap(92, 20, image_cloud_upload_2_bits, 17, 16, 0xFFFF);
+    c_main.C.drawBitmap(16, 20, image_envelope_bits, 17, 16, 0xFFFF);
+    c_main.C.setTextColor(0xFFFF);
+    c_main.C.setTextSize(1);
+    c_main.C.setTextWrap(false);
+    c_main.C.setCursor(28, 89);
+    c_main.C.print("Checking score");
+    c_main.C.drawBitmap(56, 20, image_hour_glass_75_bits, 11, 16, 0xFFFF);
+}

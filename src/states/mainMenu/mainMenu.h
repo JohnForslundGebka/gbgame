@@ -21,7 +21,7 @@ public:
     void stop() override;
 
     explicit MainMenu();
-    int m_selectedState{};
+    int m_selectedState = 0;
 
 private:
      MainMenuUi *m_canvas = nullptr;

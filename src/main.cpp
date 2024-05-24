@@ -6,7 +6,19 @@
 #include "hardware/buttons.h"
 #include "states/mainMenu/mainMenu.h"
 #include "states/stateHandler.h"
+#include "core/settings.h"
+#include "wifi/dataTransmit.h"
+#include "functionality/scores.h"
+#include "functionality/readWriteFlash.h"
 #include "mbed_stats.h"
+
+//#define DEBUG
+uint32_t State::instanceCounter = 0;
+DisplayManager& dm = DisplayManager::getInstance();
+Buttons button;
+StateHandler stateHandler;
+Scores &scores = Scores::getInstance();
+DataTransmit &wifi = DataTransmit::getInstance();
 
 void print_memory_info() {
     mbed_stats_heap_t heap_stats;
@@ -30,24 +42,20 @@ void print_memory_info() {
     Serial.println(" ");
 }
 
-//#define DEBUG
-
-uint32_t State::instanceCounter = 0;
-DisplayManager& dm = DisplayManager::getInstance();
-Buttons button;
-StateHandler stateHandler;
-
-
-
 void setup() {
     Serial.begin(115200);
     dm.init();
     stateHandler.init();
+   // wifi.init();
+    scores.init();
+   wifi.userName = flash::readFromFlash("username");
+   wifi.ssid = flash::readFromFlash("network");
+   wifi.password = flash::readFromFlash("password");
 }
 
 void loop() {
     using namespace std::chrono;
-    print_memory_info();
-    rtos::ThisThread::sleep_for(seconds(3));
+   // Serial.println(wifi.ssid);
+    rtos::ThisThread::sleep_for(seconds(4));
 
 }

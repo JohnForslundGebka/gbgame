@@ -57,9 +57,4 @@ private:
     mbed::InterruptIn buttonDown;
     
 };
-
-
-
-
-
 #endif

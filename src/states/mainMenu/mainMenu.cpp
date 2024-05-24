@@ -33,24 +33,26 @@ void MainMenu::handleInput() {
         switch(m_result){
             case Buttons::UP_FLAG:
                 Buttons::states.clear(Buttons::UP_FLAG);
-                if(m_selectedState == (GlobalStates::numberOfMainMenuStates - 1))
-                    m_selectedState = 0;
-                else if (m_selectedState == 0)
-                    m_selectedState = (GlobalStates::numberOfMainMenuStates - 1);
-                else
+                if (m_selectedState == 0) {
+                    // Wrap around to the last index if at the first index
+                    m_selectedState = GlobalStates::numberOfMainMenuStates - 1;
+                } else {
+                    // Otherwise, decrement normally
                     m_selectedState--;
+                }
                 m_canvas->moveUp();
                 m_pntrCanvas = &m_canvas->c_canvas;
                 break;
 
             case Buttons::DOWN_FLAG:
                 Buttons::states.clear(Buttons::DOWN_FLAG);
-                if(m_selectedState == (GlobalStates::numberOfMainMenuStates - 1))
+                if (m_selectedState == GlobalStates::numberOfMainMenuStates - 1) {
+                    // Wrap around to the first index if at the last index
                     m_selectedState = 0;
-                else if (m_selectedState == 0)
-                    m_selectedState = (GlobalStates::numberOfMainMenuStates - 1);
-                else
+                } else {
+                    // Otherwise, just increment normally
                     m_selectedState++;
+                }
                 m_canvas->moveDown();
                 m_pntrCanvas = &m_canvas->c_canvas;
                 break;
@@ -58,6 +60,7 @@ void MainMenu::handleInput() {
             case Buttons::A_FLAG:
                 //set the stateFlags, to the state that the StateHandler should run
                 State::stateFlags.set(GlobalStates::mainMenuList[m_selectedState]->getFlagName());
+                m_selectedState = 0;
                 break;
 
             default:

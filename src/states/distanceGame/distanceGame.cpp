@@ -2,6 +2,7 @@
 #include "distanceGameUi.h"
 #include "rtos.h"
 #include "mbed.h"
+#include "functionality/scores.h"
 
 
 
@@ -63,58 +64,88 @@ void DistanceGame::game() {
     using namespace rtos;
     using namespace mbed;
     using namespace std::chrono;
+
+    int m_totScore = 0;
+
+    //class that is used for handling highscores and leaderboards
+    Scores &leaderBoard = Scores::getInstance();
+
+
 #ifdef DEBUG
     Serial.println("NU BORJAR JAG");
 #endif
-        //Seeds the random generator and generates the target length
-        randomSeed(millis());
-        m_targetLength = random(10, 100);
+
+      for (int i = 0; i < MAX_ROUNDS; i++) {
+          //Seeds the random generator and generates the target length
+          randomSeed(millis());
+          m_targetLength = random(10, 100);
+          //Creates and starts a thread that blink the screen text "button A"
+          rtos::ThisThread::sleep_for(50ms);
+          Thread t_screenBlink;
+          t_screenBlink.start(mbed::callback(this, &DistanceGame::screenBlink));
 
 #ifdef DEBUG
-    Serial.println("NU GÖR JAG THREAD");
+          Serial.println("NU GÖR JAG THREAD");
 #endif
+          m_canvas->drawScreen1();
+          m_gameFlags.set(SCREEN_UPDATE_FLAG);
 
-     m_canvas->drawScreen1();
-     m_gameFlags.set(SCREEN_UPDATE_FLAG);
-    //Creates and starts a thread that blink the screen text "button A"
-     rtos::ThisThread::sleep_for(50ms);
-     Thread t_screenBlink;
-     t_screenBlink.start(mbed::callback(this, &DistanceGame::screenBlink));
 
 #ifdef DEBUG
-    Serial.println("NU VANTAR JAG 1");
+          Serial.println("NU VANTAR JAG 1");
 #endif
-        //Waits for user to press A to measure distance
-        m_gameFlags.wait_any(ADVANCE_GAME_FLAG, osWaitForever, true);
+          //Waits for user to press A to measure distance
+          m_gameFlags.wait_any(ADVANCE_GAME_FLAG, osWaitForever, true);
 
-        t_screenBlink.join();
+          t_screenBlink.join();
 
-        //Measures distance and calculates how far off the user was.
-        m_measured = ultrasonic.readDistance();
-        m_score = abs(m_targetLength - m_measured);
+          //Measures distance and calculates how far off the user was.
+          m_measured = ultrasonic.readDistance();
+          m_score = abs(m_targetLength - m_measured);
 
-        //Draws screen2 with the results and sets the flag to update screen
-        m_canvas->drawScreen2();
-        m_gameFlags.set(SCREEN_UPDATE_FLAG);
+          if (m_score == 0) {
+              m_score = 1;
+          }
+
+          double normalizedDifference = static_cast<double>(m_score) / m_targetLength;
+
+          // Calculate the score: (1 - normalizedDifference) ensures that a smaller difference yields a higher score
+          // Multiply by 100 to scale it up to the score range and use max to ensure the score is never negative
+          int score = std::max(0, static_cast<int>((1 - normalizedDifference) * 100));
+
+          m_totScore += score;
+
+          //Draws screen2 with the results and sets the flag to update screen
+          m_canvas->drawScreen2();
+          m_gameFlags.set(SCREEN_UPDATE_FLAG);
 
 
-        //Waits for button A press to finish the game
-        m_gameFlags.wait_any(ADVANCE_GAME_FLAG, osWaitForever, true);
+          //Waits for button A press to finish the game
+          m_gameFlags.wait_any(ADVANCE_GAME_FLAG, osWaitForever, true);
 
-        m_canvas->drawScreen3();
-        m_gameFlags.set(SCREEN_UPDATE_FLAG);
-
-        rtos::ThisThread::sleep_for(1000ms);
 
 #ifdef DEBUG
-    Serial.println("NU AR GAME KLART");
+          Serial.println("NU AR GAME KLART");
 #endif
+      }
 
+        if (m_totScore > leaderBoard.maxScores[m_flagName]){
+            m_canvas->drawScreen4();
+            m_gameFlags.set(SCREEN_UPDATE_FLAG);
+            rtos::ThisThread::sleep_for(1s);
+        }
+      if(leaderBoard.addScore(m_totScore,this)){
+          m_isRunning = false;
+          State::stateFlags.set(GlobalStates::stateList[INDEX_NEW_HIGHSCORE]->getFlagName());
+      } else {
+          m_canvas->drawScreen3(m_totScore);
+          m_gameFlags.set(SCREEN_UPDATE_FLAG);
 
-    //Return to main manu when game finish
-        m_isRunning = false;
-        State::stateFlags.set(GlobalStates::stateList[0]->getFlagName());
-
+          rtos::ThisThread::sleep_for(3s);
+          //Return to main manu when game finish
+          m_isRunning = false;
+          State::stateFlags.set(GlobalStates::stateList[INDEX_MAIN_MENU]->getFlagName());
+      }
 
 #ifdef DEBUG
    Serial.println("NU HAR GAME KÖRTS KLART");
@@ -127,8 +158,6 @@ void DistanceGame::run() {
     using namespace mbed;
     //Starts the threads
     m_isRunning = true;
-
-
 
 #ifdef DEBUG
     Serial.println("NU RUN JAG");
