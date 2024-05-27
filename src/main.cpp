@@ -46,16 +46,14 @@ void setup() {
     Serial.begin(115200);
     dm.init();
     stateHandler.init();
-   // wifi.init();
     scores.init();
-   wifi.userName = flash::readFromFlash("username");
-   wifi.ssid = flash::readFromFlash("network");
-   wifi.password = flash::readFromFlash("password");
+    wifi.userName = flash::readFromFlash("username");
+    wifi.ssid = flash::readFromFlash("network");
+    wifi.password = flash::readFromFlash("password");
 }
 
 void loop() {
     using namespace std::chrono;
    // Serial.println(wifi.ssid);
     rtos::ThisThread::sleep_for(seconds(4));
-
 }

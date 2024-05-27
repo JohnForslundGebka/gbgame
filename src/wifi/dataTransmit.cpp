@@ -43,7 +43,10 @@ bool DataTransmit::init() {
     }
 #endif
    int wifiTries = 0;
-
+    Serial.println("WIFI IGEN");
+    Serial.println(userName);
+    Serial.println(ssid);
+    Serial.println(password);
     while (WiFi.status() != WL_CONNECTED ) {
         WiFi.begin(ssid, password);
         Serial.print(".");
