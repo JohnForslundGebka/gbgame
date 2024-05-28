@@ -10,6 +10,7 @@
 #include "wifi/dataTransmit.h"
 #include "functionality/scores.h"
 #include "functionality/readWriteFlash.h"
+#include "functionality/challengeHandler.h"
 #include "mbed_stats.h"
 
 //#define DEBUG
@@ -19,6 +20,7 @@ Buttons button;
 StateHandler stateHandler;
 Scores &scores = Scores::getInstance();
 DataTransmit &wifi = DataTransmit::getInstance();
+
 
 void print_memory_info() {
     mbed_stats_heap_t heap_stats;
