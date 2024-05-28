@@ -8,6 +8,7 @@
 #ifndef GBGAME_MULTIPLAYER_H
 #define GBGAME_MULTIPLAYER_H
 #include <Arduino.h>
+#include <vector>
 #include "core/macros.h"
 #include "mbed.h"
 #include "rtos.h"
@@ -15,8 +16,7 @@
 #include "hardware/buttons.h"
 #include "hardware/displayManager.h"
 #include "multiplayerMenuUI.h"
-#include <vector>
-#include "wifi/dataTransmit.h"
+#include "functionality/challenge.h"
 
 class MultiplayerMenu : public State {
 private:
