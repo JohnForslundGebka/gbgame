@@ -14,7 +14,7 @@ public:
     ChallengeHandler& operator=(const ChallengeHandler&) = delete;
     Challenge* currentChallenge;
 
-    void startChallenge(Challenge* c);
+    void startChallenge(int numberOfChallengeInVector);
     bool endChallenge(int score);
     void getChallengesFromLobby(std::vector<String> &lobbyList);
 

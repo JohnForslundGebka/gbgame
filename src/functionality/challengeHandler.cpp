@@ -13,14 +13,14 @@ ChallengeHandler::ChallengeHandler() {
 
 }
 
-void ChallengeHandler::startChallenge(Challenge *c) {
-  currentChallenge = c;
+void ChallengeHandler::startChallenge(int numberOfChallengeInVector) {
+  currentChallenge = &challenges[numberOfChallengeInVector];
   String game = currentChallenge->info["game"].as<String>();
 
-    JsonObject player2 = currentChallenge->info["player2"].to<JsonObject>();
+  JsonObject player2 = currentChallenge->info["player2"].to<JsonObject>();
 
-    player2["name"] = wifi.userName;
-    challengeIsRunning = true;
+  player2["name"] = wifi.userName;
+  challengeIsRunning = true;
 
   if (game=="measury"){
     State::stateFlags.set(INDEX_DISTANCE_GAME);
@@ -40,6 +40,7 @@ bool ChallengeHandler::endChallenge(int score) {
     currentChallenge->info["player2"]["score"] = score;
 
     int player1Score = currentChallenge->info["player1"]["score"].as<int>();
+    currentChallenge->info["played"] = true;
 
     bool challengeWasWon = (score > player1Score);
     (challengeWasWon) ? currentChallenge->info["winner"] = player1Name : currentChallenge->info["winner"] = wifi.userName;
@@ -47,7 +48,6 @@ bool ChallengeHandler::endChallenge(int score) {
     //funktion som updaterar challengedatabasen
 
     currentChallenge = nullptr;
-
     return challengeWasWon;
 }
 

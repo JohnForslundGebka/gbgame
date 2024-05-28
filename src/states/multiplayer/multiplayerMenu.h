@@ -16,7 +16,7 @@
 #include "hardware/buttons.h"
 #include "hardware/displayManager.h"
 #include "multiplayerMenuUI.h"
-#include "functionality/challenge.h"
+#include "functionality/challengeHandler.h"
 #include "wifi/dataTransmit.h"
 
 class MultiplayerMenu : public State {
@@ -30,6 +30,7 @@ private:
     //Canvas object for drawing the screens
     MultiplayerMenuUI *m_canvas = nullptr;
     DataTransmit &wifi = DataTransmit::getInstance();
+    ChallengeHandler &challengeHandler = ChallengeHandler::getInstance();
 
     enum {
         LOBBY,

@@ -167,6 +167,9 @@ void MultiplayerMenu::run() {
     m_optionEntered = false;
     m_execute = false;
 
+    //get all the challenges from the database
+    challengeHandler.getChallengesFromLobby(m_lobbyList);
+
     //Starts the threads
     m_isRunning = true;
 
