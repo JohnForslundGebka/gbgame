@@ -8,6 +8,7 @@
 #ifndef GBGAME_MULTIPLAYER_H
 #define GBGAME_MULTIPLAYER_H
 #include <Arduino.h>
+#include <vector>
 #include "core/macros.h"
 #include "mbed.h"
 #include "rtos.h"
@@ -15,7 +16,7 @@
 #include "hardware/buttons.h"
 #include "hardware/displayManager.h"
 #include "multiplayerMenuUI.h"
-#include <vector>
+#include "functionality/challengeHandler.h"
 #include "wifi/dataTransmit.h"
 
 class MultiplayerMenu : public State {
@@ -28,7 +29,8 @@ private:
 
     //Canvas object for drawing the screens
     MultiplayerMenuUI *m_canvas = nullptr;
-
+    DataTransmit &wifi = DataTransmit::getInstance();
+    ChallengeHandler &challengeHandler = ChallengeHandler::getInstance();
 
     enum {
         LOBBY,
@@ -37,8 +39,7 @@ private:
     };
 
 public:
-    DataTransmit &wifi = DataTransmit::getInstance();
-    std::vector<String> m_lobbyList = {"Game 1", "game 2", "game 3"};
+    std::vector<String> m_lobbyList;
     std::vector<String> m_newList = {"Voicy", "Measury"};
     std::vector<String> m_myGamesList = {"Voicy", "Measury", "Voicy"};
 

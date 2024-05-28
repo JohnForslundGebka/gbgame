@@ -28,9 +28,6 @@ void WifiMenu::handleInput() {
             continue;
         }
 
-        //clear flags
-        Buttons::states.clear(Buttons::START_FLAG  | Buttons::A_FLAG) | Buttons::UP_FLAG 
-                            | Buttons::DOWN_FLAG | Buttons::LEFT_FLAG | Buttons::RIGHT_FLAG | Buttons::B_FLAG;
         // Handle input and update positions
         switch (result) {
             case Buttons::A_FLAG :
@@ -44,11 +41,13 @@ void WifiMenu::handleInput() {
                 if (!m_optionEntered){
                     m_optionEntered = true;
                 }
+                Buttons::states.clear(Buttons::A_FLAG);
                 break;
 
             case Buttons::START_FLAG:
                 m_isRunning = false;
                 State::stateFlags.set(GlobalStates::stateList[INDEX_MAIN_MENU]->getFlagName());
+                Buttons::states.clear(Buttons::START_FLAG);
                 break;
 
             case Buttons::UP_FLAG:
@@ -65,7 +64,8 @@ void WifiMenu::handleInput() {
                 if (m_optionEntered) {
                     p_selectedText[m_selectedLetter]++;
                     checkLetterBounds(p_selectedText[m_selectedLetter]);
-                }    
+                }
+                Buttons::states.clear(Buttons::UP_FLAG);
                 break;
 
             case Buttons::DOWN_FLAG:
@@ -82,6 +82,7 @@ void WifiMenu::handleInput() {
                     p_selectedText[m_selectedLetter]--;
                     checkLetterBounds(p_selectedText[m_selectedLetter]);
                 }
+                Buttons::states.clear(Buttons::DOWN_FLAG);
                 break;
 
             case Buttons::LEFT_FLAG:
@@ -91,7 +92,7 @@ void WifiMenu::handleInput() {
                         m_selectedLetter = 0;
                     }
                 }
-                    
+                Buttons::states.clear(Buttons::LEFT_FLAG);
                 break;
 
             case Buttons::RIGHT_FLAG:
@@ -102,11 +103,12 @@ void WifiMenu::handleInput() {
                 }
                     
                 }
-                
+                Buttons::states.clear(Buttons::RIGHT_FLAG);
                 break;
 
             case Buttons::B_FLAG:
                 m_optionEntered = false;
+                Buttons::states.clear(Buttons::B_FLAG);
                 break;
 
             default:
@@ -242,6 +244,9 @@ void WifiMenu::game() {
             Serial.println("Connecting...");
             m_canvas->drawScreen4();
             m_gameFlags.set(SCREEN_UPDATE_FLAG);
+            Serial.println(wifi.userName);
+            Serial.println(wifi.ssid);
+            Serial.println(wifi.password);
 
             wifi.init();
             Serial.println("tried to connect...");

@@ -10,6 +10,7 @@
 #include <WiFiNINA.h>
 #include "core/settings.h"
 #include "core/macros.h"
+#include "functionality/challenge.h"
 #include "states/globalStates.h"
 #include <ArduinoJson.h>
 #include <unordered_map>
@@ -36,8 +37,9 @@ public:
 
     //will take the local leaderboard and upload it to the airbase database
     void sendHighscoreToData(std::unordered_map<uint32_t, ScoresArray> &leaderBoards);
-
     void getNetworkNames(std::vector<String> &networkList);
+
+    void getChallengesFromData(std::vector<Challenge> &challenges);
 
     //class that handles the connecting to the Firebase database
     FirebaseData fbdo;

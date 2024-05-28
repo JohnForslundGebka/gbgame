@@ -96,7 +96,7 @@ void MainMenuUi::updateTextFields() {
     for (int i = 0; i < 5; i++){
         textField[i] = GlobalStates::mainMenuList[counter]->m_stateName;
 
-        if(counter == (GlobalStates::numberOfMainMenuStates))
+        if(counter == GlobalStates::numberOfMainMenuStates - 1)
             counter = 0;
         else
             counter++;

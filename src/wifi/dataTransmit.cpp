@@ -1,6 +1,7 @@
 
 #include "dataTransmit.h"
 #include "core/state.h"
+#include "functionality/challenge.h"
 
 
 
@@ -43,7 +44,9 @@ bool DataTransmit::init() {
     }
 #endif
    int wifiTries = 0;
-
+    Serial.println(userName);
+    Serial.println(ssid);
+    Serial.println(password);
     while (WiFi.status() != WL_CONNECTED ) {
         WiFi.begin(ssid, password);
         Serial.print(".");
@@ -153,4 +156,26 @@ void DataTransmit::getNetworkNames(std::vector<String> &networkList) {
         Serial.println(WiFi.SSID(i));
         delay(10);
     }
+}
+
+void DataTransmit::getChallengesFromData(std::vector<Challenge> &challenges) {
+   fbdo.clear();
+   String path = "/Lobby/Challenges";
+
+   if (Firebase.getJSON(fbdo, path)) {
+       JsonDocument doc;
+       DeserializationError error = deserializeJson(doc, fbdo.jsonData());
+       if (error) {
+           Serial.print("deserializeJson() failed: ");
+           Serial.println(error.c_str());
+           return;
+       }
+       JsonObject obj = doc.as<JsonObject>();
+       for (JsonPair p : obj){
+            String ID = p.key().c_str();  // This is the challengeId
+            JsonObject challenge = p.value().as<JsonObject>();
+            challenges.emplace_back(ID,challenge);
+       }
+   }
+
 }

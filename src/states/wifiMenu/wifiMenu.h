@@ -8,6 +8,7 @@
 #ifndef GBGAME_wifiMenu_H
 #define GBGAME_wifiMenu_H
 #include <Arduino.h>
+#include <vector>
 #include "core/macros.h"
 #include "mbed.h"
 #include "rtos.h"
@@ -15,7 +16,6 @@
 #include "hardware/buttons.h"
 #include "hardware/displayManager.h"
 #include "wifiMenuUI.h"
-#include <vector>
 #include "functionality/readWriteFlash.h"
 #include "core/settings.h"
 #include "wifi/dataTransmit.h"
