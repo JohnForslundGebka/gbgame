@@ -41,18 +41,12 @@ void print_memory_info() {
     Serial.println("------------------------------------");
     Serial.println(" ");
 }
- 
+
 void setup() {
     Serial.begin(115200);
     dm.init();
     stateHandler.init();
-     // wifi.init();
     scores.init();
-
-    // flash::writeToFlash("testnet", "network");
-    flash::writeToFlash("01234567", "password");
-    // flash::writeToFlash("Melk", "username");
-
     wifi.userName = flash::readFromFlash("username");
     wifi.ssid = flash::readFromFlash("network");
     wifi.password = flash::readFromFlash("password");
@@ -60,7 +54,6 @@ void setup() {
 
 void loop() {
     using namespace std::chrono;
-    print_memory_info();
+   // Serial.println(wifi.ssid);
     rtos::ThisThread::sleep_for(seconds(4));
-
 }
