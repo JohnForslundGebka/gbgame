@@ -96,67 +96,69 @@ void MultiplayerMenu::game() {
 
         m_gameFlags.wait_any(INPUT_UPDATE_FLAG,osWaitForever, true);
         
-        if (m_optionEntered && m_option == LOBBY) {
+        if (m_optionEntered) {
 
-            m_canvas->drawScreen2();
-            m_gameFlags.set(SCREEN_UPDATE_FLAG);
+            if (m_option == LOBBY) {
+
+                m_canvas->drawScreen2();
+                m_gameFlags.set(SCREEN_UPDATE_FLAG);
+                
+                //Sets the number of maximum selectable options
+                m_optionMAX = m_lobbyList.size() - 1;
+
+                if (m_execute) {
+                    m_execute = false;
+                    m_optionEntered = false;
+                    m_option = 0;
+                }
+            }
+
             
-            //Sets the number of maximum selectable options
-            m_optionMAX = m_lobbyList.size() - 1;
+            else if (m_option == NEW) {
 
-            if (m_execute) {
-                m_execute = false;
-                m_optionEntered = false;
-                m_option = 0;
+                m_canvas->drawScreen3();
+                m_gameFlags.set(SCREEN_UPDATE_FLAG);
+
+                if (m_execute) {
+                
+                    //Clear flags and go back to multiplayer menu
+                    m_option = 0;
+                    m_execute = false;
+                    m_optionEntered = false; 
+                }
+            }
+
+            // Display the set name screen and sets letter edit ranges
+            else if (m_option == MY_GAMES) {
+
+                m_canvas->drawScreen4();
+                m_gameFlags.set(SCREEN_UPDATE_FLAG);
+
+
+                if (m_execute) {
+                    //Clear flags and go back to multiplayer menu
+                    m_option = 0;
+                    m_optionEntered = false;
+                    m_execute = false;
+                    m_gameFlags.set(ADVANCE_GAME_FLAG);
+                }
             }
         }
-
-        // Display the password screen and sets letter edit ranges
-        else if (m_optionEntered && m_option == NEW) {
-
-            m_canvas->drawScreen3();
-            m_gameFlags.set(SCREEN_UPDATE_FLAG);
-
-            if (m_execute) {
-            
-                //Clear flags and go back to multiplayer menu
-                m_option = 0;
-                m_execute = false;
-                m_optionEntered = false; 
-            }
-        }
-
-        // Display the set name screen and sets letter edit ranges
-        else if (m_optionEntered && m_option == MY_GAMES) {
-
-            m_canvas->drawScreen4();
-            m_gameFlags.set(SCREEN_UPDATE_FLAG);
-
-
-            if (m_execute) {
-                //Clear flags and go back to multiplayer menu
-                m_option = 0;
-                m_optionEntered = false;
-                m_execute = false;
-                m_gameFlags.set(ADVANCE_GAME_FLAG);
-            }
-        }
-
-        else if (!m_optionEntered) {
+        else {
             m_optionMAX = 2;                //Sets maximum number of selectable options
-
             m_canvas->drawScreen1();
             m_gameFlags.set(SCREEN_UPDATE_FLAG);
         }
-
+        
         ThisThread::sleep_for(100ms); 
     }
+   
 
     m_execute = false; 
 
     //Return to main menu when game finish
-    m_isRunning = false;
-    State::stateFlags.set(GlobalStates::stateList[INDEX_MAIN_MENU]->getFlagName());
+    // m_isRunning = false;
+    // State::stateFlags.set(GlobalStates::stateList[INDEX_MAIN_MENU]->getFlagName());
 }
 
 void MultiplayerMenu::run() {
@@ -180,8 +182,14 @@ void MultiplayerMenu::run() {
     t_userInput->start(mbed::callback(this, &MultiplayerMenu::handleInput));
     t_screenUpdate->start(mbed::callback(this, &MultiplayerMenu::update));
     
-    t_userInput->set_priority(osPriorityAboveNormal1);
+    //t_userInput->set_priority(osPriorityAboveNormal1);
     m_gameFlags.set(INPUT_UPDATE_FLAG);
+
+    m_canvas->drawScreen2();
+    m_gameFlags.set(SCREEN_UPDATE_FLAG);
+
+    Serial.println("nu run jag multiplayer");
+                
 
 }
 

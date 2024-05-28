@@ -22,9 +22,9 @@ public:
     void drawScreen4();           // Draws my games screen
 
     char m_menuOptions[3][12] = {
-        " Lobby",
-        "  New",
-        "My games"
+        "  Lobby",
+        "   New",
+        " My games"
     };
  
 private:

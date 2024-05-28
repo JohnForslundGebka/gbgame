@@ -39,5 +39,6 @@ namespace GlobalStates {
                                      micGame.getFlagName()  |
                                      highScore.getFlagName()|
                                      newHighscore.getFlagName() |
-                                     wifiMenu.getFlagName();
+                                     wifiMenu.getFlagName() |
+                                     multiplayerMenu.getFlagName();
 }
