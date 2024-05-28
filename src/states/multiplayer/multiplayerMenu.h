@@ -39,7 +39,7 @@ private:
     };
 
 public:
-    std::vector<String> m_lobbyList;
+    std::vector<String> m_lobbyList = {"greger", "johan", "peter"};
     std::vector<String> m_newList = {"Voicy", "Measury"};
     std::vector<String> m_myGamesList = {"Voicy", "Measury", "Voicy"};
 
