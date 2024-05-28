@@ -16,7 +16,7 @@ public:
     Challenge* currentChallenge;
 
     void startChallenge(Challenge* c);
-    bool endChallenge();
+    bool endChallenge(int score);
 
     DataTransmit &wifi = DataTransmit::getInstance();
     bool challengeIsRunning = false;

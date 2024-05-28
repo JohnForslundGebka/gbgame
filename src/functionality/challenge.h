@@ -6,7 +6,6 @@ class Challenge {
     public:
     String ID{};
     JsonDocument* info;
-
     Challenge(const String &id, JsonDocument *info);
 };
 
