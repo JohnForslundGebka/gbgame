@@ -8,6 +8,7 @@
 #include "states/highscore/highScore.h"
 #include "states/newHighscore/newHighscore.h"
 #include "states/wifiMenu/wifiMenu.h"
+#include "states/multiplayer/multiplayerMenu.h"
 
 
 
@@ -21,11 +22,12 @@ namespace GlobalStates {
     HighScore highScore;
     NewHighscore newHighscore;
     WifiMenu wifiMenu;
+    MultiplayerMenu multiplayerMenu;
 
 
-    State* stateList[numberOfTotalStates] = {&mainMenu, &distanceGame, &games, &settings, &micGame, &highScore, &newHighscore, &wifiMenu};
+    State* stateList[numberOfTotalStates] = {&mainMenu, &distanceGame, &games, &settings, &micGame, &highScore, &newHighscore, &wifiMenu, &multiplayerMenu};
 
-    State* mainMenuList[numberOfMainMenuStates] = {&games,&settings,&highScore};
+    State* mainMenuList[numberOfMainMenuStates] = {&games,&settings,&highScore, &multiplayerMenu};
     State* gameList[numberOfGameStates] = {&distanceGame, &micGame};
     State* settingsList[numberOfSettingsStates] = {&wifiMenu};
 

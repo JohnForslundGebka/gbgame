@@ -22,6 +22,7 @@
 //flags used as conditions for threads
 #define SCREEN_UPDATE_FLAG  (1UL << 1)
 #define ADVANCE_GAME_FLAG  (1UL << 2)
+#define INPUT_UPDATE_FLAG (1UL << 3)
 
 //used for the firebase connection
 #define DATABASE_URL "gbgame-6141c-default-rtdb.europe-west1.firebasedatabase.app"
@@ -37,7 +38,8 @@ enum {
     INDEX_MIC_GAME,
     INDEX_HIGHSCORE,
     INDEX_NEW_HIGHSCORE,
-    INDEX_WIFI_MENU
+    INDEX_WIFI_MENU,
+    INDEX_MULTIPLAYER_MENU
 };
 
 
