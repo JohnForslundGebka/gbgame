@@ -15,10 +15,9 @@ ChallengeHandler::ChallengeHandler() {
 
 void ChallengeHandler::startChallenge(Challenge *c) {
   currentChallenge = c;
-  auto& info = *(currentChallenge->info);  // Dereference the pointer to get the JsonObject
-  String game = info["game"].as<String>();
+  String game = currentChallenge->info["game"].as<String>();
 
-    JsonObject player2 = info["player2"].to<JsonObject>();
+    JsonObject player2 = currentChallenge->info["player2"].to<JsonObject>();
 
     player2["name"] = wifi.userName;
     challengeIsRunning = true;
@@ -35,20 +34,29 @@ bool ChallengeHandler::endChallenge(int score) {
 
     challengeIsRunning = false;
     String ID = currentChallenge->ID;
-    auto& info = *(currentChallenge->info);  // Dereference the pointer to get the JsonDocument
 
-    String player1Name = info["player2"]["name"].as<String>();
+    String player1Name = currentChallenge->info["player2"]["name"].as<String>();
     //adding player2 score to a database
-    info["player2"]["score"] = score;
+    currentChallenge->info["player2"]["score"] = score;
 
-    int player1Score = info["player1"]["score"].as<int>();
+    int player1Score = currentChallenge->info["player1"]["score"].as<int>();
 
     bool challengeWasWon = (score > player1Score);
-    (challengeWasWon) ? info["winner"] = player1Name : info["winner"] = wifi.userName;
+    (challengeWasWon) ? currentChallenge->info["winner"] = player1Name : currentChallenge->info["winner"] = wifi.userName;
 
     //funktion som updaterar challengedatabasen
 
     currentChallenge = nullptr;
 
     return challengeWasWon;
+}
+
+void ChallengeHandler::getChallengesFromLobby(std::vector<String> &lobbyList) {
+    challenges.clear();
+    wifi.getChallengesFromData(challenges);
+    //add challenges to lobbylist
+    for (auto &challenge: challenges) {
+        lobbyList.push_back(challenge.challengeSummery);
+    }
+
 }
