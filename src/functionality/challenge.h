@@ -5,8 +5,9 @@
 class Challenge {
     public:
     String ID{};
-    JsonDocument* info;
-    Challenge(const String &id, JsonDocument *info);
+    JsonObject info;
+    Challenge(const String &id, JsonObject _info);
+    String challengeSummery{};
 };
 
 #endif //GBGAME_CHALLENGE_H

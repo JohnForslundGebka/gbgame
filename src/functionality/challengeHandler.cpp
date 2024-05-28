@@ -15,14 +15,13 @@ ChallengeHandler::ChallengeHandler() {
 
 void ChallengeHandler::startChallenge(Challenge *c) {
   currentChallenge = c;
-  auto& info = *(currentChallenge->info);  // Dereference the pointer to get the JsonDocument
+  auto& info = *(currentChallenge->info);  // Dereference the pointer to get the JsonObject
   String game = info["game"].as<String>();
 
     JsonObject player2 = info["player2"].to<JsonObject>();
 
     player2["name"] = wifi.userName;
-
-   challengeIsRunning = true;
+    challengeIsRunning = true;
 
   if (game=="measury"){
     State::stateFlags.set(INDEX_DISTANCE_GAME);

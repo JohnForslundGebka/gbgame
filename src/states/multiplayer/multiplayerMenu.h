@@ -17,6 +17,7 @@
 #include "hardware/displayManager.h"
 #include "multiplayerMenuUI.h"
 #include "functionality/challenge.h"
+#include "wifi/dataTransmit.h"
 
 class MultiplayerMenu : public State {
 private:
@@ -28,7 +29,7 @@ private:
 
     //Canvas object for drawing the screens
     MultiplayerMenuUI *m_canvas = nullptr;
-
+    DataTransmit &wifi = DataTransmit::getInstance();
 
     enum {
         LOBBY,
@@ -37,7 +38,7 @@ private:
     };
 
 public:
-    DataTransmit &wifi = DataTransmit::getInstance();
+    std::vector<Challenge> m_challenges;
     std::vector<String> m_lobbyList = {"Game 1", "game 2", "game 3"};
     std::vector<String> m_newList = {"Voicy", "Measury"};
     std::vector<String> m_myGamesList = {"Voicy", "Measury", "Voicy"};
