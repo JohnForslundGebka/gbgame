@@ -39,14 +39,16 @@ private:
     };
 
 public:
-    std::vector<String> m_lobbyList = {"greger", "johan", "peter"};
-    std::vector<String> m_newList = {"Voicy", "Measury"};
+    std::vector<String> m_lobbyList = {"greger", "johan", "peter", "häst"};
     std::vector<String> m_myGamesList = {"Voicy", "Measury", "Voicy"};
 
     bool m_optionEntered = false;
     bool m_execute = false;
 
+
     int m_option = 0;
+    int m_subOption = 0;
+    int *m_optionPtr = &m_option;
     int m_optionMAX = 3;
 
     MultiplayerMenu();

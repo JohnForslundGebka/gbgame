@@ -49,14 +49,14 @@ void MultiplayerMenu::handleInput() {
                 break;
 
             case Buttons::UP_FLAG:
-                m_option--;
-                if (m_option < 0) { m_option = 0; } 
+                (*m_optionPtr)--;
+                if (*m_optionPtr < 0) { *m_optionPtr = 0; } 
                 Buttons::states.clear(Buttons::UP_FLAG);               
                 break;
 
             case Buttons::DOWN_FLAG:
-                m_option++;
-                if (m_option > m_optionMAX) { m_option = m_optionMAX; }
+                (*m_optionPtr)++;
+                if (*m_optionPtr > m_optionMAX) { *m_optionPtr = m_optionMAX; }
                 Buttons::states.clear(Buttons::DOWN_FLAG);
                 break;
 
@@ -95,21 +95,30 @@ void MultiplayerMenu::game() {
     while (m_isRunning) {
 
         m_gameFlags.wait_any(INPUT_UPDATE_FLAG,osWaitForever, true);
-        
+        Serial.println(*m_optionPtr);
+
         if (m_optionEntered) {
+
+            m_optionPtr = &m_subOption;
 
             if (m_option == LOBBY) {
 
+                
                 m_canvas->drawScreen2();
                 m_gameFlags.set(SCREEN_UPDATE_FLAG);
                 
-                //Sets the number of maximum selectable options
+                //Sets the number of maximum selectable options in the lobby list
                 m_optionMAX = m_lobbyList.size() - 1;
 
+                //This code executes when pressing A in the lobby menu
                 if (m_execute) {
                     m_execute = false;
                     m_optionEntered = false;
                     m_option = 0;
+
+                    //Use m_subOption to index which challange to start.
+
+                    //Start the challange choosen from the list
                 }
             }
 
@@ -121,10 +130,12 @@ void MultiplayerMenu::game() {
 
                 if (m_execute) {
                 
-                    //Clear flags and go back to multiplayer menu
+                    //Clear flags and go to Games menu
                     m_option = 0;
                     m_execute = false;
                     m_optionEntered = false; 
+
+                    State::stateFlags.set(GlobalStates::stateList[INDEX_GAMES]->getFlagName());
                 }
             }
 
@@ -146,6 +157,7 @@ void MultiplayerMenu::game() {
         }
         else {
             m_optionMAX = 2;                //Sets maximum number of selectable options
+            m_optionPtr = &m_option;
             m_canvas->drawScreen1();
             m_gameFlags.set(SCREEN_UPDATE_FLAG);
         }
@@ -188,8 +200,8 @@ void MultiplayerMenu::run() {
     //t_userInput->set_priority(osPriorityAboveNormal1);
     m_gameFlags.set(INPUT_UPDATE_FLAG);
 
-    m_canvas->drawScreen2();
-    m_gameFlags.set(SCREEN_UPDATE_FLAG);
+    // m_canvas->drawScreen2();
+    // m_gameFlags.set(SCREEN_UPDATE_FLAG);
 
     Serial.println("nu run jag multiplayer");
                 
