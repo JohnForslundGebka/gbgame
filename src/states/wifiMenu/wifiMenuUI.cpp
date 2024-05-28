@@ -57,6 +57,14 @@ void WifiMenuUI::drawScreen2() {
     c_main.C.print("Password");
 
     c_main.C.drawLine(0, 20, 128, 20, WHITE);    //Draw line under "Wifi"
+
+    c_main.C.setTextColor(WHITE);
+    c_main.C.setTextSize(1);
+    c_main.C.setTextWrap(false);
+    c_main.C.setCursor(4, 30);
+    c_main.C.print("A:save password");
+    c_main.C.setCursor(4, 45);
+    c_main.C.print("B: go back");
     
     //Draw line under selected letter
     int selectedLetter = 9;                           
