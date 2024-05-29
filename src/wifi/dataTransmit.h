@@ -37,6 +37,7 @@ public:
 
     //will take the local leaderboard and upload it to the airbase database
     void sendHighscoreToData(std::unordered_map<uint32_t, ScoresArray> &leaderBoards);
+    void sendChallengeToData(const String& challenge);
     void getNetworkNames(std::vector<String> &networkList);
 
     void getChallengesFromData(std::vector<Challenge> &challenges);

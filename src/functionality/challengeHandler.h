@@ -5,6 +5,7 @@
 #include <vector>
 
 class Challenge;
+class State;
 
 class ChallengeHandler {
 public:
@@ -14,12 +15,16 @@ public:
     ChallengeHandler& operator=(const ChallengeHandler&) = delete;
     Challenge* currentChallenge;
 
-    void startChallenge(int numberOfChallengeInVector);
-    bool endChallenge(int score);
+    void startChallenge(String game);
+    void endStartChallenge(State *state, int score);
+
+    void respondToChallenge(int numberOfChallengeInVector);
+    bool endResponseToChallenge(int score);
     void getChallengesFromLobby(std::vector<String> &lobbyList);
 
     DataTransmit &wifi = DataTransmit::getInstance();
-    bool challengeIsRunning = false;
+    bool respondingToChallenge = false;
+    bool startingAChallenge = false;
 private:
     ChallengeHandler();  // Private constructor
     std::vector<Challenge> challenges;

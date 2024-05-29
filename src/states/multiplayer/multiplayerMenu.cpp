@@ -151,7 +151,7 @@ void MultiplayerMenu::game() {
                     m_option = 0;
                     m_optionEntered = false;
                     m_execute = false;
-                    m_gameFlags.set(ADVANCE_GAME_FLAG);
+                    m_gameFlags.set(INPUT_UPDATE_FLAG);
                 }
             }
         }

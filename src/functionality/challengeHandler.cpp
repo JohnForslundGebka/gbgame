@@ -13,14 +13,11 @@ ChallengeHandler::ChallengeHandler() {
 
 }
 
-void ChallengeHandler::startChallenge(int numberOfChallengeInVector) {
+void ChallengeHandler::respondToChallenge(int numberOfChallengeInVector) {
   currentChallenge = &challenges[numberOfChallengeInVector];
-  String game = currentChallenge->info["game"].as<String>();
+  String game = currentChallenge->m_game;
 
-  JsonObject player2 = currentChallenge->info["player2"].to<JsonObject>();
-
-  player2["name"] = wifi.userName;
-  challengeIsRunning = true;
+  respondingToChallenge = true;
 
   if (game=="measury"){
     State::stateFlags.set(INDEX_DISTANCE_GAME);
@@ -30,20 +27,21 @@ void ChallengeHandler::startChallenge(int numberOfChallengeInVector) {
   }
 }
 
-bool ChallengeHandler::endChallenge(int score) {
+bool ChallengeHandler::endResponseToChallenge(int player2Score) {
 
-    challengeIsRunning = false;
-    String ID = currentChallenge->ID;
+    respondingToChallenge = false;
+    String ID = currentChallenge->m_ID;
 
-    String player1Name = currentChallenge->info["player2"]["name"].as<String>();
+    String player1Name = currentChallenge->m_player1Name;
     //adding player2 score to a database
-    currentChallenge->info["player2"]["score"] = score;
+    currentChallenge->m_player2Name = wifi.userName;
+    currentChallenge->m_player2Score = player2Score;
 
-    int player1Score = currentChallenge->info["player1"]["score"].as<int>();
-    currentChallenge->info["played"] = true;
+    int player1Score = currentChallenge->m_player1Score;
+    currentChallenge->m_played = true;
 
-    bool challengeWasWon = (score > player1Score);
-    (challengeWasWon) ? currentChallenge->info["winner"] = player1Name : currentChallenge->info["winner"] = wifi.userName;
+    bool challengeWasWon = (player2Score > player1Score);
+    (challengeWasWon) ? currentChallenge->m_winner = player1Name : currentChallenge->m_winner = wifi.userName;
 
     //funktion som updaterar challengedatabasen
 
@@ -53,10 +51,46 @@ bool ChallengeHandler::endChallenge(int score) {
 
 void ChallengeHandler::getChallengesFromLobby(std::vector<String> &lobbyList) {
     challenges.clear();
+    lobbyList.clear();
     wifi.getChallengesFromData(challenges);
     //add challenges to lobbylist
     for (auto &challenge: challenges) {
-        lobbyList.push_back(challenge.challengeSummery);
+        lobbyList.push_back(challenge.m_challengeSummery);
     }
+}
+
+void ChallengeHandler::startChallenge(String game) {
+    startingAChallenge = true;
+    if (game=="measury"){
+        State::stateFlags.set(INDEX_DISTANCE_GAME);
+    } else if(game=="voicy")
+    {
+        State::stateFlags.set(INDEX_MIC_GAME);
+    }
+
+}
+
+void ChallengeHandler::endStartChallenge(State *state, int score) {
+
+    String gameName = state->m_stateName;
+    //create the challenge object
+    JsonDocument doc;
+    //convert to json Object
+    JsonObject challenge = doc.to<JsonObject>();
+    //fill with data
+    challenge["game"] = gameName;
+    challenge["played"] = false;
+    challenge["player1"]["name"] = wifi.userName;
+    challenge["player1"]["score"] = score;
+    challenge["winner"] = "none";
+
+    // Serialize JSON to String (to send to the database)
+    String output;
+    serializeJson(doc, output);
+    startingAChallenge = false;
+
+    wifi.sendChallengeToData(output);
+
+    //gå tillbaks till någon meny eller något
 
 }
