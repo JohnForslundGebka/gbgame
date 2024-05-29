@@ -4,9 +4,8 @@
  * 
  * @class
  */
-
-#ifndef GBGAME_MULTIPLAYER_H
-#define GBGAME_MULTIPLAYER_H
+#ifndef GBGAME_multiplayerMenu_h
+#define GBGAME_multiplayerMenu_h
 #include <Arduino.h>
 #include <vector>
 #include "core/macros.h"
@@ -16,8 +15,7 @@
 #include "hardware/buttons.h"
 #include "hardware/displayManager.h"
 #include "multiplayerMenuUI.h"
-#include "functionality/challengeHandler.h"
-#include "wifi/dataTransmit.h"
+
 
 class MultiplayerMenu : public State {
 private:
@@ -29,8 +27,7 @@ private:
 
     //Canvas object for drawing the screens
     MultiplayerMenuUI *m_canvas = nullptr;
-    DataTransmit &wifi = DataTransmit::getInstance();
-    ChallengeHandler &challengeHandler = ChallengeHandler::getInstance();
+
 
     enum {
         LOBBY,
@@ -62,4 +59,4 @@ public:
 
 };
 
-#endif //GBGAME_MULTIPLAYER_H
+#endif //GBGAME_multiplayerMenu_h

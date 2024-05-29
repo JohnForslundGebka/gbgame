@@ -1,8 +1,8 @@
-#ifndef GBGAME_MULTIPLAYER_UI_H
-#define GBGAME_MULTIPLAYER_UI_H
+#ifndef GBGAME_multiplayerMenuUI_H
+#define GBGAME_multiplayerMenuUI_H
 #include "ui/canvas.h"
 #include "core/macros.h"
-#include "core/state.h" 
+//#include "core/state.h"
 
 class MultiplayerMenu; // Forward declaration
 
@@ -32,4 +32,4 @@ private:
 
 };
 
-#endif //GBGAME_MULTIPLAYER_UI_H
+#endif //GBGAME_multiplayerMenuUI_H

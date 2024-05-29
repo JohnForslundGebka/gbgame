@@ -1,7 +1,6 @@
 #include "challengeHandler.h"
 #include "challenge.h"
 #include "core/state.h"
-#include "core/macros.h"
 
 
 ChallengeHandler &ChallengeHandler::getInstance() {
@@ -18,9 +17,9 @@ void ChallengeHandler::respondToChallenge(int numberOfChallengeInVector) {
 
   respondingToChallenge = true;
 
-  if (game=="measury"){
+  if (game=="Measury"){
     State::stateFlags.set(INDEX_DISTANCE_GAME);
-  } else if(game=="voicy")
+  } else if(game=="Voicy")
   {
       State::stateFlags.set(INDEX_MIC_GAME);
   }
@@ -53,9 +52,9 @@ bool ChallengeHandler::endResponseToChallenge(int player2Score) {
 
 void ChallengeHandler::startChallenge(const String& game) {
     startingAChallenge = true;
-    if (game=="measury"){
+    if (game=="Measury"){
         State::stateFlags.set(INDEX_DISTANCE_GAME);
-    } else if(game=="voicy")
+    } else if(game=="Voicy")
     {
         State::stateFlags.set(INDEX_MIC_GAME);
     }
@@ -82,8 +81,9 @@ void ChallengeHandler::endStartChallenge(State *state, int score) {
 
     wifi.sendChallengeToData(output);
 
-    //gå tillbaks till någon meny eller något
-
+    Serial.println("WE SENT A CHALLENGE");
+    //Go to some menu or something
+    State::stateFlags.set(INDEX_MAIN_MENU);
 }
 
 void ChallengeHandler::getChallengesFromLobby(std::vector<String> &lobbyList) {

@@ -3,11 +3,12 @@
 #include "rtos.h"
 #include "mbed.h"
 #include "functionality/scores.h"
-
+#include "functionality/challengeHandler.h"
 
 
 // Constructor, initializes all necessary objects
-DistanceGame::DistanceGame():  State("Measury"){}
+DistanceGame::DistanceGame():  State("Measury") {
+}
 
 void DistanceGame::handleInput() {
     using namespace rtos;
@@ -69,6 +70,8 @@ void DistanceGame::game() {
 
     //class that is used for handling highscores and leaderboards
     Scores &leaderBoard = Scores::getInstance();
+    //class that is used for challenges
+    ChallengeHandler &challengeHandler = ChallengeHandler::getInstance();
 
 
 #ifdef DEBUG
@@ -129,23 +132,29 @@ void DistanceGame::game() {
 #endif
       }
 
-        if (m_totScore > leaderBoard.maxScores[m_flagName]){
-            m_canvas->drawScreen4();
-            m_gameFlags.set(SCREEN_UPDATE_FLAG);
-            rtos::ThisThread::sleep_for(1s);
-        }
-      if(leaderBoard.addScore(m_totScore,this)){
-          m_isRunning = false;
-          State::stateFlags.set(GlobalStates::stateList[INDEX_NEW_HIGHSCORE]->getFlagName());
-      } else {
-          m_canvas->drawScreen3(m_totScore);
-          m_gameFlags.set(SCREEN_UPDATE_FLAG);
+      //if a challenge is being played, do not send score to leaderboard
+     if(challengeHandler.startingAChallenge) {
+         challengeHandler.endStartChallenge(this,m_totScore);
 
-          rtos::ThisThread::sleep_for(3s);
-          //Return to main manu when game finish
-          m_isRunning = false;
-          State::stateFlags.set(GlobalStates::stateList[INDEX_MAIN_MENU]->getFlagName());
-      }
+     } else {
+         if (m_totScore > leaderBoard.maxScores[m_flagName]) {
+             m_canvas->drawScreen4();
+             m_gameFlags.set(SCREEN_UPDATE_FLAG);
+             rtos::ThisThread::sleep_for(1s);
+         }
+         if (leaderBoard.addScore(m_totScore, this)) {
+             m_isRunning = false;
+             State::stateFlags.set(GlobalStates::stateList[INDEX_NEW_HIGHSCORE]->getFlagName());
+         } else {
+             m_canvas->drawScreen3(m_totScore);
+             m_gameFlags.set(SCREEN_UPDATE_FLAG);
+
+             rtos::ThisThread::sleep_for(3s);
+             //Return to main manu when game finish
+             m_isRunning = false;
+             State::stateFlags.set(GlobalStates::stateList[INDEX_MAIN_MENU]->getFlagName());
+         }
+     }
 
 #ifdef DEBUG
    Serial.println("NU HAR GAME KÖRTS KLART");
@@ -154,6 +163,7 @@ void DistanceGame::game() {
 }
 
 void DistanceGame::run() {
+
     using namespace rtos;
     using namespace mbed;
     //Starts the threads

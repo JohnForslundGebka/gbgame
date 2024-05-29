@@ -2,6 +2,7 @@
 #include "rtos.h"
 #include "mbed.h"
 #include <string>
+#include "functionality/challengeHandler.h"
 
 
 // Constructor, initializes the state with it's name "Wifi Menu"
@@ -88,9 +89,12 @@ void MultiplayerMenu::update(){
 }
 
 void MultiplayerMenu::game() {
+    ChallengeHandler &challengeHandler = ChallengeHandler::getInstance();
     using namespace rtos;
     using namespace mbed;
     using namespace std::chrono;
+
+
     
     while (m_isRunning) {
 
@@ -130,12 +134,15 @@ void MultiplayerMenu::game() {
 
                 if (m_execute) {
                 
-                    //Clear flags and go to Games menu
+                    //Clear flags
                     m_option = 0;
                     m_execute = false;
                     m_optionEntered = false; 
 
-                    State::stateFlags.set(GlobalStates::stateList[INDEX_GAMES]->getFlagName());
+                   // State::stateFlags.set(GlobalStates::stateList[INDEX_GAMES]->getFlagName());
+                   //start a measury challenge, change later
+                   challengeHandler.startChallenge("Measury");
+
                 }
             }
 
@@ -176,6 +183,7 @@ void MultiplayerMenu::game() {
 void MultiplayerMenu::run() {
     using namespace rtos;
     using namespace mbed;
+    ChallengeHandler &challengeHandler = ChallengeHandler::getInstance();
 
     m_option = 0;
     m_optionEntered = false;

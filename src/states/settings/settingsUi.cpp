@@ -112,14 +112,6 @@ void SettingsUi::updateTextFields() {
     textField[1] = "Account";
     textField[2] = "Test";
 
-//    for (int i = 0; i < 3; i++){
-//        textField[i] = GlobalStates::settingsList[counter]->m_stateName;
-//
-//        if(counter == (GlobalStates::numberOfSettingsStates - 1))
-//            counter = 0;
-//        else
-//            counter++;
-//    }
 }
 
 void SettingsUi::drawHandPos1() {

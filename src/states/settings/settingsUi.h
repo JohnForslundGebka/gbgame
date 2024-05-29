@@ -2,8 +2,7 @@
 #define GBGAME_SETTINGSUI_H
 #include "ui/canvas.h"
 #include "ui/images.h"
-#include "core/state.h"
-#include "states/globalStates.h"
+
 
 class Settings; //forward declaration
 

@@ -3,12 +3,12 @@
 #include "states/distanceGame/distanceGame.h"
 #include "states/mainMenu/mainMenu.h"
 #include "states/subMenuGames/games.h"
-#include "states/settings/settings.h"
 #include "states/micGame/micGame.h"
 #include "states/highscore/highScore.h"
 #include "states/newHighscore/newHighscore.h"
 #include "states/wifiMenu/wifiMenu.h"
 #include "states/multiplayer/multiplayerMenu.h"
+#include "states/settings/settings.h"
 
 
 
@@ -17,12 +17,12 @@ namespace GlobalStates {
     MainMenu mainMenu;
     DistanceGame distanceGame;
     Games games;
-    Settings settings;
     MicGame micGame;
     HighScore highScore;
     NewHighscore newHighscore;
     WifiMenu wifiMenu;
     MultiplayerMenu multiplayerMenu;
+    Settings settings;
 
 
     State* stateList[numberOfTotalStates] = {&mainMenu, &distanceGame, &games, &settings, &micGame, &highScore, &newHighscore, &wifiMenu, &multiplayerMenu};
