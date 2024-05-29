@@ -40,7 +40,7 @@ public:
     //will take the local challenge and upload it to the airbase database
     void sendChallengeToData(const String& challenge);
 
-    void endChallengeToData(String ID, String challengeData);
+    void endChallengeToData(String ID, const String& challengeData);
     //function for getting the wifi-networks
     void getNetworkNames(std::vector<String> &networkList);
     //updates the local challenges with the values from the firebase database

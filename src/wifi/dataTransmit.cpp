@@ -199,7 +199,7 @@ void DataTransmit::sendChallengeToData(const String& challenge) {
 
 }
 
-void DataTransmit::endChallengeToData(String ID, String challengeData) {
+void DataTransmit::endChallengeToData(String ID, const String& challengeData) {
     String basePath = "/Lobby/";
     String fullPath = basePath + ID;
     if (!Firebase.setJSON(fbdo, fullPath, challengeData)) {

@@ -39,7 +39,7 @@ private:
     };
 
 public:
-    std::vector<String> m_lobbyList = {"greger", "johan", "peter", "häst"};
+    std::vector<String> m_lobbyList;
     std::vector<String> m_myGamesList = {"Voicy", "Measury", "Voicy"};
 
     bool m_optionEntered = false;
