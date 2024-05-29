@@ -1,6 +1,6 @@
 #ifndef GBGAME_CHALLENGE_H
 #define GBGAME_CHALLENGE_H
-#include <ArduinoJson.h>
+#include <Arduino.h>
 
 class Challenge {
     public:
@@ -21,7 +21,7 @@ class Challenge {
 
     String m_challengeSummery{};
 
-    String getJsonData();
+    String getJsonData() const;
 private:
 
 };

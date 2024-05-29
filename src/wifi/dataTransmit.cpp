@@ -198,3 +198,7 @@ void DataTransmit::sendChallengeToData(const String& challenge) {
     }
 
 }
+
+void DataTransmit::endChallengeToData(String ID, String challengeData) {
+
+}

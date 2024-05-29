@@ -1,4 +1,5 @@
 #include "challenge.h"
+#include <ArduinoJson.h>
 
 
 Challenge::Challenge(const String &id, const String &game, bool played, const String &player1Name, int player1Score) :
@@ -9,7 +10,7 @@ m_player1Score(player1Score){
     m_challengeSummery = game + "  -  " + m_player1Name;
 }
 
-String Challenge::getJsonData() {
+String Challenge::getJsonData() const {
     JsonDocument doc;
     //convert to json Object
     JsonObject challenge = doc.to<JsonObject>();

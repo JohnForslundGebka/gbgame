@@ -10,7 +10,6 @@ ChallengeHandler &ChallengeHandler::getInstance() {
 }
 
 ChallengeHandler::ChallengeHandler() {
-
 }
 
 void ChallengeHandler::respondToChallenge(int numberOfChallengeInVector) {
@@ -49,17 +48,7 @@ bool ChallengeHandler::endResponseToChallenge(int player2Score) {
     return challengeWasWon;
 }
 
-void ChallengeHandler::getChallengesFromLobby(std::vector<String> &lobbyList) {
-    challenges.clear();
-    lobbyList.clear();
-    wifi.getChallengesFromData(challenges);
-    //add challenges to lobbylist
-    for (auto &challenge: challenges) {
-        lobbyList.push_back(challenge.m_challengeSummery);
-    }
-}
-
-void ChallengeHandler::startChallenge(String game) {
+void ChallengeHandler::startChallenge(const String& game) {
     startingAChallenge = true;
     if (game=="measury"){
         State::stateFlags.set(INDEX_DISTANCE_GAME);
@@ -67,7 +56,6 @@ void ChallengeHandler::startChallenge(String game) {
     {
         State::stateFlags.set(INDEX_MIC_GAME);
     }
-
 }
 
 void ChallengeHandler::endStartChallenge(State *state, int score) {
@@ -93,4 +81,14 @@ void ChallengeHandler::endStartChallenge(State *state, int score) {
 
     //gå tillbaks till någon meny eller något
 
+}
+
+void ChallengeHandler::getChallengesFromLobby(std::vector<String> &lobbyList) {
+    challenges.clear();
+    lobbyList.clear();
+    wifi.getChallengesFromData(challenges);
+    //add challenges to lobbylist
+    for (auto &challenge: challenges) {
+        lobbyList.push_back(challenge.m_challengeSummery);
+    }
 }
