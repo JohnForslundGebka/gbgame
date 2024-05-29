@@ -9,15 +9,16 @@
 #define GBGAME_GLOBALSTATES_H
 #include <cstdint>
 
+class Settings;
 class MainMenu;
 class DistanceGame;
 class Games;
-class Settings;
 class MicGame;
 class HighScore;
 class NewHighscore;
 class WifiMenu;
 class MultiplayerMenu;
+
 
 // Not a state, just the base class
 class State;
