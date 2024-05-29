@@ -39,36 +39,33 @@ void MultiplayerMenu::handleInput() {
                 if (!m_optionEntered) {
                     m_optionEntered = true;
                 }
-                Buttons::states.clear(Buttons::A_FLAG);
                 break;
 
             case Buttons::START_FLAG:
                 m_isRunning = false;
                 State::stateFlags.set(GlobalStates::stateList[INDEX_MAIN_MENU]->getFlagName());
-                Buttons::states.clear(Buttons::START_FLAG);
                 break;
 
             case Buttons::UP_FLAG:
                 (*m_optionPtr)--;
                 if (*m_optionPtr < 0) { *m_optionPtr = 0; } 
-                Buttons::states.clear(Buttons::UP_FLAG);               
                 break;
 
             case Buttons::DOWN_FLAG:
                 (*m_optionPtr)++;
                 if (*m_optionPtr > m_optionMAX) { *m_optionPtr = m_optionMAX; }
-                Buttons::states.clear(Buttons::DOWN_FLAG);
                 break;
 
             case Buttons::B_FLAG:
                 m_optionEntered = false;
-                Buttons::states.clear(Buttons::B_FLAG);
                 break;
 
             default:
                 break;
         }
+
         m_gameFlags.set(INPUT_UPDATE_FLAG);
+        Buttons::states.clear(Buttons::ALL_FLAG);
         ThisThread::sleep_for(50ms);
     }
 }
@@ -83,7 +80,6 @@ void MultiplayerMenu::update(){
     {
         m_gameFlags.wait_any(SCREEN_UPDATE_FLAG, osWaitForever);
         m_displayManager.updateScreen(&m_canvas->c_main);
-        //ThisThread::sleep_for(100ms); 
     }
 }
 
@@ -102,7 +98,6 @@ void MultiplayerMenu::game() {
             m_optionPtr = &m_subOption;
 
             if (m_option == LOBBY) {
-
                 
                 m_canvas->drawScreen2();
                 m_gameFlags.set(SCREEN_UPDATE_FLAG);
