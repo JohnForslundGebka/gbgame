@@ -20,6 +20,8 @@ class Challenge {
     Challenge(const String &id, const String &game, bool played, const String &player1Name, int player1Score);
 
     String m_challengeSummery{};
+
+    String getJsonData();
 private:
 
 };
