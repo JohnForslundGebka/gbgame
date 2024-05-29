@@ -29,20 +29,23 @@ void ChallengeHandler::respondToChallenge(int numberOfChallengeInVector) {
 bool ChallengeHandler::endResponseToChallenge(int player2Score) {
 
     respondingToChallenge = false;
-    String ID = currentChallenge->m_ID;
 
     String player1Name = currentChallenge->m_player1Name;
-    //adding player2 score to a database
+    //adding player2 score to the challenge
     currentChallenge->m_player2Name = wifi.userName;
     currentChallenge->m_player2Score = player2Score;
 
     int player1Score = currentChallenge->m_player1Score;
     currentChallenge->m_played = true;
 
+    //set the winning players name
     bool challengeWasWon = (player2Score > player1Score);
     (challengeWasWon) ? currentChallenge->m_winner = player1Name : currentChallenge->m_winner = wifi.userName;
 
-    //funktion som updaterar challengedatabasen
+    //send the new data to the database
+    String jsonData = currentChallenge->getJsonData();
+    String ID = currentChallenge->m_ID;
+    wifi.endChallengeToData(ID,jsonData);
 
     currentChallenge = nullptr;
     return challengeWasWon;

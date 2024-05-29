@@ -200,5 +200,9 @@ void DataTransmit::sendChallengeToData(const String& challenge) {
 }
 
 void DataTransmit::endChallengeToData(String ID, String challengeData) {
-
+    String basePath = "/Lobby/";
+    String fullPath = basePath + ID;
+    if (!Firebase.setJSON(fbdo, fullPath, challengeData)) {
+        Serial.println("Failed to send data: " + fbdo.errorReason());
+    }
 }
