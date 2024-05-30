@@ -211,6 +211,8 @@ void WifiMenu::game() {
 
         // Display the set name screen and sets letter edit ranges
         else if (m_optionEntered && m_option == SET_NAME) {
+            if (m_selectedLetter > 3) {m_selectedLetter = 0;}
+
             p_selectedText = m_username;
 
             m_maxLetter = 3;                //Max selectable letter in name
