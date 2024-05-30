@@ -23,7 +23,7 @@ public:
     void drawScreenNetworks();           // Draws connecting screen
     void drawNetworks();
 
-    char m_menuOptions[4][12] = {
+    String m_menuOptions[4] = {
         "  Login",
         " Set wifi",
         " Password",

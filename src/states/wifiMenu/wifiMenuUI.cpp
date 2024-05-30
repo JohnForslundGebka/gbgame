@@ -30,17 +30,19 @@ void WifiMenuUI::drawScreen1() {
     int cursorPosition = 31;
     c_main.C.setCursor(4, cursorPosition);
         
-    for (int i = 0; i < 4; i++) {
-        if (parentState->m_option == i) {
+    int index = 0; // Initialize an index to use for comparison
+    for (const auto& menuOption : m_menuOptions) {  // Use range-based loop
+        if (parentState->m_option == index) {
             c_main.C.setTextColor(GREEN);
-        } 
-        else {
+        } else {
             c_main.C.setTextColor(0x738E);
         }
 
-        c_main.C.print(m_menuOptions[i]);
+        c_main.C.print(menuOption);   // Print the current menu option
         cursorPosition += 25;
-        c_main.C.setCursor(4, cursorPosition);
+        c_main.C.setCursor(4, cursorPosition);  // Update the cursor position for the next option
+
+        index++;  // Increment the index manually
     }
 }
 
