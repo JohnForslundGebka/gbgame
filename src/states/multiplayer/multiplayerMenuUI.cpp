@@ -121,7 +121,7 @@ void MultiplayerMenuUI::drawScreen4() {
         c_main.C.setCursor(4, cursorPosition);
         c_main.C.print(challenge.m_challengeSummery);
 
-        cursorPosition += 25;
+        cursorPosition += 12;
         index++;
     }
 
