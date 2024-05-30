@@ -21,7 +21,7 @@ public:
     void drawScreen3();           // Draws new screen
     void drawScreen4();           // Draws my games screen
 
-    char m_menuOptions[3][12] = {
+    const String m_menuOptions[3] = {
         "   Lobby",
         "    New",
         " My games"

@@ -23,7 +23,6 @@ class MultiplayerMenu;
 // Not a state, just the base class
 class State;
 
-
 namespace GlobalStates {
 
     const int numberOfTotalStates = 9;
@@ -43,8 +42,6 @@ namespace GlobalStates {
     extern MultiplayerMenu multiplayerMenu;
 
     
-
-
     //arrays of different states, used for menus
     extern State* stateList[numberOfTotalStates];
     extern State* mainMenuList[numberOfMainMenuStates];
