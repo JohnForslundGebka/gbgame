@@ -109,7 +109,6 @@ void MultiplayerMenu::game() {
 
             if (m_option == LOBBY) {
 
-                
                 m_canvas->drawScreen2();
                 m_gameFlags.set(SCREEN_UPDATE_FLAG);
                 
@@ -142,9 +141,9 @@ void MultiplayerMenu::game() {
                     m_optionEntered = false; 
 
                    // State::stateFlags.set(GlobalStates::stateList[INDEX_GAMES]->getFlagName());
-                   //start a measury challenge, change later
 
-                   challengeHandler.startChallenge("Measury");
+                   //start a measury challenge, change later
+                   challengeHandler.startChallenge(INDEX_DISTANCE_GAME);
 
                 }
             }
@@ -186,14 +185,15 @@ void MultiplayerMenu::game() {
 void MultiplayerMenu::run() {
     using namespace rtos;
     using namespace mbed;
-    //ChallengeHandler &challengeHandler = ChallengeHandler::getInstance();
+
 
     m_option = 0;
     m_optionEntered = false;
     m_execute = false;
 
-    // //get all the challenges from the database
-    // challengeHandler.getChallengesFromLobby(m_lobbyList);
+    //get all the challenges from the database
+    ChallengeHandler &challengeHandler = ChallengeHandler::getInstance();
+    challengeHandler.getChallengesFromLobby(m_lobbyList);
 
     //Starts the threads
     m_isRunning = true;

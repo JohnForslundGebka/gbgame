@@ -15,7 +15,7 @@ public:
     ChallengeHandler& operator=(const ChallengeHandler&) = delete;
     Challenge* currentChallenge;
 
-    void startChallenge(const String& game);
+    void startChallenge(int gameIndex);
     void endStartChallenge(State *state, int score);
 
     void respondToChallenge(int numberOfChallengeInVector);

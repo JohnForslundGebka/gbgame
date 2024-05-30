@@ -3,6 +3,7 @@
 #include "core/state.h"
 
 
+
 ChallengeHandler &ChallengeHandler::getInstance() {
     static ChallengeHandler instance;
     return instance;
@@ -50,14 +51,9 @@ bool ChallengeHandler::endResponseToChallenge(int player2Score) {
     return challengeWasWon;
 }
 
-void ChallengeHandler::startChallenge(const String& game) {
+void ChallengeHandler::startChallenge(int gameIndex) {
     startingAChallenge = true;
-    if (game=="Measury"){
-        State::stateFlags.set(INDEX_DISTANCE_GAME);
-    } else if(game=="Voicy")
-    {
-        State::stateFlags.set(INDEX_MIC_GAME);
-    }
+    State::stateFlags.set(GlobalStates::stateList[gameIndex]->getFlagName());
 }
 
 void ChallengeHandler::endStartChallenge(State *state, int score) {
@@ -83,7 +79,7 @@ void ChallengeHandler::endStartChallenge(State *state, int score) {
 
     Serial.println("WE SENT A CHALLENGE");
     //Go to some menu or something
-    State::stateFlags.set(INDEX_MAIN_MENU);
+    State::stateFlags.set(GlobalStates::stateList[INDEX_MULTIPLAYER_MENU]->getFlagName());
 }
 
 void ChallengeHandler::getChallengesFromLobby(std::vector<String> &lobbyList) {
