@@ -1,5 +1,8 @@
 #include "multiplayerMenuUI.h"
 #include "multiplayerMenu.h"
+#include "functionality/challengeHandler.h"
+#include "wifi/dataTransmit.h"
+
 
 MultiplayerMenuUI::MultiplayerMenuUI(MultiplayerMenu *pGame) : parentState(pGame), c_main(128, 128, 0, 0) {
 }
@@ -86,6 +89,9 @@ void MultiplayerMenuUI::drawScreen3() {
 }
 
 void MultiplayerMenuUI::drawScreen4() {
+    ChallengeHandler &challengeHandler = ChallengeHandler::getInstance();
+    DataTransmit &wifi = DataTransmit::getInstance();
+
     c_main.C.fillRect(0, 0, 128, 128, BLACK);
 
     c_main.C.setTextColor(WHITE);
@@ -114,6 +120,7 @@ void MultiplayerMenuUI::drawScreen4() {
         c_main.C.print(challenge.m_challengeSummery);
 
         cursorPosition += 25;
+        index++;
     }
 
 
