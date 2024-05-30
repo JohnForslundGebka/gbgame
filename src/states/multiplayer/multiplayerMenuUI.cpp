@@ -10,7 +10,7 @@ void MultiplayerMenuUI::init() {}
 void MultiplayerMenuUI::drawScreen1() {
     c_main.C.fillRect(0, 0, 128, 128, BLACK);
 
-    c_main.C.setTextColor(WHITE);
+    c_main.C.setTextColor(MAGENTA);
     c_main.C.setTextSize(2);
     c_main.C.setTextWrap(false);
     c_main.C.setCursor(1, 3);
@@ -19,17 +19,22 @@ void MultiplayerMenuUI::drawScreen1() {
     c_main.C.drawLine(0, 20, 128, 20, WHITE);                                //Draw line under "Wifi"
 
     //Draw menu options
-    int cursorPosition = 31;
-    c_main.C.setCursor(4, cursorPosition);
+    int cursorPosition = 33;
+    c_main.C.setCursor(1, cursorPosition);
         
-    for (int i = 0; i < 4; i++) {
-        //Sets color of selected option
-        c_main.C.setTextColor(*parentState->m_optionPtr == i ? GREEN : 0x738E);
 
-        c_main.C.print(m_menuOptions[i]);
-        cursorPosition += 25;
+    int index = 0; // Manual index to replace 'i' in the original for-loop
+    for (const auto& option : m_menuOptions) {
+        // Sets color of selected option
+        c_main.C.setTextColor(*parentState->m_optionPtr == index ? GREEN : 0x738E);
+
+        c_main.C.print(option);
+        cursorPosition += 30;
         c_main.C.setCursor(4, cursorPosition);
+
+        index++; // Increment the manual index
     }
+    
 }
 
 //password screen
