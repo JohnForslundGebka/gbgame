@@ -54,6 +54,7 @@ void MultiplayerMenuUI::drawScreen2() {
 
     int cursorPosition = 30;
 
+    c_main.C.setTextSize(1);
     for (int i = 0; i < parentState -> m_lobbyList.size(); i++) {
         //Sets color of selected option
         c_main.C.setTextColor(*parentState->m_optionPtr == i ? GREEN : 0x738E);
@@ -113,6 +114,7 @@ void MultiplayerMenuUI::drawScreen4() {
     }
 
     int index = 0;
+    c_main.C.setTextSize(1);
     for (auto &challenge : myChallenges){
         c_main.C.setTextColor(*parentState->m_optionPtr == index ? GREEN : 0x738E);
 
