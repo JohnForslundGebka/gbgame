@@ -25,9 +25,10 @@ public:
     DataTransmit &wifi = DataTransmit::getInstance();
     bool respondingToChallenge = false;
     bool startingAChallenge = false;
+    std::vector<Challenge> challenges;
 private:
     ChallengeHandler();  // Private constructor
-    std::vector<Challenge> challenges;
+
 };
 
 

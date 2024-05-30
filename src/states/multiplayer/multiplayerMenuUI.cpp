@@ -97,15 +97,35 @@ void MultiplayerMenuUI::drawScreen4() {
 
     int cursorPosition = 30;
 
-    for (int i = 0; i < parentState -> m_myGamesList.size(); i++) {
-        //Sets color of selected option
-        c_main.C.setTextColor(*parentState->m_optionPtr == i ? GREEN : 0x738E);
+    std::vector<Challenge> myChallenges;
+
+    for (auto &challenge : challengeHandler.challenges)
+    {
+        if(challenge.m_player1Name == wifi.userName) {
+            myChallenges.push_back(challenge);
+        }
+    }
+
+    int index = 0;
+    for (auto &challenge : myChallenges){
+        c_main.C.setTextColor(*parentState->m_optionPtr == index ? GREEN : 0x738E);
 
         c_main.C.setCursor(4, cursorPosition);
-        c_main.C.print(parentState -> m_myGamesList[i]);
-        
+        c_main.C.print(challenge.m_challengeSummery);
+
         cursorPosition += 25;
     }
+
+
+//    for (int i = 0; i < parentState -> m_myGamesList.size(); i++) {
+//        //Sets color of selected option
+//        c_main.C.setTextColor(*parentState->m_optionPtr == i ? GREEN : 0x738E);
+//
+//        c_main.C.setCursor(4, cursorPosition);
+//        c_main.C.print(parentState -> m_myGamesList[i]);
+//
+//        cursorPosition += 25;
+//    }
     
 }
 

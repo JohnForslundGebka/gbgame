@@ -19,10 +19,10 @@ void ChallengeHandler::respondToChallenge(int numberOfChallengeInVector) {
   respondingToChallenge = true;
 
   if (game=="Measury"){
-    State::stateFlags.set(INDEX_DISTANCE_GAME);
+      State::stateFlags.set(GlobalStates::stateList[INDEX_DISTANCE_GAME]->getFlagName());
   } else if(game=="Voicy")
   {
-      State::stateFlags.set(INDEX_MIC_GAME);
+      State::stateFlags.set(GlobalStates::stateList[INDEX_MIC_GAME]->getFlagName());
   }
 }
 
@@ -31,11 +31,12 @@ bool ChallengeHandler::endResponseToChallenge(int player2Score) {
     respondingToChallenge = false;
 
     String player1Name = currentChallenge->m_player1Name;
+    int player1Score = currentChallenge->m_player1Score;
+
     //adding player2 score to the challenge
     currentChallenge->m_player2Name = wifi.userName;
     currentChallenge->m_player2Score = player2Score;
 
-    int player1Score = currentChallenge->m_player1Score;
     currentChallenge->m_played = true;
 
     //set the winning players name

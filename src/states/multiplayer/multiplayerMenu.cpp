@@ -145,6 +145,8 @@ void MultiplayerMenu::game() {
                    //start a measury challenge, change later
                    challengeHandler.startChallenge(INDEX_DISTANCE_GAME);
 
+                   String name = challengeHandler.challenges[2].m_player1Name;
+
                 }
             }
 
