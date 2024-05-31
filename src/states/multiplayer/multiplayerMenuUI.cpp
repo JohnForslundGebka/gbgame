@@ -102,13 +102,16 @@ void MultiplayerMenuUI::drawScreen4() {
     int cursorPosition = 30;
 
     int index = 0;
+    uint16_t color{};
     c_main.C.setTextSize(1);
     for (auto &challenge : parentState->m_myGamesList){
+
+        challenge->m_played ? color = GREEN : color = RED;
         c_main.C.setTextColor((*parentState->m_optionPtr == index) ? GREEN : 0x738E);
 
         c_main.C.setCursor(4, cursorPosition);
         c_main.C.print(challenge->m_challengeSummery);
-
+        c_main.C.fillCircle(94, cursorPosition+3, 2, color);
         cursorPosition += 10;
         index++;
     }
@@ -138,6 +141,61 @@ void MultiplayerMenuUI::drawWaitingScreen() {
     c_main.C.setTextWrap(false);
     c_main.C.setCursor(3, 25);
     c_main.C.print("Waiting... ");
+}
+
+void MultiplayerMenuUI::drawChallengeInfo(Challenge* challenge) {
+
+    ChallengeHandler &challengeHandler = ChallengeHandler::getInstance();
+    DataTransmit &wifi = DataTransmit::getInstance();
+
+    c_main.C.fillScreen(BLACK);
+    c_main.C.drawLine(0, 19, 127, 19, 0xFFFF);
+    c_main.C.setTextColor(0xFFFF);
+    c_main.C.setTextSize(2);
+    c_main.C.setTextWrap(false);
+    c_main.C.setCursor(11, 2);
+    c_main.C.print("Challenge");
+    c_main.C.setTextColor(0x57FF);
+
+    if (challenge->m_game == "Measury") {
+        c_main.C.setCursor(20, 29);
+    } else {
+        c_main.C.setCursor(37, 29);
+    }
+    
+    c_main.C.print(challenge->m_game);
+    c_main.C.setTextColor(0xFABF);
+    c_main.C.setCursor(4, 53);
+    c_main.C.print(challenge->m_player1Name);
+
+
+    c_main.C.setTextColor(0x540);
+    c_main.C.setCursor(95, 53);
+    c_main.C.print(challenge->m_player1Score);
+    c_main.C.setTextColor(0xFFFF);
+    c_main.C.setTextSize(1);
+    c_main.C.setCursor(38, 105);
+
+    if (challenge->m_played) {
+        c_main.C.setCursor(4, 74);
+        c_main.C.print(challenge->m_player2Name);
+        c_main.C.setCursor(95, 74);
+        c_main.C.print(challenge->m_player2Score);
+
+        if (wifi.userName == challenge->m_winner) {
+            c_main.C.print("You won!");
+        } else {
+            c_main.C.print("You lost!");
+        }
+
+
+
+    } else {
+        c_main.C.print("Not played!");
+    }
+
+
+
 }
 
 
