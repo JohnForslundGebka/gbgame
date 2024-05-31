@@ -3,6 +3,8 @@
 #include "rtos.h"
 #include "mbed.h"
 #include "functionality/scores.h"
+#include "functionality/challengeHandler.h"
+
 
 // Constructor, initializes the state with it's name "voicy"
 MicGame::MicGame():  State("Voicy"){}
@@ -10,10 +12,6 @@ MicGame::MicGame():  State("Voicy"){}
 void MicGame::handleInput() {
     using namespace rtos;
     using namespace mbed;
-
-#ifdef DEBUG
-     Serial.println("NU VÄNTAR JAG PÅ KNAPPAR");  
-#endif
 
     while (m_isRunning) {
         using namespace std::chrono;
@@ -108,25 +106,40 @@ void MicGame::game() {
     //Exit the waveform loop for proper termination of thread
     m_runWaveform = false;
 
-    //check if a new highscore was set
-    if (m_score > leaderBoard.maxScores[m_flagName]){
-        m_canvas->drawScreen4();
-        m_gameFlags.set(SCREEN_UPDATE_FLAG);
-        rtos::ThisThread::sleep_for(1s);
-    }
+    //class that is used for challenges
+    ChallengeHandler &challengeHandler = ChallengeHandler::getInstance();
 
-    //check is highscore can get onto the leaderboard
-    if(leaderBoard.addScore(m_score,this)){
-        m_isRunning = false;
-        State::stateFlags.set(GlobalStates::stateList[INDEX_NEW_HIGHSCORE]->getFlagName());
-    } else{
-    //Draw the last screen showing the score
-    m_canvas->drawScreen3();
-    //Waits for button A press to exit the game
-    m_gameFlags.wait_any(ADVANCE_GAME_FLAG, osWaitForever, true);
-    //Return to the main menu when the game finishes
-    m_isRunning = false;
-    State::stateFlags.set(GlobalStates::stateList[INDEX_MAIN_MENU]->getFlagName());
+    //if a challenge is being played, do not send score to leaderboard
+    if(challengeHandler.startingAChallenge) {
+        challengeHandler.endStartChallenge(this,m_score);
+
+    } else if (challengeHandler.respondingToChallenge) { //if the user is responding to a challenge
+
+        String player1name = challengeHandler.currentChallenge->m_player1Name;
+        int player1Score = challengeHandler.currentChallenge->m_player1Score;
+        String player2name = challengeHandler.currentChallenge->m_player2Name;
+
+        if(challengeHandler.endResponseToChallenge(m_score)){
+                m_canvas->drawChallengeWinScreen(player1name,player1Score,player2name,m_score);
+                m_gameFlags.set(SCREEN_UPDATE_FLAG);
+                rtos::ThisThread::sleep_for(5s);
+                State::stateFlags.set(GlobalStates::stateList[INDEX_MAIN_MENU]->getFlagName());
+        }
+        
+    } else {
+            //check is highscore can get onto the leaderboard
+        if(leaderBoard.addScore(m_score,this)) {
+            m_isRunning = false;
+            State::stateFlags.set(GlobalStates::stateList[INDEX_NEW_HIGHSCORE]->getFlagName());
+        } else {
+            //Draw the last screen showing the score
+            m_canvas->drawScreen3();
+            //Waits for button A press to exit the game
+            m_gameFlags.wait_any(ADVANCE_GAME_FLAG, osWaitForever, true);
+            //Return to the main menu when the game finishes
+            m_isRunning = false;
+            State::stateFlags.set(GlobalStates::stateList[INDEX_MAIN_MENU]->getFlagName());
+        }
     }
 }
 

@@ -139,13 +139,9 @@ void MultiplayerMenu::game() {
                     m_execute = false;
                     m_optionEntered = false; 
 
-                   // State::stateFlags.set(GlobalStates::stateList[INDEX_GAMES]->getFlagName());
+                    challengeHandler.startingAChallenge = true;
 
-                   //start a measury challenge, change later
-                   challengeHandler.startChallenge(INDEX_DISTANCE_GAME);
-
-                   String name = challengeHandler.challenges[2].m_player1Name;
-
+                    State::stateFlags.set(GlobalStates::stateList[INDEX_GAMES]->getFlagName());
                 }
             }
 
