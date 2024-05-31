@@ -202,7 +202,25 @@ void DataTransmit::sendChallengeToData(const String& challenge) {
 void DataTransmit::endChallengeToData(String ID, const String& challengeData) {
     String basePath = "/Lobby/";
     String fullPath = basePath + ID;
-    if (!Firebase.setJSON(fbdo, fullPath, challengeData)) {
-        Serial.println("Failed to send data: " + fbdo.errorReason());
+    int maxRetries = 3; // Number of retries
+    int attempt = 0;
+    bool success = false;
+
+    while (attempt < maxRetries && !success) {
+        if (Firebase.setJSON(fbdo, fullPath, challengeData)) {
+            success = true; // Data sent successfully
+            Serial.println("Data sent successfully.");
+        } else {
+            Serial.println("Failed to send data: " + fbdo.errorReason());
+            attempt++;
+            if (attempt < maxRetries) {
+                Serial.println("Retrying...");
+                delay(500); // Wait for 1 second before retrying
+            }
+        }
+    }
+
+    if (!success) {
+        Serial.println("Failed to send data after retries.");
     }
 }
