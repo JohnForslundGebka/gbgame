@@ -160,6 +160,7 @@ void MultiplayerMenu::game() {
                     //This function need to be fixed.
                     m_canvas ->drawChallengeInfo(m_myGamesList[m_subOption]);
                     m_gameFlags.set(SCREEN_UPDATE_FLAG);
+                    m_gameFlags.wait_any(INPUT_UPDATE_FLAG,osWaitForever, true);
 
                     //Clear flags
                     m_option = 0;
