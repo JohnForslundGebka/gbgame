@@ -40,6 +40,7 @@ private:
 
     //Canvas object for drawing the screens
     DistanceGameUi *m_canvas = nullptr;
+    bool challengeMode = false;
 public:
     DistanceGame();
 
@@ -52,6 +53,7 @@ public:
     void handleInput() override;
     void update() override;
     void stop() override;
+    void challenge(int score);
 
     void game();               //Contains the logic for the game
 

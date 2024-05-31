@@ -24,7 +24,7 @@ public:
     void drawScreen4();           //draws the data loading screen
     void drawScreen3();           // Draws the exit/finish screen
     void drawChallengeWinScreen(String &player1name, int player1score, String &player2name, int player2score);
-    void drawChallengeLooseScreen();
+    void drawChallengeLooseScreen(String &player1name, int player1score, String &player2name, int player2score);
 
     int m_lastBallPos;           //Variable used locally to update correctly
     int m_lastScore = 0;         //Variable used locally to update correctly

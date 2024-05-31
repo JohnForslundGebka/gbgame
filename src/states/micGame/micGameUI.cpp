@@ -153,6 +153,25 @@ void MicGameUI::drawChallengeWinScreen(String &player1name, int player1score, St
 
 }
 
-void MicGameUI::drawChallengeLooseScreen() {
-
+void MicGameUI::drawChallengeLooseScreen(String &player1name, int player1score, String &player2name, int player2score) {
+    c_main.C.fillScreen(BLACK);
+    c_main.C.setTextColor(0xFABF);
+    c_main.C.setTextSize(2);
+    c_main.C.setTextWrap(false);
+    c_main.C.setCursor(9, 38);
+    c_main.C.print(player1name);
+    c_main.C.setTextColor(0x57FF);
+    c_main.C.setCursor(14, 10);
+    c_main.C.print("YOU LOST");
+    c_main.C.setTextColor(0xFABF);
+    c_main.C.setCursor(8, 56);
+    c_main.C.print(player2name);
+    c_main.C.setTextColor(0x540);
+    c_main.C.setCursor(78, 57);
+    c_main.C.print(player2score);
+    c_main.C.setCursor(77, 38);
+    c_main.C.print(player1score);
+    c_main.C.drawLine(59, 64, 71, 64, 0xFFFF);
+    c_main.C.drawLine(59, 46, 71, 46, 0xFFFF);
+    c_main.C.drawBitmap(34, 75, image_Cry_dolph_bits, 55, 52, 0xFFFF);
 }

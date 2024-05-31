@@ -65,13 +65,13 @@ void DistanceGame::game() {
     using namespace rtos;
     using namespace mbed;
     using namespace std::chrono;
-
     int m_totScore = 0;
 
     //class that is used for handling highscores and leaderboards
     Scores &leaderBoard = Scores::getInstance();
     //class that is used for challenges
     ChallengeHandler &challengeHandler = ChallengeHandler::getInstance();
+    challengeMode = challengeHandler.startingAChallenge || challengeHandler.respondingToChallenge;
 
     for (int i = 0; i < MAX_ROUNDS; i++) {
         //Seeds the random generator and generates the target length
@@ -115,28 +115,15 @@ void DistanceGame::game() {
         m_gameFlags.wait_any(ADVANCE_GAME_FLAG, osWaitForever, true);
     }
 
-    //if a challenge is being played, do not send score to leaderboard
-    if(challengeHandler.startingAChallenge) {
-        challengeHandler.endStartChallenge(this,m_totScore);
-
-    } else if (challengeHandler.respondingToChallenge){
-
-        String player1name = challengeHandler.currentChallenge->m_player1Name;
-        int player1Score = challengeHandler.currentChallenge->m_player1Score;
-        String player2name = challengeHandler.currentChallenge->m_player2Name;
-        if(challengeHandler.endResponseToChallenge(m_totScore)){
-                m_canvas->drawChallengeWinScreen(player1name,player1Score,player2name,m_totScore);
-                m_gameFlags.set(SCREEN_UPDATE_FLAG);
-                rtos::ThisThread::sleep_for(5s);
-                State::stateFlags.set(GlobalStates::stateList[INDEX_MAIN_MENU]->getFlagName());
-        }
-        
+    if(challengeMode){
+        challenge(m_totScore);
     } else {
+        //if a new highscore was set
         if (m_totScore > leaderBoard.maxScores[m_flagName]) {
             m_canvas->drawScreen4();
             m_gameFlags.set(SCREEN_UPDATE_FLAG);
             rtos::ThisThread::sleep_for(1s);
-        }
+        } //try to add to leaderboard
         if (leaderBoard.addScore(m_totScore, this)) {
             m_isRunning = false;
             State::stateFlags.set(GlobalStates::stateList[INDEX_NEW_HIGHSCORE]->getFlagName());
@@ -227,6 +214,30 @@ void DistanceGame::screenBlink() {
         m_canvas->drawScreen1();
         m_gameFlags.set(SCREEN_UPDATE_FLAG);
         rtos::ThisThread::sleep_for(300ms);
+    }
+}
+
+void DistanceGame::challenge(int score) {
+    ChallengeHandler &ch = ChallengeHandler::getInstance();
+    //If the user is starting a new challenge
+    if(ch.startingAChallenge) {
+        ch.endStartChallenge(this,score);
+    } else if (ch.respondingToChallenge){
+          //get info from player 1
+          String player1name = ch.currentChallenge->m_player1Name;
+          int player1Score = ch.currentChallenge->m_player1Score;
+          String player2name = ch.currentChallenge->m_player2Name;
+          if(ch.endResponseToChallenge(score)){
+              m_canvas->drawChallengeWinScreen(player1name,player1Score,player2name,score);
+              m_gameFlags.set(SCREEN_UPDATE_FLAG);
+              rtos::ThisThread::sleep_for(std::chrono::seconds(5));
+              State::stateFlags.set(GlobalStates::stateList[INDEX_MAIN_MENU]->getFlagName());
+          } else {
+              m_canvas->drawChallengeLooseScreen(player1name,player1Score,player2name,score);
+              m_gameFlags.set(SCREEN_UPDATE_FLAG);
+              rtos::ThisThread::sleep_for(std::chrono::seconds(5));
+              State::stateFlags.set(GlobalStates::stateList[INDEX_MAIN_MENU]->getFlagName());
+          }
     }
 }
 

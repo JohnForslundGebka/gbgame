@@ -69,6 +69,9 @@ void MicGame::game() {
     using namespace std::chrono;
     //class that is used for handling highscores and leaderboards
     Scores &leaderBoard = Scores::getInstance();
+    //class that is used for challenges
+    ChallengeHandler &challengeHandler = ChallengeHandler::getInstance();
+    challengeMode = challengeHandler.startingAChallenge || challengeHandler.respondingToChallenge;
 
     const int GAME_LENGTH = 15;             //Length in seconds of a game
     int lastTime = 0;                       //Keeps track of when to update score
@@ -106,26 +109,8 @@ void MicGame::game() {
     //Exit the waveform loop for proper termination of thread
     m_runWaveform = false;
 
-    //class that is used for challenges
-    ChallengeHandler &challengeHandler = ChallengeHandler::getInstance();
-
-    //if a challenge is being played, do not send score to leaderboard
-    if(challengeHandler.startingAChallenge) {
-        challengeHandler.endStartChallenge(this,m_score);
-
-    } else if (challengeHandler.respondingToChallenge) { //if the user is responding to a challenge
-
-        String player1name = challengeHandler.currentChallenge->m_player1Name;
-        int player1Score = challengeHandler.currentChallenge->m_player1Score;
-        String player2name = challengeHandler.currentChallenge->m_player2Name;
-
-        if(challengeHandler.endResponseToChallenge(m_score)){
-                m_canvas->drawChallengeWinScreen(player1name,player1Score,player2name,m_score);
-                m_gameFlags.set(SCREEN_UPDATE_FLAG);
-                rtos::ThisThread::sleep_for(5s);
-                State::stateFlags.set(GlobalStates::stateList[INDEX_MAIN_MENU]->getFlagName());
-        }
-        
+    if(challengeMode){
+        challenge(m_score);
     } else {
             //check is highscore can get onto the leaderboard
         if(leaderBoard.addScore(m_score,this)) {
@@ -264,7 +249,6 @@ void MicGame::incrementCounter() {
     m_timeCounter++;
 }
 
-
 //Updates the ball position based on mic input, adjust sleep_for parameter to change speed
 void MicGame::updatePosition(int change) {
 
@@ -281,5 +265,30 @@ void MicGame::updatePosition(int change) {
             m_position = 30;
         }
         rtos::ThisThread::sleep_for(3);
+    }
+}
+
+//sends challengedata to database
+void MicGame::challenge(int score) {
+    ChallengeHandler &ch = ChallengeHandler::getInstance();
+    //If the user is starting a new challenge
+    if(ch.startingAChallenge) {
+        ch.endStartChallenge(this,score);
+    } else if (ch.respondingToChallenge){
+        //get info from player 1
+        String player1name = ch.currentChallenge->m_player1Name;
+        int player1Score = ch.currentChallenge->m_player1Score;
+        String player2name = ch.currentChallenge->m_player2Name;
+        if(ch.endResponseToChallenge(score)){
+            m_canvas->drawChallengeWinScreen(player1name,player1Score,player2name,score);
+            m_gameFlags.set(SCREEN_UPDATE_FLAG);
+            rtos::ThisThread::sleep_for(std::chrono::seconds(5));
+            State::stateFlags.set(GlobalStates::stateList[INDEX_MAIN_MENU]->getFlagName());
+        } else {
+            m_canvas->drawChallengeLooseScreen(player1name,player1Score,player2name,score);
+            m_gameFlags.set(SCREEN_UPDATE_FLAG);
+            rtos::ThisThread::sleep_for(std::chrono::seconds(5));
+            State::stateFlags.set(GlobalStates::stateList[INDEX_MAIN_MENU]->getFlagName());
+        }
     }
 }
