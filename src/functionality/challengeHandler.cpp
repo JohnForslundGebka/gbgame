@@ -21,9 +21,9 @@ void ChallengeHandler::respondToChallenge(Challenge* challenge) {
 
   respondingToChallenge = true;
 
-  if (game=="Measury"){
+  if (game == "Measury"){
       State::stateFlags.set(GlobalStates::stateList[INDEX_DISTANCE_GAME]->getFlagName());
-  } else if(game=="Voicy")
+  } else if(game == "Voicy")
   {
       State::stateFlags.set(GlobalStates::stateList[INDEX_MIC_GAME]->getFlagName());
   }

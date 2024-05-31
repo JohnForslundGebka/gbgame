@@ -73,96 +73,83 @@ void DistanceGame::game() {
     //class that is used for challenges
     ChallengeHandler &challengeHandler = ChallengeHandler::getInstance();
 
+    for (int i = 0; i < MAX_ROUNDS; i++) {
+        //Seeds the random generator and generates the target length
+        randomSeed(millis());
+        m_targetLength = random(10, 100);
+        //Creates and starts a thread that blink the screen text "button A"
+        rtos::ThisThread::sleep_for(50ms);
+        Thread t_screenBlink;
+        t_screenBlink.start(mbed::callback(this, &DistanceGame::screenBlink));
 
-#ifdef DEBUG
-    Serial.println("NU BORJAR JAG");
-#endif
+        m_canvas->drawScreen1();
+        m_gameFlags.set(SCREEN_UPDATE_FLAG);
 
-      for (int i = 0; i < MAX_ROUNDS; i++) {
-          //Seeds the random generator and generates the target length
-          randomSeed(millis());
-          m_targetLength = random(10, 100);
-          //Creates and starts a thread that blink the screen text "button A"
-          rtos::ThisThread::sleep_for(50ms);
-          Thread t_screenBlink;
-          t_screenBlink.start(mbed::callback(this, &DistanceGame::screenBlink));
+        //Waits for user to press A to measure distance
+        m_gameFlags.wait_any(ADVANCE_GAME_FLAG, osWaitForever, true);
 
-#ifdef DEBUG
-          Serial.println("NU GÖR JAG THREAD");
-#endif
-          m_canvas->drawScreen1();
-          m_gameFlags.set(SCREEN_UPDATE_FLAG);
+        t_screenBlink.join();
 
-          //Waits for user to press A to measure distance
-          m_gameFlags.wait_any(ADVANCE_GAME_FLAG, osWaitForever, true);
+        //Measures distance and calculates how far off the user was.
+        m_measured = ultrasonic.readDistance();
+        m_score = abs(m_targetLength - m_measured);
 
-          t_screenBlink.join();
+        if (m_score == 0) {
+            m_score = 1;
+        }
 
-          //Measures distance and calculates how far off the user was.
-          m_measured = ultrasonic.readDistance();
-          m_score = abs(m_targetLength - m_measured);
+        double normalizedDifference = static_cast<double>(m_score) / m_targetLength;
 
-          if (m_score == 0) {
-              m_score = 1;
-          }
+        // Calculate the score: (1 - normalizedDifference) ensures that a smaller difference yields a higher score
+        // Multiply by 100 to scale it up to the score range and use max to ensure the score is never negative
+        int score = std::max(0, static_cast<int>((1 - normalizedDifference) * 100));
 
-          double normalizedDifference = static_cast<double>(m_score) / m_targetLength;
+        m_totScore += score;
 
-          // Calculate the score: (1 - normalizedDifference) ensures that a smaller difference yields a higher score
-          // Multiply by 100 to scale it up to the score range and use max to ensure the score is never negative
-          int score = std::max(0, static_cast<int>((1 - normalizedDifference) * 100));
-
-          m_totScore += score;
-
-          //Draws screen2 with the results and sets the flag to update screen
-          m_canvas->drawScreen2();
-          m_gameFlags.set(SCREEN_UPDATE_FLAG);
+        //Draws screen2 with the results and sets the flag to update screen
+        m_canvas->drawScreen2();
+        m_gameFlags.set(SCREEN_UPDATE_FLAG);
 
 
-          //Waits for button A press to finish the game
-          m_gameFlags.wait_any(ADVANCE_GAME_FLAG, osWaitForever, true);
-      }
+        //Waits for button A press to finish the game
+        m_gameFlags.wait_any(ADVANCE_GAME_FLAG, osWaitForever, true);
+    }
 
-      //if a challenge is being played, do not send score to leaderboard
-     if(challengeHandler.startingAChallenge) {
-         challengeHandler.endStartChallenge(this,m_totScore);
+    //if a challenge is being played, do not send score to leaderboard
+    if(challengeHandler.startingAChallenge) {
+        challengeHandler.endStartChallenge(this,m_totScore);
 
-     } else if (challengeHandler.respondingToChallenge){
+    } else if (challengeHandler.respondingToChallenge){
 
-         String player1name = challengeHandler.currentChallenge->m_player1Name;
-         int player1Score = challengeHandler.currentChallenge->m_player1Score;
-         String player2name = challengeHandler.currentChallenge->m_player2Name;
-         if(challengeHandler.endResponseToChallenge(m_totScore)){
-                 m_canvas->drawChallengeWinScreen(player1name,player1Score,player2name,m_totScore);
-                 m_gameFlags.set(SCREEN_UPDATE_FLAG);
-                 rtos::ThisThread::sleep_for(5s);
-                 State::stateFlags.set(GlobalStates::stateList[INDEX_MAIN_MENU]->getFlagName());
-         }
+        String player1name = challengeHandler.currentChallenge->m_player1Name;
+        int player1Score = challengeHandler.currentChallenge->m_player1Score;
+        String player2name = challengeHandler.currentChallenge->m_player2Name;
+        if(challengeHandler.endResponseToChallenge(m_totScore)){
+                m_canvas->drawChallengeWinScreen(player1name,player1Score,player2name,m_totScore);
+                m_gameFlags.set(SCREEN_UPDATE_FLAG);
+                rtos::ThisThread::sleep_for(5s);
+                State::stateFlags.set(GlobalStates::stateList[INDEX_MAIN_MENU]->getFlagName());
+        }
+        
+    } else {
+        if (m_totScore > leaderBoard.maxScores[m_flagName]) {
+            m_canvas->drawScreen4();
+            m_gameFlags.set(SCREEN_UPDATE_FLAG);
+            rtos::ThisThread::sleep_for(1s);
+        }
+        if (leaderBoard.addScore(m_totScore, this)) {
+            m_isRunning = false;
+            State::stateFlags.set(GlobalStates::stateList[INDEX_NEW_HIGHSCORE]->getFlagName());
+        } else {
+            m_canvas->drawScreen3(m_totScore);
+            m_gameFlags.set(SCREEN_UPDATE_FLAG);
 
-     }else {
-         if (m_totScore > leaderBoard.maxScores[m_flagName]) {
-             m_canvas->drawScreen4();
-             m_gameFlags.set(SCREEN_UPDATE_FLAG);
-             rtos::ThisThread::sleep_for(1s);
-         }
-         if (leaderBoard.addScore(m_totScore, this)) {
-             m_isRunning = false;
-             State::stateFlags.set(GlobalStates::stateList[INDEX_NEW_HIGHSCORE]->getFlagName());
-         } else {
-             m_canvas->drawScreen3(m_totScore);
-             m_gameFlags.set(SCREEN_UPDATE_FLAG);
-
-             rtos::ThisThread::sleep_for(3s);
-             //Return to main manu when game finish
-             m_isRunning = false;
-             State::stateFlags.set(GlobalStates::stateList[INDEX_MAIN_MENU]->getFlagName());
-         }
-     }
-
-#ifdef DEBUG
-   Serial.println("NU HAR GAME KÖRTS KLART");
-#endif
-
+            rtos::ThisThread::sleep_for(3s);
+            //Return to main manu when game finish
+            m_isRunning = false;
+            State::stateFlags.set(GlobalStates::stateList[INDEX_MAIN_MENU]->getFlagName());
+        }
+    }
 }
 
 void DistanceGame::run() {
@@ -171,10 +158,6 @@ void DistanceGame::run() {
     using namespace mbed;
     //Starts the threads
     m_isRunning = true;
-
-#ifdef DEBUG
-    Serial.println("NU RUN JAG");
-#endif
 
     t_gameLogic = new Thread;
     t_screenUpdate = new Thread;
@@ -185,62 +168,44 @@ void DistanceGame::run() {
     t_gameLogic->start(mbed::callback(this, &DistanceGame::game));
     t_userInput->start(mbed::callback(this, &DistanceGame::handleInput));
     t_screenUpdate->start(mbed::callback(this, &DistanceGame::update));
-
-#ifdef DEBUG
-    Serial.println("NU RUN JAG FÄRDIGT");
-#endif
 }
 
 void DistanceGame::stop() {
     using namespace std::chrono;
-#ifdef DEBUG
-    Serial.println("NU STOPPAR DISTANCEGAME");
-#endif
+
     m_isRunning = false;
     //set flags, to not be stuck in waiting
     Buttons::states.set(Buttons::START_FLAG | Buttons::A_FLAG);
     m_gameFlags.set(SCREEN_UPDATE_FLAG | ADVANCE_GAME_FLAG);
-#ifdef DEBUG
-    Serial.println("AVSLUTAR TRÅDAR");
-#endif
+
     // Finnish threads and clean upp pointers
     if(t_gameLogic) {
         t_gameLogic->join();
         delete t_gameLogic;
         t_gameLogic = nullptr;
     }
-#ifdef DEBUG
-    Serial.println("AVSLUTAT GAME LOGIC");
-#endif
+
     if(t_userInput){
         t_userInput->join();
         delete t_userInput;
         t_userInput = nullptr;
     }
-#ifdef DEBUG
-    Serial.println("AVSLUTAT USER INPUT");
-#endif
+
     if(t_screenUpdate){
         t_screenUpdate->join();
         delete t_screenUpdate;
         t_screenUpdate = nullptr;
     }
-#ifdef DEBUG
-    Serial.println("AVSLUTAT SCREEN UPDARE");
-#endif
 
     delete m_canvas; // Properly delete the m_canvas when stopping
     m_canvas = nullptr;
-
 
     //clear all flags before exiting
     m_gameFlags.clear(SCREEN_UPDATE_FLAG | ADVANCE_GAME_FLAG);
     Buttons::states.clear(Buttons::START_FLAG | Buttons::A_FLAG);
 
     rtos::ThisThread::sleep_for(10ms);
-#ifdef DEBUG
-    Serial.println("HEJDA FRAN STOP I DISTANCEGAME");
-#endif
+
 }
 
 void DistanceGame::screenBlink() {
