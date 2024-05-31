@@ -190,9 +190,10 @@ void MultiplayerMenu::run() {
     using namespace mbed;
     DataTransmit &wifi = DataTransmit::getInstance();
     m_canvas = new MultiplayerMenuUI(this);
+    m_myGamesList.clear();
 
     if(!wifi.wifiIsConnected){
-        m_canvas->drawNotConnectedScreen();
+        m_canvas->drawNotConnectedScreen(); //draw wifi message screen
         m_displayManager.updateScreen(&m_canvas->c_main);
         ThisThread::sleep_for(std::chrono::seconds(3));
         State::stateFlags.set(GlobalStates::stateList[INDEX_MAIN_MENU]->getFlagName());
@@ -203,6 +204,15 @@ void MultiplayerMenu::run() {
         //get all the challenges from the database
         ChallengeHandler &challengeHandler = ChallengeHandler::getInstance();
         challengeHandler.getChallengesFromLobby(m_lobbyList);
+
+        //fill m_myGamesList vector with pointers to the users challenges
+        for (auto &challenge : challengeHandler.challenges)
+        {
+            if(challenge.m_player1Name == wifi.userName) {
+                m_myGamesList.push_back(&challenge);
+            }
+        }
+
         //Starts the threads
         m_isRunning = true;
         t_gameLogic = new Thread;
@@ -212,7 +222,6 @@ void MultiplayerMenu::run() {
         t_userInput->start(mbed::callback(this, &MultiplayerMenu::handleInput));
         t_screenUpdate->start(mbed::callback(this, &MultiplayerMenu::update));
 
-        //t_userInput->set_priority(osPriorityAboveNormal1);
         m_gameFlags.set(INPUT_UPDATE_FLAG);
     }
 

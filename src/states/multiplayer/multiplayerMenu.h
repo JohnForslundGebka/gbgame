@@ -15,6 +15,7 @@
 #include "hardware/buttons.h"
 #include "hardware/displayManager.h"
 #include "multiplayerMenuUI.h"
+#include "functionality/challenge.h"
 
 
 class MultiplayerMenu : public State {
@@ -37,7 +38,7 @@ private:
 
 public:
     std::vector<String> m_lobbyList;
-    std::vector<String> m_myGamesList = {"Voicy", "Measury", "Voicy"};
+    std::vector<Challenge*> m_myGamesList;
 
     bool m_optionEntered = false;
     bool m_execute = false;

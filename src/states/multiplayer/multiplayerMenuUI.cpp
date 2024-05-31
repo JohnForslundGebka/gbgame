@@ -40,7 +40,6 @@ void MultiplayerMenuUI::drawScreen1() {
     
 }
 
-//password screen
 void MultiplayerMenuUI::drawScreen2() {
     c_main.C.fillRect(0, 0, 128, 128, BLACK);
 
@@ -88,7 +87,7 @@ void MultiplayerMenuUI::drawScreen3() {
     c_main.C.print("a game! ");
     
 }
-
+//draw my games screen
 void MultiplayerMenuUI::drawScreen4() {
     ChallengeHandler &challengeHandler = ChallengeHandler::getInstance();
     DataTransmit &wifi = DataTransmit::getInstance();
@@ -104,22 +103,13 @@ void MultiplayerMenuUI::drawScreen4() {
 
     int cursorPosition = 30;
 
-    std::vector<Challenge> myChallenges;
-
-    for (auto &challenge : challengeHandler.challenges)
-    {
-        if(challenge.m_player1Name == wifi.userName) {
-            myChallenges.push_back(challenge);
-        }
-    }
-
     int index = 0;
     c_main.C.setTextSize(1);
-    for (auto &challenge : myChallenges){
+    for (auto &challenge : parentState->m_myGamesList){
         c_main.C.setTextColor((*parentState->m_optionPtr == index) ? GREEN : 0x738E);
 
         c_main.C.setCursor(4, cursorPosition);
-        c_main.C.print(challenge.m_challengeSummery);
+        c_main.C.print(challenge->m_challengeSummery);
 
         cursorPosition += 10;
         index++;
