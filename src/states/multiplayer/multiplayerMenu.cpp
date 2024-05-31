@@ -158,13 +158,13 @@ void MultiplayerMenu::game() {
                 if (m_execute) {
                     
                     //This function need to be fixed.
-                    //m_canvas ->drawChallengeInfo(&m_myGamesList[m_subOption]);
+                    m_canvas->drawChallengeInfo(m_myGamesList[m_subOption]);
 
                     //Clear flags
                     m_option = 0;
                     m_optionEntered = false;
                     m_execute = false;
-                    m_gameFlags.set(INPUT_UPDATE_FLAG);
+                    m_gameFlags.set(SCREEN_UPDATE_FLAG);
                 }
             }
         }
