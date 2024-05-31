@@ -156,7 +156,13 @@ void MultiplayerMenuUI::drawChallengeInfo(Challenge* challenge) {
     c_main.C.setCursor(11, 2);
     c_main.C.print("Challenge");
     c_main.C.setTextColor(0x57FF);
-    c_main.C.setCursor(37, 29);
+
+    if (challenge->m_game == "Measury") {
+        c_main.C.setCursor(20, 29);
+    } else {
+        c_main.C.setCursor(37, 29);
+    }
+    
     c_main.C.print(challenge->m_game);
     c_main.C.setTextColor(0xFABF);
     c_main.C.setCursor(4, 53);
