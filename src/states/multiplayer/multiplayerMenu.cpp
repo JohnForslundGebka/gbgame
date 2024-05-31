@@ -122,8 +122,9 @@ void MultiplayerMenu::game() {
                     m_optionEntered = false;
                     m_option = 0;
 
+                    if(m_lobbyList.size()>0){
                     //Use m_subOption to index which challenge to start.
-                    challengeHandler.respondToChallenge(m_lobbyList[m_subOption]);
+                    challengeHandler.respondToChallenge(m_lobbyList[m_subOption]);}
                 }
             }
 
