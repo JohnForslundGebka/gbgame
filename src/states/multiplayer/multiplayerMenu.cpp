@@ -97,8 +97,6 @@ void MultiplayerMenu::game() {
     using namespace mbed;
     using namespace std::chrono;
 
-
-    
     while (m_isRunning) {
 
         m_gameFlags.wait_any(INPUT_UPDATE_FLAG,osWaitForever, true);

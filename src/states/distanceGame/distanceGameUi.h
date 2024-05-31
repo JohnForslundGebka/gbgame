@@ -22,10 +22,8 @@ public:
     void drawScreen3(int score);
     void drawScreen4();
     void drawChallengeWinScreen(String &player1name, int player1score, String &player2name, int player2score);
-    void drawChallengeLooseScreen();
-
+    void drawChallengeLooseScreen(String &player1name, int player1score, String &player2name, int player2score);
 private:
-
 
 };
 

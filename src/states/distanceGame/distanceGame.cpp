@@ -128,15 +128,20 @@ void DistanceGame::game() {
          challengeHandler.endStartChallenge(this,m_totScore);
 
      } else if (challengeHandler.respondingToChallenge){
-
+        //get info from player 1
          String player1name = challengeHandler.currentChallenge->m_player1Name;
          int player1Score = challengeHandler.currentChallenge->m_player1Score;
          String player2name = challengeHandler.currentChallenge->m_player2Name;
-         if(challengeHandler.endResponseToChallenge(m_totScore)){
+         if(challengeHandler.endResponseToChallenge(m_totScore)){  //if the user won
                  m_canvas->drawChallengeWinScreen(player1name,player1Score,player2name,m_totScore);
                  m_gameFlags.set(SCREEN_UPDATE_FLAG);
                  rtos::ThisThread::sleep_for(5s);
                  State::stateFlags.set(GlobalStates::stateList[INDEX_MAIN_MENU]->getFlagName());
+         } else {
+             m_canvas->drawChallengeLooseScreen(player1name,player1Score,player2name,m_totScore);
+             m_gameFlags.set(SCREEN_UPDATE_FLAG);
+             rtos::ThisThread::sleep_for(5s);
+             State::stateFlags.set(GlobalStates::stateList[INDEX_MAIN_MENU]->getFlagName());
          }
 
      }else {
