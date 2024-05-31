@@ -47,7 +47,7 @@ public:
     int m_option = 0;
     int m_subOption = 0;
     int *m_optionPtr = &m_option;
-    int m_optionMAX = 3;
+    unsigned int m_optionMAX = 3;
 
     MultiplayerMenu();
 

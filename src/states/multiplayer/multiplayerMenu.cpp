@@ -106,6 +106,7 @@ void MultiplayerMenu::game() {
 
         if (m_optionEntered) {
 
+            m_subOption = 0;
             m_optionPtr = &m_subOption;
 
             if (m_option == LOBBY) {
@@ -154,6 +155,7 @@ void MultiplayerMenu::game() {
             // Display the set name screen and sets letter edit ranges
             else if (m_option == MY_GAMES) {
 
+                m_optionMAX = m_myGamesList.size() - 1;
                 m_canvas->drawScreen4();
                 m_gameFlags.set(SCREEN_UPDATE_FLAG);
 

@@ -61,7 +61,7 @@ void MultiplayerMenuUI::drawScreen2() {
         c_main.C.setCursor(4, cursorPosition);
         c_main.C.print(parentState -> m_lobbyList[i]);
         
-        cursorPosition += 25;
+        cursorPosition += 12;
     }
  
 
