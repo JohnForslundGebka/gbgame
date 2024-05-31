@@ -153,22 +153,33 @@ void MultiplayerMenuUI::drawChallengeInfo(Challenge* challenge) {
     c_main.C.print("Challenge");
     c_main.C.setTextColor(0x57FF);
     c_main.C.setCursor(37, 29);
-    c_main.C.print("Game");
+    c_main.C.print(challenge->m_game);
     c_main.C.setTextColor(0xFABF);
     c_main.C.setCursor(4, 53);
-    c_main.C.print("Name1");
+    c_main.C.print(challenge->m_player1Name);
     c_main.C.setCursor(4, 74);
-    c_main.C.print("Name2");
+    c_main.C.print(challenge->m_player2Name);
     c_main.C.setTextColor(0x540);
     c_main.C.setCursor(95, 53);
-    c_main.C.print("P1");
+    c_main.C.print(challenge->m_player1Score);
     c_main.C.setCursor(95, 74);
-    c_main.C.print("P2");
+    c_main.C.print(challenge->m_player2Score);
     c_main.C.setTextColor(0xFFFF);
     c_main.C.setTextSize(1);
     c_main.C.setCursor(38, 105);
+
+    if (challenge->m_played) {
+        if (wifi.userName == challenge->m_winner) {
+            c_main.C.print("You won!");
+        } else {
+            c_main.C.print("You lost!");
+        }
+
+    } else {
+        c_main.C.print("Not played!");
+    }
     
-    c_main.C.print("You won!");
+    
 
 }
 
