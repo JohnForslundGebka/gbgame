@@ -37,7 +37,7 @@ private:
     };
 
 public:
-    std::vector<String> m_lobbyList;
+    std::vector<Challenge*> m_lobbyList;
     std::vector<Challenge*> m_myGamesList;
 
     bool m_optionEntered = false;

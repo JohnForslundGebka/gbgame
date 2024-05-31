@@ -40,7 +40,7 @@ void MultiplayerMenuUI::drawScreen1() {
     
 }
 
-void MultiplayerMenuUI::drawScreen2() {
+void MultiplayerMenuUI::drawLobbyList() {
     c_main.C.fillRect(0, 0, 128, 128, BLACK);
 
     c_main.C.setTextColor(WHITE);
@@ -52,19 +52,17 @@ void MultiplayerMenuUI::drawScreen2() {
     c_main.C.drawLine(0, 20, 128, 20, WHITE);   
 
     int cursorPosition = 30;
-
+    int index = 0;
     c_main.C.setTextSize(1);
-    for (int i = 0; i < parentState -> m_lobbyList.size(); i++) {
-        //Sets color of selected option
-        c_main.C.setTextColor(*parentState->m_optionPtr == i ? GREEN : 0x738E);
+    for (auto &challenge : parentState->m_lobbyList){
+        c_main.C.setTextColor((*parentState->m_optionPtr == index) ? GREEN : 0x738E);
 
         c_main.C.setCursor(4, cursorPosition);
-        c_main.C.print(parentState -> m_lobbyList[i]);
-        
-        cursorPosition += 12;
-    }
- 
+        c_main.C.print(challenge->m_challengeSummery);
 
+        cursorPosition += 12;
+        index++;
+    }
 }
 
 void MultiplayerMenuUI::drawScreen3() {

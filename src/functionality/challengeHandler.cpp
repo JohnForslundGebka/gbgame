@@ -13,6 +13,8 @@ ChallengeHandler::ChallengeHandler() {
 }
 
 void ChallengeHandler::respondToChallenge(int numberOfChallengeInVector) {
+
+
   currentChallenge = &challenges[numberOfChallengeInVector];
   String game = currentChallenge->m_game;
 
@@ -83,12 +85,14 @@ void ChallengeHandler::endStartChallenge(State *state, int score) {
     State::stateFlags.set(GlobalStates::stateList[INDEX_MULTIPLAYER_MENU]->getFlagName());
 }
 
-void ChallengeHandler::getChallengesFromLobby(std::vector<String> &lobbyList) {
+void ChallengeHandler::getChallengesFromLobby(std::vector<Challenge*> &lobbyList) {
     challenges.clear();
     lobbyList.clear();
     wifi.getChallengesFromData(challenges);
     //add challenges to lobbylist
     for (auto &challenge: challenges) {
-        lobbyList.push_back(challenge.m_challengeSummery);
+        if (!challenge.m_played) {
+            lobbyList.push_back(&challenge);
+        }
     }
 }

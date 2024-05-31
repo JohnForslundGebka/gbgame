@@ -20,7 +20,7 @@ public:
 
     void respondToChallenge(int numberOfChallengeInVector);
     bool endResponseToChallenge(int score);
-    void getChallengesFromLobby(std::vector<String> &lobbyList);
+    void getChallengesFromLobby(std::vector<Challenge*> &lobbyList);
 
     DataTransmit &wifi = DataTransmit::getInstance();
     bool respondingToChallenge = false;

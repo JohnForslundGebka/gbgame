@@ -17,7 +17,7 @@ public:
     void init();
     
     void drawScreen1();           // Draws the menu options
-    void drawScreen2();           // Draws lobby screen
+    void drawLobbyList();           // Draws lobby screen
     void drawScreen3();           // Draws new screen
     void drawScreen4();           // Draws my games screen
     void drawNotConnectedScreen();

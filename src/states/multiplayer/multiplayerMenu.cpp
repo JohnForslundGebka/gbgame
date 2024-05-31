@@ -106,12 +106,11 @@ void MultiplayerMenu::game() {
 
         if (m_optionEntered) {
 
-            m_subOption = 0;
             m_optionPtr = &m_subOption;
 
             if (m_option == LOBBY) {
 
-                m_canvas->drawScreen2();
+                m_canvas->drawLobbyList();
                 m_gameFlags.set(SCREEN_UPDATE_FLAG);
                 
                 //Sets the number of maximum selectable options in the lobby list
