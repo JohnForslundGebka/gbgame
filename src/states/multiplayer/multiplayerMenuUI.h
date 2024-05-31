@@ -1,8 +1,8 @@
-#ifndef GBGAME_MULTIPLAYER_UI_H
-#define GBGAME_MULTIPLAYER_UI_H
+#ifndef GBGAME_multiplayerMenuUI_H
+#define GBGAME_multiplayerMenuUI_H
 #include "ui/canvas.h"
 #include "core/macros.h"
-#include "core/state.h" 
+//#include "core/state.h"
 
 class MultiplayerMenu; // Forward declaration
 
@@ -17,9 +17,11 @@ public:
     void init();
     
     void drawScreen1();           // Draws the menu options
-    void drawScreen2();           // Draws lobby screen
+    void drawLobbyList();           // Draws lobby screen
     void drawScreen3();           // Draws new screen
     void drawScreen4();           // Draws my games screen
+    void drawNotConnectedScreen();
+    void drawWaitingScreen();
 
     const String m_menuOptions[3] = {
         "   Lobby",
@@ -32,4 +34,4 @@ private:
 
 };
 
-#endif //GBGAME_MULTIPLAYER_UI_H
+#endif //GBGAME_multiplayerMenuUI_H

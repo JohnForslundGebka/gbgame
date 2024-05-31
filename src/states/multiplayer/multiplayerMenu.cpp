@@ -2,6 +2,8 @@
 #include "rtos.h"
 #include "mbed.h"
 #include <string>
+#include "functionality/challengeHandler.h"
+#include "wifi/dataTransmit.h"
 
 
 // Constructor, initializes the state with it's name "Wifi Menu"
@@ -39,33 +41,36 @@ void MultiplayerMenu::handleInput() {
                 if (!m_optionEntered) {
                     m_optionEntered = true;
                 }
+                Buttons::states.clear(Buttons::A_FLAG);
                 break;
 
             case Buttons::START_FLAG:
                 m_isRunning = false;
                 State::stateFlags.set(GlobalStates::stateList[INDEX_MAIN_MENU]->getFlagName());
+                Buttons::states.clear(Buttons::START_FLAG);
                 break;
 
             case Buttons::UP_FLAG:
                 (*m_optionPtr)--;
                 if (*m_optionPtr < 0) { *m_optionPtr = 0; } 
+                Buttons::states.clear(Buttons::UP_FLAG);               
                 break;
 
             case Buttons::DOWN_FLAG:
                 (*m_optionPtr)++;
                 if (*m_optionPtr > m_optionMAX) { *m_optionPtr = m_optionMAX; }
+                Buttons::states.clear(Buttons::DOWN_FLAG);
                 break;
 
             case Buttons::B_FLAG:
                 m_optionEntered = false;
+                Buttons::states.clear(Buttons::B_FLAG);
                 break;
 
             default:
                 break;
         }
-
         m_gameFlags.set(INPUT_UPDATE_FLAG);
-        Buttons::states.clear(Buttons::ALL_FLAG);
         ThisThread::sleep_for(50ms);
     }
 }
@@ -80,26 +85,32 @@ void MultiplayerMenu::update(){
     {
         m_gameFlags.wait_any(SCREEN_UPDATE_FLAG, osWaitForever);
         m_displayManager.updateScreen(&m_canvas->c_main);
+        //ThisThread::sleep_for(100ms); 
     }
 }
 
 void MultiplayerMenu::game() {
+    ChallengeHandler &challengeHandler = ChallengeHandler::getInstance();
+    challengeHandler.getChallengesFromLobby(m_lobbyList);
+
     using namespace rtos;
     using namespace mbed;
     using namespace std::chrono;
+
+
     
     while (m_isRunning) {
 
         m_gameFlags.wait_any(INPUT_UPDATE_FLAG,osWaitForever, true);
-        Serial.println(*m_optionPtr);
+
 
         if (m_optionEntered) {
 
             m_optionPtr = &m_subOption;
 
             if (m_option == LOBBY) {
-                
-                m_canvas->drawScreen2();
+
+                m_canvas->drawLobbyList();
                 m_gameFlags.set(SCREEN_UPDATE_FLAG);
                 
                 //Sets the number of maximum selectable options in the lobby list
@@ -111,9 +122,9 @@ void MultiplayerMenu::game() {
                     m_optionEntered = false;
                     m_option = 0;
 
-                    //Use m_subOption to index which challange to start.
-
-                    //Start the challange choosen from the list
+                    if(m_lobbyList.size()>0){
+                    //Use m_subOption to index which challenge to start.
+                    challengeHandler.respondToChallenge(m_lobbyList[m_subOption]);}
                 }
             }
 
@@ -125,18 +136,25 @@ void MultiplayerMenu::game() {
 
                 if (m_execute) {
                 
-                    //Clear flags and go to Games menu
+                    //Clear flags
                     m_option = 0;
                     m_execute = false;
                     m_optionEntered = false; 
 
-                    State::stateFlags.set(GlobalStates::stateList[INDEX_GAMES]->getFlagName());
+                   // State::stateFlags.set(GlobalStates::stateList[INDEX_GAMES]->getFlagName());
+
+                   //start a measury challenge, change later
+                   challengeHandler.startChallenge(INDEX_DISTANCE_GAME);
+
+                   String name = challengeHandler.challenges[2].m_player1Name;
+
                 }
             }
 
             // Display the set name screen and sets letter edit ranges
             else if (m_option == MY_GAMES) {
 
+                m_optionMAX = m_myGamesList.size() - 1;
                 m_canvas->drawScreen4();
                 m_gameFlags.set(SCREEN_UPDATE_FLAG);
 
@@ -146,7 +164,7 @@ void MultiplayerMenu::game() {
                     m_option = 0;
                     m_optionEntered = false;
                     m_execute = false;
-                    m_gameFlags.set(ADVANCE_GAME_FLAG);
+                    m_gameFlags.set(INPUT_UPDATE_FLAG);
                 }
             }
         }
@@ -171,35 +189,46 @@ void MultiplayerMenu::game() {
 void MultiplayerMenu::run() {
     using namespace rtos;
     using namespace mbed;
-
-    m_option = 0;
-    m_optionEntered = false;
-    m_execute = false;
-
-    //get all the challenges from the database
-    challengeHandler.getChallengesFromLobby(m_lobbyList);
-
-    //Starts the threads
-    m_isRunning = true;
-
-    t_gameLogic = new Thread;
-    t_screenUpdate = new Thread;
-    t_userInput = new Thread;
-
+    DataTransmit &wifi = DataTransmit::getInstance();
     m_canvas = new MultiplayerMenuUI(this);
+    m_myGamesList.clear();
 
-    t_gameLogic->start(mbed::callback(this, &MultiplayerMenu::game));
-    t_userInput->start(mbed::callback(this, &MultiplayerMenu::handleInput));
-    t_screenUpdate->start(mbed::callback(this, &MultiplayerMenu::update));
-    
-    //t_userInput->set_priority(osPriorityAboveNormal1);
-    m_gameFlags.set(INPUT_UPDATE_FLAG);
+    if(!wifi.wifiIsConnected){
+        m_canvas->drawNotConnectedScreen(); //draw wifi message screen
+        m_displayManager.updateScreen(&m_canvas->c_main);
+        ThisThread::sleep_for(std::chrono::seconds(3));
+        State::stateFlags.set(GlobalStates::stateList[INDEX_MAIN_MENU]->getFlagName());
+    } else {
+        m_option = 0;
+        m_optionEntered = false;
+        m_execute = false;
+        
+        m_canvas->drawWaitingScreen();
+        m_displayManager.updateScreen(&m_canvas->c_main);
 
-    // m_canvas->drawScreen2();
-    // m_gameFlags.set(SCREEN_UPDATE_FLAG);
+        //get all the challenges from the database
+        ChallengeHandler &challengeHandler = ChallengeHandler::getInstance();
+        challengeHandler.getChallengesFromLobby(m_lobbyList);
 
-    Serial.println("nu run jag multiplayer");
-                
+        //fill m_myGamesList vector with pointers to the users challenges
+        for (auto &challenge : challengeHandler.challenges)
+        {
+            if(challenge.m_player1Name == wifi.userName) {
+                m_myGamesList.push_back(&challenge);
+            }
+        }
+
+        //Starts the threads
+        m_isRunning = true;
+        t_gameLogic = new Thread;
+        t_screenUpdate = new Thread;
+        t_userInput = new Thread;
+        t_gameLogic->start(mbed::callback(this, &MultiplayerMenu::game));
+        t_userInput->start(mbed::callback(this, &MultiplayerMenu::handleInput));
+        t_screenUpdate->start(mbed::callback(this, &MultiplayerMenu::update));
+
+        m_gameFlags.set(INPUT_UPDATE_FLAG);
+    }
 
 }
 

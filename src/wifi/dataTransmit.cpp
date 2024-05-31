@@ -160,7 +160,7 @@ void DataTransmit::getNetworkNames(std::vector<String> &networkList) {
 
 void DataTransmit::getChallengesFromData(std::vector<Challenge> &challenges) {
    fbdo.clear();
-   String path = "/Lobby/Challenges";
+   String path = "/Lobby";
 
    if (Firebase.getJSON(fbdo, path)) {
        JsonDocument doc;
@@ -171,11 +171,38 @@ void DataTransmit::getChallengesFromData(std::vector<Challenge> &challenges) {
            return;
        }
        JsonObject obj = doc.as<JsonObject>();
-       for (JsonPair p : obj){
-            String ID = p.key().c_str();  // This is the challengeId
-            JsonObject challenge = p.value().as<JsonObject>();
-            challenges.emplace_back(ID,challenge);
+       for (JsonPair p : obj){   //create the challenge objects and put them into the vector
+           String ID = p.key().c_str();
+           JsonObject challengeInfo = p.value().as<JsonObject>();
+           // Extract each field from the JsonObject
+           String game = challengeInfo["game"].as<String>();
+           bool played = challengeInfo["played"].as<bool>();
+           String player1Name = challengeInfo["player1"]["name"].as<String>();
+           int player1Score = challengeInfo["player1"]["score"].as<int>();
+
+            challenges.emplace_back(ID,game,played,player1Name,player1Score);
        }
    }
 
+}
+
+void DataTransmit::sendChallengeToData(const String& challenge) {
+
+    String path = "/Lobby";
+    if (Firebase.pushJSON(fbdo, path, challenge)) {
+        Serial.println("Challenge added successfully.");
+        Serial.println("Generated Challenge ID: " + fbdo.pushName());  // Firebase generates a unique push ID
+    } else {
+        Serial.print("Failed to add challenge: ");
+        Serial.println(fbdo.errorReason());
+    }
+
+}
+
+void DataTransmit::endChallengeToData(String ID, const String& challengeData) {
+    String basePath = "/Lobby/";
+    String fullPath = basePath + ID;
+    if (!Firebase.setJSON(fbdo, fullPath, challengeData)) {
+        Serial.println("Failed to send data: " + fbdo.errorReason());
+    }
 }

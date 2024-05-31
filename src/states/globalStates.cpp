@@ -4,6 +4,7 @@
 #include "states/mainMenu/mainMenu.h"
 #include "states/subMenuGames/games.h"
 #include "states/settings/settings.h"
+
 #include "states/micGame/micGame.h"
 #include "states/highscore/highScore.h"
 #include "states/newHighscore/newHighscore.h"
@@ -18,6 +19,7 @@ namespace GlobalStates {
     DistanceGame distanceGame;
     Games games;
     Settings settings;
+
     MicGame micGame;
     HighScore highScore;
     NewHighscore newHighscore;

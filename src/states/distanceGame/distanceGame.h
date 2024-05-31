@@ -24,6 +24,7 @@
 #include "hardware/ultrasonic.h"
 #include "distanceGameUi.h"
 
+class ChallengeHandler;
 
 //Number of rounds for a game
 #define MAX_ROUNDS 3
@@ -39,7 +40,6 @@ private:
 
     //Canvas object for drawing the screens
     DistanceGameUi *m_canvas = nullptr;
-
 public:
     DistanceGame();
 

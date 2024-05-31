@@ -10,8 +10,8 @@
 #include "wifi/dataTransmit.h"
 #include "functionality/scores.h"
 #include "functionality/readWriteFlash.h"
-#include "functionality/challengeHandler.h"
 #include "mbed_stats.h"
+#include "functionality/challengeHandler.h"
 
 //#define DEBUG
 uint32_t State::instanceCounter = 0;
@@ -20,6 +20,7 @@ Buttons button;
 StateHandler stateHandler;
 Scores &scores = Scores::getInstance();
 DataTransmit &wifi = DataTransmit::getInstance();
+ChallengeHandler &challengeHandler = ChallengeHandler::getInstance();
 
 
 void print_memory_info() {

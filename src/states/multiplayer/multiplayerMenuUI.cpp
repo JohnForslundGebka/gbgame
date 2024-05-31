@@ -1,5 +1,8 @@
 #include "multiplayerMenuUI.h"
 #include "multiplayerMenu.h"
+#include "functionality/challengeHandler.h"
+#include "wifi/dataTransmit.h"
+
 
 MultiplayerMenuUI::MultiplayerMenuUI(MultiplayerMenu *pGame) : parentState(pGame), c_main(128, 128, 0, 0) {
 }
@@ -37,8 +40,7 @@ void MultiplayerMenuUI::drawScreen1() {
     
 }
 
-//password screen
-void MultiplayerMenuUI::drawScreen2() {
+void MultiplayerMenuUI::drawLobbyList() {
     c_main.C.fillRect(0, 0, 128, 128, BLACK);
 
     c_main.C.setTextColor(WHITE);
@@ -50,18 +52,17 @@ void MultiplayerMenuUI::drawScreen2() {
     c_main.C.drawLine(0, 20, 128, 20, WHITE);   
 
     int cursorPosition = 30;
-
-    for (int i = 0; i < parentState -> m_lobbyList.size(); i++) {
-        //Sets color of selected option
-        c_main.C.setTextColor(*parentState->m_optionPtr == i ? GREEN : 0x738E);
+    int index = 0;
+    c_main.C.setTextSize(1);
+    for (auto &challenge : parentState->m_lobbyList){
+        c_main.C.setTextColor((*parentState->m_optionPtr == index) ? GREEN : 0x738E);
 
         c_main.C.setCursor(4, cursorPosition);
-        c_main.C.print(parentState -> m_lobbyList[i]);
-        
-        cursorPosition += 25;
-    }
- 
+        c_main.C.print(challenge->m_challengeSummery);
 
+        cursorPosition += 12;
+        index++;
+    }
 }
 
 void MultiplayerMenuUI::drawScreen3() {
@@ -84,8 +85,11 @@ void MultiplayerMenuUI::drawScreen3() {
     c_main.C.print("a game! ");
     
 }
-
+//draw my games screen
 void MultiplayerMenuUI::drawScreen4() {
+    ChallengeHandler &challengeHandler = ChallengeHandler::getInstance();
+    DataTransmit &wifi = DataTransmit::getInstance();
+
     c_main.C.fillRect(0, 0, 128, 128, BLACK);
 
     c_main.C.setTextColor(WHITE);
@@ -97,16 +101,43 @@ void MultiplayerMenuUI::drawScreen4() {
 
     int cursorPosition = 30;
 
-    for (int i = 0; i < parentState -> m_myGamesList.size(); i++) {
-        //Sets color of selected option
-        c_main.C.setTextColor(*parentState->m_optionPtr == i ? GREEN : 0x738E);
+    int index = 0;
+    c_main.C.setTextSize(1);
+    for (auto &challenge : parentState->m_myGamesList){
+        c_main.C.setTextColor((*parentState->m_optionPtr == index) ? GREEN : 0x738E);
 
         c_main.C.setCursor(4, cursorPosition);
-        c_main.C.print(parentState -> m_myGamesList[i]);
-        
-        cursorPosition += 25;
+        c_main.C.print(challenge->m_challengeSummery);
+
+        cursorPosition += 10;
+        index++;
     }
-    
+}
+
+void MultiplayerMenuUI::drawNotConnectedScreen() {
+    c_main.C.fillScreen(BLACK);
+    c_main.C.drawBitmap(43, 76, image_Restoring_bits, 38, 32, 0xFFFF);
+    c_main.C.setTextColor(0xFFFF);
+    c_main.C.setTextSize(2);
+    c_main.C.setTextWrap(false);
+    c_main.C.setCursor(25, 4);
+    c_main.C.print("Please ");
+    c_main.C.setCursor(24, 21);
+    c_main.C.print("connect");
+    c_main.C.setCursor(23, 40);
+    c_main.C.print("to wifi");
+    c_main.C.setTextSize(1);
+    c_main.C.setCursor(21, 59);
+    c_main.C.print("for mulitplayer");
+}
+void MultiplayerMenuUI::drawWaitingScreen() {
+    c_main.C.fillScreen(BLACK);
+    c_main.C.drawBitmap(43, 76, image_Restoring_bits, 38, 32, 0xFFFF);
+    c_main.C.setTextColor(0xFFFF);
+    c_main.C.setTextSize(2);
+    c_main.C.setTextWrap(false);
+    c_main.C.setCursor(3, 25);
+    c_main.C.print("Waiting... ");
 }
 
 

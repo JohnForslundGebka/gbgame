@@ -4,9 +4,8 @@
  * 
  * @class
  */
-
-#ifndef GBGAME_MULTIPLAYER_H
-#define GBGAME_MULTIPLAYER_H
+#ifndef GBGAME_multiplayerMenu_h
+#define GBGAME_multiplayerMenu_h
 #include <Arduino.h>
 #include <vector>
 #include "core/macros.h"
@@ -16,8 +15,8 @@
 #include "hardware/buttons.h"
 #include "hardware/displayManager.h"
 #include "multiplayerMenuUI.h"
-#include "functionality/challengeHandler.h"
-#include "wifi/dataTransmit.h"
+#include "functionality/challenge.h"
+
 
 class MultiplayerMenu : public State {
 private:
@@ -29,8 +28,7 @@ private:
 
     //Canvas object for drawing the screens
     MultiplayerMenuUI *m_canvas = nullptr;
-    DataTransmit &wifi = DataTransmit::getInstance();
-    ChallengeHandler &challengeHandler = ChallengeHandler::getInstance();
+
 
     enum {
         LOBBY,
@@ -39,8 +37,8 @@ private:
     };
 
 public:
-    std::vector<String> m_lobbyList = {"greger", "johan", "peter", "häst"};
-    std::vector<String> m_myGamesList = {"Voicy", "Measury", "Voicy"};
+    std::vector<Challenge*> m_lobbyList;
+    std::vector<Challenge*> m_myGamesList;
 
     bool m_optionEntered = false;
     bool m_execute = false;
@@ -49,7 +47,7 @@ public:
     int m_option = 0;
     int m_subOption = 0;
     int *m_optionPtr = &m_option;
-    int m_optionMAX = 3;
+    unsigned int m_optionMAX = 3;
 
     MultiplayerMenu();
 
@@ -62,4 +60,4 @@ public:
 
 };
 
-#endif //GBGAME_MULTIPLAYER_H
+#endif //GBGAME_multiplayerMenu_h
