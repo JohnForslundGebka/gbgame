@@ -3,6 +3,7 @@
 #include "mbed.h"
 #include <string>
 #include "functionality/challengeHandler.h"
+#include "wifi/dataTransmit.h"
 
 
 // Constructor, initializes the state with it's name "Wifi Menu"
@@ -187,37 +188,33 @@ void MultiplayerMenu::game() {
 void MultiplayerMenu::run() {
     using namespace rtos;
     using namespace mbed;
-
-
-    m_option = 0;
-    m_optionEntered = false;
-    m_execute = false;
-
-    //get all the challenges from the database
-    ChallengeHandler &challengeHandler = ChallengeHandler::getInstance();
-    challengeHandler.getChallengesFromLobby(m_lobbyList);
-
-    //Starts the threads
-    m_isRunning = true;
-
-    t_gameLogic = new Thread;
-    t_screenUpdate = new Thread;
-    t_userInput = new Thread;
-
+    DataTransmit &wifi = DataTransmit::getInstance();
     m_canvas = new MultiplayerMenuUI(this);
 
-    t_gameLogic->start(mbed::callback(this, &MultiplayerMenu::game));
-    t_userInput->start(mbed::callback(this, &MultiplayerMenu::handleInput));
-    t_screenUpdate->start(mbed::callback(this, &MultiplayerMenu::update));
-    
-    //t_userInput->set_priority(osPriorityAboveNormal1);
-    m_gameFlags.set(INPUT_UPDATE_FLAG);
+    if(!wifi.wifiIsConnected){
+        m_canvas->drawNotConnectedScreen();
+        m_displayManager.updateScreen(&m_canvas->c_main);
+        ThisThread::sleep_for(std::chrono::seconds(3));
+        State::stateFlags.set(GlobalStates::stateList[INDEX_MAIN_MENU]->getFlagName());
+    } else {
+        m_option = 0;
+        m_optionEntered = false;
+        m_execute = false;
+        //get all the challenges from the database
+        ChallengeHandler &challengeHandler = ChallengeHandler::getInstance();
+        challengeHandler.getChallengesFromLobby(m_lobbyList);
+        //Starts the threads
+        m_isRunning = true;
+        t_gameLogic = new Thread;
+        t_screenUpdate = new Thread;
+        t_userInput = new Thread;
+        t_gameLogic->start(mbed::callback(this, &MultiplayerMenu::game));
+        t_userInput->start(mbed::callback(this, &MultiplayerMenu::handleInput));
+        t_screenUpdate->start(mbed::callback(this, &MultiplayerMenu::update));
 
-    // m_canvas->drawScreen2();
-    // m_gameFlags.set(SCREEN_UPDATE_FLAG);
-
-    Serial.println("nu run jag multiplayer");
-                
+        //t_userInput->set_priority(osPriorityAboveNormal1);
+        m_gameFlags.set(INPUT_UPDATE_FLAG);
+    }
 
 }
 
