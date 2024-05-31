@@ -140,6 +140,38 @@ void MultiplayerMenuUI::drawWaitingScreen() {
     c_main.C.print("Waiting... ");
 }
 
+void MultiplayerMenuUI::drawChallengeInfo(Challenge* challenge) {
+
+    ChallengeHandler &challengeHandler = ChallengeHandler::getInstance();
+    DataTransmit &wifi = DataTransmit::getInstance();
+
+    c_main.C.drawLine(0, 19, 127, 19, 0xFFFF);
+    c_main.C.setTextColor(0xFFFF);
+    c_main.C.setTextSize(2);
+    c_main.C.setTextWrap(false);
+    c_main.C.setCursor(11, 2);
+    c_main.C.print("Challenge");
+    c_main.C.setTextColor(0x57FF);
+    c_main.C.setCursor(37, 29);
+    c_main.C.print("Game");
+    c_main.C.setTextColor(0xFABF);
+    c_main.C.setCursor(4, 53);
+    c_main.C.print("Name1");
+    c_main.C.setCursor(4, 74);
+    c_main.C.print("Name2");
+    c_main.C.setTextColor(0x540);
+    c_main.C.setCursor(95, 53);
+    c_main.C.print("P1");
+    c_main.C.setCursor(95, 74);
+    c_main.C.print("P2");
+    c_main.C.setTextColor(0xFFFF);
+    c_main.C.setTextSize(1);
+    c_main.C.setCursor(38, 105);
+    
+    c_main.C.print("You won!");
+
+}
+
 
 
 

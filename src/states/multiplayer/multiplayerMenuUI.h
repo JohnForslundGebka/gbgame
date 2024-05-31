@@ -2,6 +2,7 @@
 #define GBGAME_multiplayerMenuUI_H
 #include "ui/canvas.h"
 #include "core/macros.h"
+#include "functionality/challenge.h"
 //#include "core/state.h"
 
 class MultiplayerMenu; // Forward declaration
@@ -22,6 +23,7 @@ public:
     void drawScreen4();           // Draws my games screen
     void drawNotConnectedScreen();
     void drawWaitingScreen();
+    void drawChallengeInfo(Challenge* challenge);
 
     const String m_menuOptions[3] = {
         "   Lobby",
