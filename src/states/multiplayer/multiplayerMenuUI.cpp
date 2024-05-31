@@ -130,6 +130,15 @@ void MultiplayerMenuUI::drawNotConnectedScreen() {
     c_main.C.setCursor(21, 59);
     c_main.C.print("for mulitplayer");
 }
+void MultiplayerMenuUI::drawWaitingScreen() {
+    c_main.C.fillScreen(BLACK);
+    c_main.C.drawBitmap(43, 76, image_Restoring_bits, 38, 32, 0xFFFF);
+    c_main.C.setTextColor(0xFFFF);
+    c_main.C.setTextSize(2);
+    c_main.C.setTextWrap(false);
+    c_main.C.setCursor(3, 25);
+    c_main.C.print("Waiting... ");
+}
 
 
 

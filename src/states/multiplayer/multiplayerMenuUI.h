@@ -21,6 +21,7 @@ public:
     void drawScreen3();           // Draws new screen
     void drawScreen4();           // Draws my games screen
     void drawNotConnectedScreen();
+    void drawWaitingScreen();
 
     const String m_menuOptions[3] = {
         "   Lobby",

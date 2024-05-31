@@ -201,6 +201,10 @@ void MultiplayerMenu::run() {
         m_option = 0;
         m_optionEntered = false;
         m_execute = false;
+        
+        m_canvas->drawWaitingScreen();
+        m_displayManager.updateScreen(&m_canvas->c_main);
+
         //get all the challenges from the database
         ChallengeHandler &challengeHandler = ChallengeHandler::getInstance();
         challengeHandler.getChallengesFromLobby(m_lobbyList);
