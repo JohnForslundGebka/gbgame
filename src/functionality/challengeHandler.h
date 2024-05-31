@@ -18,7 +18,7 @@ public:
     void startChallenge(int gameIndex);
     void endStartChallenge(State *state, int score);
 
-    void respondToChallenge(int numberOfChallengeInVector);
+    void respondToChallenge(Challenge* challenge);
     bool endResponseToChallenge(int score);
     void getChallengesFromLobby(std::vector<Challenge*> &lobbyList);
 

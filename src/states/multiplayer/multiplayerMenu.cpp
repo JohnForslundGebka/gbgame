@@ -102,7 +102,7 @@ void MultiplayerMenu::game() {
     while (m_isRunning) {
 
         m_gameFlags.wait_any(INPUT_UPDATE_FLAG,osWaitForever, true);
-        Serial.println(*m_optionPtr);
+
 
         if (m_optionEntered) {
 
@@ -122,9 +122,8 @@ void MultiplayerMenu::game() {
                     m_optionEntered = false;
                     m_option = 0;
 
-                    //Use m_subOption to index which challange to start.
-
-                    //Start the challange choosen from the list
+                    //Use m_subOption to index which challenge to start.
+                    challengeHandler.respondToChallenge(m_lobbyList[m_subOption]);
                 }
             }
 

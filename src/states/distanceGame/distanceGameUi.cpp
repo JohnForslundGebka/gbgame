@@ -1,6 +1,7 @@
 #include "distanceGameUi.h"
 #include "distanceGame.h"
 
+
 DistanceGameUi::DistanceGameUi(DistanceGame *pGame) : parentState(pGame), c_main(128, 128, 0, 0) {}
 
 void DistanceGameUi::init() {}
@@ -117,4 +118,32 @@ void DistanceGameUi::drawScreen4() {
     c_main.C.setCursor(28, 89);
     c_main.C.print("Checking score");
     c_main.C.drawBitmap(56, 20, image_hour_glass_75_bits, 11, 16, 0xFFFF);
+}
+
+void DistanceGameUi::drawChallengeWinScreen(String &player1name, int player1score, String &player2name, int player2score) {
+    c_main.C.fillScreen(BLACK);
+    c_main.C.setTextColor(0xFABF);
+    c_main.C.setTextSize(2);
+    c_main.C.setTextWrap(false);
+    c_main.C.setCursor(9, 38);
+    c_main.C.print(player1name);
+    c_main.C.setTextColor(0x57FF);
+    c_main.C.setCursor(16, 9);
+    c_main.C.print("YOU WON!");
+    c_main.C.setTextColor(0xFABF);
+    c_main.C.setCursor(8, 56);
+    c_main.C.print(player2name);
+    c_main.C.setTextColor(0x540);
+    c_main.C.setCursor(78, 57);
+    c_main.C.print(player2score);
+    c_main.C.setCursor(77, 38);
+    c_main.C.print(player1score);
+    c_main.C.drawLine(59, 64, 71, 64, 0xFFFF);
+    c_main.C.drawLine(59, 46, 71, 46, 0xFFFF);
+    c_main.C.drawBitmap(31, 85, image_Connected_bits, 62, 31, 0xFFFF);
+
+}
+
+void DistanceGameUi::drawChallengeLooseScreen() {
+
 }

@@ -93,10 +93,6 @@ void DistanceGame::game() {
           m_canvas->drawScreen1();
           m_gameFlags.set(SCREEN_UPDATE_FLAG);
 
-
-#ifdef DEBUG
-          Serial.println("NU VANTAR JAG 1");
-#endif
           //Waits for user to press A to measure distance
           m_gameFlags.wait_any(ADVANCE_GAME_FLAG, osWaitForever, true);
 
@@ -125,18 +121,25 @@ void DistanceGame::game() {
 
           //Waits for button A press to finish the game
           m_gameFlags.wait_any(ADVANCE_GAME_FLAG, osWaitForever, true);
-
-
-#ifdef DEBUG
-          Serial.println("NU AR GAME KLART");
-#endif
       }
 
       //if a challenge is being played, do not send score to leaderboard
      if(challengeHandler.startingAChallenge) {
          challengeHandler.endStartChallenge(this,m_totScore);
 
-     } else {
+     } else if (challengeHandler.respondingToChallenge){
+
+         String player1name = challengeHandler.currentChallenge->m_player1Name;
+         int player1Score = challengeHandler.currentChallenge->m_player1Score;
+         String player2name = challengeHandler.currentChallenge->m_player2Name;
+         if(challengeHandler.endResponseToChallenge(m_totScore)){
+                 m_canvas->drawChallengeWinScreen(player1name,player1Score,player2name,m_totScore);
+                 m_gameFlags.set(SCREEN_UPDATE_FLAG);
+                 rtos::ThisThread::sleep_for(5s);
+                 State::stateFlags.set(GlobalStates::stateList[INDEX_MAIN_MENU]->getFlagName());
+         }
+
+     }else {
          if (m_totScore > leaderBoard.maxScores[m_flagName]) {
              m_canvas->drawScreen4();
              m_gameFlags.set(SCREEN_UPDATE_FLAG);

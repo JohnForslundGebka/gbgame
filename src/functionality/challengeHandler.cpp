@@ -12,11 +12,12 @@ ChallengeHandler &ChallengeHandler::getInstance() {
 ChallengeHandler::ChallengeHandler() {
 }
 
-void ChallengeHandler::respondToChallenge(int numberOfChallengeInVector) {
+void ChallengeHandler::respondToChallenge(Challenge* challenge) {
 
 
-  currentChallenge = &challenges[numberOfChallengeInVector];
+  currentChallenge = challenge;
   String game = currentChallenge->m_game;
+  currentChallenge->m_player2Name = wifi.userName;
 
   respondingToChallenge = true;
 
@@ -36,18 +37,22 @@ bool ChallengeHandler::endResponseToChallenge(int player2Score) {
     int player1Score = currentChallenge->m_player1Score;
 
     //adding player2 score to the challenge
-    currentChallenge->m_player2Name = wifi.userName;
     currentChallenge->m_player2Score = player2Score;
 
     currentChallenge->m_played = true;
 
     //set the winning players name
     bool challengeWasWon = (player2Score > player1Score);
-    (challengeWasWon) ? currentChallenge->m_winner = player1Name : currentChallenge->m_winner = wifi.userName;
+    (challengeWasWon) ? currentChallenge->m_winner = wifi.userName : currentChallenge->m_winner = player1Name;
 
     //send the new data to the database
     String jsonData = currentChallenge->getJsonData();
     String ID = currentChallenge->m_ID;
+
+    Serial.println("JSON data to send: " + jsonData);
+    Serial.println(" ");
+    Serial.println("CHALLENGE ID IS:  " + ID);
+
     wifi.endChallengeToData(ID,jsonData);
 
     currentChallenge = nullptr;
@@ -91,7 +96,7 @@ void ChallengeHandler::getChallengesFromLobby(std::vector<Challenge*> &lobbyList
     wifi.getChallengesFromData(challenges);
     //add challenges to lobbylist
     for (auto &challenge: challenges) {
-        if (!challenge.m_played) {
+        if (!challenge.m_played && challenge.m_player1Name != wifi.userName) {
             lobbyList.push_back(&challenge);
         }
     }
