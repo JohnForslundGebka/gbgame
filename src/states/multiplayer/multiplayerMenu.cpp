@@ -93,6 +93,8 @@ void MultiplayerMenu::game() {
     ChallengeHandler &challengeHandler = ChallengeHandler::getInstance();
     challengeHandler.getChallengesFromLobby(m_lobbyList);
 
+    DataTransmit &wifi = DataTransmit::getInstance();
+
     using namespace rtos;
     using namespace mbed;
     using namespace std::chrono;
@@ -156,7 +158,10 @@ void MultiplayerMenu::game() {
                 if (m_execute) {
 
                     m_canvas->drawChallengeInfo(m_myGamesList[m_subOption]);
+                    ThisThread::sleep_for(5s);
 
+                    wifi.removeChallengeFromData(m_myGamesList[m_subOption]->m_ID);
+                    
                     //Clear flags
                     m_option = 0;
                     m_optionEntered = false;
