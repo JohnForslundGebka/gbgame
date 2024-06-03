@@ -21,14 +21,13 @@ void MultiplayerMenuUI::drawScreen1() {
 
     c_main.C.drawLine(0, 20, 128, 20, WHITE);                                //Draw line under "Wifi"
 
-    //Draw menu options
+//    Draw menu options
     int cursorPosition = 33;
     c_main.C.setCursor(1, cursorPosition);
-        
 
     int index = 0; // Manual index to replace 'i' in the original for-loop
     for (const auto& option : m_menuOptions) {
-        // Sets color of selected option
+        // Sets color of a selected option
         c_main.C.setTextColor(*parentState->m_optionPtr == index ? GREEN : 0x738E);
 
         c_main.C.print(option);
@@ -37,7 +36,7 @@ void MultiplayerMenuUI::drawScreen1() {
 
         index++; // Increment the manual index
     }
-    
+
 }
 
 void MultiplayerMenuUI::drawLobbyList() {
@@ -85,8 +84,8 @@ void MultiplayerMenuUI::drawScreen3() {
     c_main.C.print("a game! ");
     
 }
-//draw my games screen
-void MultiplayerMenuUI::drawScreen4() {
+
+void MultiplayerMenuUI::drawMyGames() {
     ChallengeHandler &challengeHandler = ChallengeHandler::getInstance();
     DataTransmit &wifi = DataTransmit::getInstance();
 
@@ -95,9 +94,18 @@ void MultiplayerMenuUI::drawScreen4() {
     c_main.C.setTextColor(WHITE);
     c_main.C.setTextSize(2);
     c_main.C.setTextWrap(false);
-    c_main.C.setCursor(24, 3);
+    c_main.C.setCursor(23, 3);
     c_main.C.print("My games");
-    c_main.C.drawLine(0, 20, 128, 20, WHITE);    
+    c_main.C.drawLine(0, 20, 128, 20, WHITE);
+    c_main.C.setTextSize(1);
+    c_main.C.fillCircle(2, 104, 2, 0x15);
+    c_main.C.fillCircle(3, 120, 2, 0xF81D);
+    c_main.C.setTextSize(1);
+    c_main.C.setCursor(7, 101);
+    c_main.C.print("Waiting for response");
+    c_main.C.setCursor(8, 117);
+    c_main.C.print("Game finished");
+
 
     int cursorPosition = 30;
 
@@ -106,13 +114,13 @@ void MultiplayerMenuUI::drawScreen4() {
     c_main.C.setTextSize(1);
     for (auto &challenge : parentState->m_myGamesList){
 
-        challenge->m_played ? color = GREEN : color = RED;
+        challenge->m_played ? color = 0xF81D : color = 0x15 ;
         c_main.C.setTextColor((*parentState->m_optionPtr == index) ? GREEN : 0x738E);
 
         c_main.C.setCursor(4, cursorPosition);
         c_main.C.print(challenge->m_challengeSummery);
         c_main.C.fillCircle(94, cursorPosition+3, 2, color);
-        cursorPosition += 10;
+        cursorPosition += 12;
         index++;
     }
 }
@@ -142,7 +150,6 @@ void MultiplayerMenuUI::drawWaitingScreen() {
     c_main.C.setCursor(3, 25);
     c_main.C.print("Waiting... ");
 }
-
 void MultiplayerMenuUI::drawChallengeInfo(Challenge* challenge) {
 
     ChallengeHandler &challengeHandler = ChallengeHandler::getInstance();
@@ -170,32 +177,35 @@ void MultiplayerMenuUI::drawChallengeInfo(Challenge* challenge) {
 
 
     c_main.C.setTextColor(0x540);
-    c_main.C.setCursor(95, 53);
+    c_main.C.setCursor(90, 53);
     c_main.C.print(challenge->m_player1Score);
-    c_main.C.setTextColor(0xFFFF);
-    c_main.C.setTextSize(1);
-    c_main.C.setCursor(38, 105);
 
     if (challenge->m_played) {
+        c_main.C.setTextSize(2);
+        c_main.C.setTextColor(0xFABF);
         c_main.C.setCursor(4, 74);
         c_main.C.print(challenge->m_player2Name);
-        c_main.C.setCursor(95, 74);
+
+        c_main.C.setCursor(90, 74);
+        c_main.C.setTextColor(0x540);
         c_main.C.print(challenge->m_player2Score);
 
+        c_main.C.setTextSize(1);
         if (wifi.userName == challenge->m_winner) {
+            c_main.C.setCursor(38, 105);
+            c_main.C.setTextColor(GREEN);
             c_main.C.print("You won!");
         } else {
+            c_main.C.setCursor(38, 105);
+            c_main.C.setTextColor(RED);
             c_main.C.print("You lost!");
         }
 
-
-
     } else {
+        c_main.C.setCursor(38, 105);
+        c_main.C.setTextColor(WHITE);
         c_main.C.print("Not played!");
     }
-
-
-
 }
 
 

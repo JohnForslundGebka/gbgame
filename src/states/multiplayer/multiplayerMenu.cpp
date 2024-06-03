@@ -149,7 +149,7 @@ void MultiplayerMenu::game() {
             else if (m_option == MY_GAMES) {
 
                 m_optionMAX = m_myGamesList.size() - 1;
-                m_canvas->drawScreen4();
+                m_canvas->drawMyGames();
                 m_gameFlags.set(SCREEN_UPDATE_FLAG);
 
 

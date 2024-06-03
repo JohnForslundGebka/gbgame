@@ -20,15 +20,15 @@ public:
     void drawScreen1();           // Draws the menu options
     void drawLobbyList();           // Draws lobby screen
     void drawScreen3();           // Draws new screen
-    void drawScreen4();           // Draws my games screen
+    void drawMyGames();           // Draws my games screen
     void drawNotConnectedScreen();
     void drawWaitingScreen();
     void drawChallengeInfo(Challenge* challenge);
 
     const String m_menuOptions[3] = {
-        "   Lobby",
-        "    New",
-        " My games"
+        "-Lobby",
+        "-New game",
+        "-My games"
     };
  
 private:
