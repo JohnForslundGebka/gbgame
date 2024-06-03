@@ -156,11 +156,21 @@ void MultiplayerMenu::game() {
 
 
                 if (m_execute) {
-
                     m_canvas->drawChallengeInfo(m_myGamesList[m_subOption]);
                     ThisThread::sleep_for(5s);
 
-                    wifi.removeChallengeFromData(m_myGamesList[m_subOption]->m_ID);
+                    if (m_myGamesList[m_subOption]->m_played) {
+                        //Removes the challenge from data base 
+                        wifi.removeChallengeFromData(m_myGamesList[m_subOption]->m_ID);
+                        //Clear the local vecot of challenges
+                        m_myGamesList.clear();
+                        //Get the new vector of challenges 
+                        for (auto &challenge : challengeHandler.challenges) {
+                            if(challenge.m_player1Name == wifi.userName) {
+                                m_myGamesList.push_back(&challenge);
+                            }
+                        }
+                    }
                     
                     //Clear flags
                     m_option = 0;
@@ -182,11 +192,8 @@ void MultiplayerMenu::game() {
    
 
     m_execute = false; 
-
-    //Return to main menu when game finish
-    // m_isRunning = false;
-    // State::stateFlags.set(GlobalStates::stateList[INDEX_MAIN_MENU]->getFlagName());
 }
+
 
 void MultiplayerMenu::run() {
     using namespace rtos;
