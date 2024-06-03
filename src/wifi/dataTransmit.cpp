@@ -172,13 +172,14 @@ void DataTransmit::getChallengesFromData(std::vector<Challenge> &challenges) {
        }
        JsonObject obj = doc.as<JsonObject>();
        for (JsonPair p : obj){   //create the challenge objects and put them into the vector
-           String ID = p.key().c_str();
+           String ID = p.key().c_str();  //get the KEy and put it as the ID
            JsonObject challengeInfo = p.value().as<JsonObject>();
            // Extract each field from the JsonObject
            String game = challengeInfo["game"].as<String>();
            bool played = challengeInfo["played"].as<bool>();
            String player1Name = challengeInfo["player1"]["name"].as<String>();
            int player1Score = challengeInfo["player1"]["score"].as<int>();
+
 
             challenges.emplace_back(ID,game,played,player1Name,player1Score);
        }
