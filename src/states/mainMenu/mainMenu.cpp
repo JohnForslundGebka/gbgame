@@ -102,7 +102,7 @@ void MainMenu::run() {
 
     t_move->set_priority(osPriorityBelowNormal1);
 
-    m_canvas->init();
+    m_canvas->drawText();
 
     m_displayManager.updateScreen(&m_canvas->c_canvas);
     

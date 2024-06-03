@@ -14,13 +14,9 @@ public:
 
     explicit MainMenuUi(MainMenu *parentState);
 
-    void init();
-
-    String textField[5];
 
     MainMenu *parentState;
     void drawText();
-    void updateTextFields();
 
     void moveDown();
     void moveUp();
