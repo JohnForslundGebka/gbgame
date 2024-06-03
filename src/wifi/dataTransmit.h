@@ -46,6 +46,8 @@ public:
     //updates the local challenges with the values from the firebase database
     void getChallengesFromData(std::vector<Challenge> &challenges);
 
+    void removeChallengeFromData(const String& challengeId);
+
     //class that handles the connecting to the Firebase database
     FirebaseData fbdo;
 

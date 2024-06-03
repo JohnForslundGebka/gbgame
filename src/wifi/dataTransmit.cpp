@@ -232,3 +232,13 @@ void DataTransmit::endChallengeToData(String ID, const String& challengeData) {
         Serial.println("Failed to send data after retries.");
     }
 }
+
+void DataTransmit::removeChallengeFromData(const String& challengeId) {
+    String path = "/Lobby/Challenges/" + challengeId;
+    if (Firebase.deleteNode(fbdo, path)) {
+        Serial.println("Challenge removed successfully.");
+    } else {
+        Serial.print("Failed to remove challenge: ");
+        Serial.println(fbdo.errorReason());
+    }
+}
