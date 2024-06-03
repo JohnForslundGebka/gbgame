@@ -17,7 +17,7 @@ void GamesUI::init() {
 
     c_canvas.C.drawBitmap(2, 64, image_hand_notice_bits, 16, 11, 0x555);
 
-    c_canvas.C.setTextColor(0xA800);
+    c_canvas.C.setTextColor(GREEN);
     c_canvas.C.setCursor(27, 62);
     c_canvas.C.print(textField[0]);
 
@@ -64,11 +64,11 @@ void GamesUI::draw() {
 
     c_canvas.C.drawBitmap(2, 64, image_hand_notice_bits, 16, 11, 0x555);
     //center choice
-    c_canvas.C.setTextColor(0xA800);
+    c_canvas.C.setTextColor(GREEN);
     c_canvas.C.setCursor(27, 62);
     c_canvas.C.print(textField[0]);
 
-    c_canvas.C.setTextColor(0xFFFF);
+    c_canvas.C.setTextColor(WHITE);
     c_canvas.C.setTextSize(1);
     c_canvas.C.setCursor(41, 88);
     c_canvas.C.print(textField[1]);
