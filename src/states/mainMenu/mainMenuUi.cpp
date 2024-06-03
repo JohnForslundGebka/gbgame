@@ -41,11 +41,11 @@ void MainMenuUi::drawText(){
 
     // Set the cursor to the calculated position and print the text
     c_canvas.C.setTextColor(GREEN);
-    c_canvas.C.setCursor(x, 66);
+    c_canvas.C.setCursor(x, 62);
     c_canvas.C.print(text);
     // Draw the arrows and pictures
-    c_canvas.C.drawBitmap(55, 42, image_ArrowUpEmpty_bits, 14, 15, 0xFFFF);
-    c_canvas.C.drawBitmap(55, 91, image_ArrowDownEmpty_bits, 14, 15, 0xFFFF);
+    c_canvas.C.drawBitmap(55, 38, image_ArrowUpEmpty_bits, 14, 15, 0xFFFF);
+    c_canvas.C.drawBitmap(55, 88, image_ArrowDownEmpty_bits, 14, 15, 0xFFFF);
     c_canvas.C.drawBitmap(64, 104, image_resized_tram_32x32_bits, 32, 32, 0xFFFF);
     c_canvas.C.drawBitmap(32, 111, image_tree_bits, 16, 16, 0xFFFF);
 

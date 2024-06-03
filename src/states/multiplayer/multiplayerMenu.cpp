@@ -64,6 +64,7 @@ void MultiplayerMenu::handleInput() {
 
             case Buttons::B_FLAG:
                 m_optionEntered = false;
+                m_option = 0;
                 Buttons::states.clear(Buttons::B_FLAG);
                 break;
 
@@ -91,7 +92,7 @@ void MultiplayerMenu::update(){
 
 void MultiplayerMenu::game() {
     ChallengeHandler &challengeHandler = ChallengeHandler::getInstance();
-    challengeHandler.getChallengesFromLobby(m_lobbyList);
+
 
     DataTransmit &wifi = DataTransmit::getInstance();
 
@@ -149,34 +150,34 @@ void MultiplayerMenu::game() {
 
             // Display the set name screen and sets letter edit ranges
             else if (m_option == MY_GAMES) {
-
                 m_optionMAX = m_myGamesList.size() - 1;
                 m_canvas->drawMyGames();
                 m_gameFlags.set(SCREEN_UPDATE_FLAG);
 
-
                 if (m_execute) {
                     m_canvas->drawChallengeInfo(m_myGamesList[m_subOption]);
-                    ThisThread::sleep_for(5s);
+                    Buttons::states.clear(Buttons::ButtonFlags::A_FLAG);
+                    ThisThread::sleep_for(2s);
+                    Buttons::states.wait_any(Buttons::ButtonFlags::A_FLAG);
 
                     if (m_myGamesList[m_subOption]->m_played) {
-                        //Removes the challenge from data base 
+                        m_canvas->drawWaitingScreen();
+                        m_gameFlags.set(SCREEN_UPDATE_FLAG);
+                        //Removes the challenge from database
                         wifi.removeChallengeFromData(m_myGamesList[m_subOption]->m_ID);
-                        //Clear the local vecot of challenges
+                        //Clear the local vector of challenges
                         m_myGamesList.clear();
-                        //Get the new vector of challenges 
+                        //Get the new vector of challenges
+                        challengeHandler.getChallengesFromLobby(m_lobbyList);
                         for (auto &challenge : challengeHandler.challenges) {
                             if(challenge.m_player1Name == wifi.userName) {
                                 m_myGamesList.push_back(&challenge);
                             }
                         }
                     }
-                    
                     //Clear flags
-                    m_option = 0;
-                    m_optionEntered = false;
                     m_execute = false;
-                    m_gameFlags.set(SCREEN_UPDATE_FLAG);
+                    m_gameFlags.set(INPUT_UPDATE_FLAG);
                 }
             }
         }

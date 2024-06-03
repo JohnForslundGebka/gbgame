@@ -234,8 +234,9 @@ void DataTransmit::endChallengeToData(String ID, const String& challengeData) {
 }
 
 void DataTransmit::removeChallengeFromData(const String& challengeId) {
-    String path = "/Lobby/Challenges/" + challengeId;
+    String path = "/Lobby/" + challengeId;
     if (Firebase.deleteNode(fbdo, path)) {
+        Serial.println("ID THAT WAS REMOVED " + challengeId);
         Serial.println("Challenge removed successfully.");
     } else {
         Serial.print("Failed to remove challenge: ");
