@@ -11,6 +11,7 @@
 #include "functionality/scores.h"
 #include "functionality/readWriteFlash.h"
 #include "mbed_stats.h"
+#include "functionality/challengeHandler.h"
 
 //#define DEBUG
 uint32_t State::instanceCounter = 0;
@@ -19,6 +20,8 @@ Buttons button;
 StateHandler stateHandler;
 Scores &scores = Scores::getInstance();
 DataTransmit &wifi = DataTransmit::getInstance();
+ChallengeHandler &challengeHandler = ChallengeHandler::getInstance();
+
 
 void print_memory_info() {
     mbed_stats_heap_t heap_stats;
@@ -46,16 +49,14 @@ void setup() {
     Serial.begin(115200);
     dm.init();
     stateHandler.init();
-   // wifi.init();
     scores.init();
-   wifi.userName = flash::readFromFlash("username");
-   wifi.ssid = flash::readFromFlash("network");
-   wifi.password = flash::readFromFlash("password");
+    wifi.userName = flash::readFromFlash("username");
+    wifi.ssid = flash::readFromFlash("network");
+    wifi.password = flash::readFromFlash("password");
 }
 
 void loop() {
     using namespace std::chrono;
    // Serial.println(wifi.ssid);
     rtos::ThisThread::sleep_for(seconds(4));
-
 }

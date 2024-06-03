@@ -4,6 +4,7 @@
 #include "core/macros.h"
 #include "core/state.h" // Include State but forward-declare DistanceGame
 
+
 class DistanceGame; // Forward declaration
 
 class DistanceGameUi {
@@ -20,9 +21,9 @@ public:
     void drawScreen2();
     void drawScreen3(int score);
     void drawScreen4();
-
+    void drawChallengeWinScreen(String &player1name, int player1score, String &player2name, int player2score);
+    void drawChallengeLooseScreen(String &player1name, int player1score, String &player2name, int player2score);
 private:
-
 
 };
 

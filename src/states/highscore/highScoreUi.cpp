@@ -1,5 +1,5 @@
 #include "highScoreUi.h"
-#include "states/globalStates.h"
+//#include "states/globalStates.h"
 #include "highScore.h"
 
 void HighScoreUi::drawHighscore() {

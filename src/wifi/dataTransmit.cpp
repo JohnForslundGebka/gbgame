@@ -1,6 +1,7 @@
 
 #include "dataTransmit.h"
 #include "core/state.h"
+#include "functionality/challenge.h"
 
 
 
@@ -43,7 +44,9 @@ bool DataTransmit::init() {
     }
 #endif
    int wifiTries = 0;
-
+    Serial.println(userName);
+    Serial.println(ssid);
+    Serial.println(password);
     while (WiFi.status() != WL_CONNECTED ) {
         WiFi.begin(ssid, password);
         Serial.print(".");
@@ -152,5 +155,91 @@ void DataTransmit::getNetworkNames(std::vector<String> &networkList) {
         networkList.emplace_back(WiFi.SSID(i));
         Serial.println(WiFi.SSID(i));
         delay(10);
+    }
+}
+
+void DataTransmit::getChallengesFromData(std::vector<Challenge> &challenges) {
+   fbdo.clear();
+   String path = "/Lobby";
+
+   if (Firebase.getJSON(fbdo, path)) {
+       JsonDocument doc;
+       DeserializationError error = deserializeJson(doc, fbdo.jsonData());
+       if (error) {
+           Serial.print("deserializeJson() failed: ");
+           Serial.println(error.c_str());
+           return;
+       }
+       JsonObject obj = doc.as<JsonObject>();
+       for (JsonPair p : obj) {   // Create the challenge objects and put them into the vector
+           String ID = p.key().c_str();  // Get the key and put it as the ID
+           JsonObject challengeInfo = p.value().as<JsonObject>();
+
+           // Extract each field from the JsonObject
+           String game = challengeInfo["game"].as<String>();
+           bool played = challengeInfo["played"].as<bool>();
+           String player1Name = challengeInfo["player1"]["name"].as<String>();
+           int player1Score = challengeInfo["player1"]["score"].as<int>();
+
+           if (played) {
+               String player2Name = challengeInfo["player2"]["name"].as<String>();
+               int player2Score = challengeInfo["player2"]["score"].as<int>();
+               String winner = challengeInfo["winner"].as<String>();
+               challenges.emplace_back(ID, game, played, player1Name, player1Score, player2Name, player2Score, winner);
+           } else {
+               challenges.emplace_back(ID, game, played, player1Name, player1Score);
+           }
+       }
+   }
+
+}
+
+void DataTransmit::sendChallengeToData(const String& challenge) {
+
+    String path = "/Lobby";
+    if (Firebase.pushJSON(fbdo, path, challenge)) {
+        Serial.println("Challenge added successfully.");
+        Serial.println("Generated Challenge ID: " + fbdo.pushName());  // Firebase generates a unique push ID
+    } else {
+        Serial.print("Failed to add challenge: ");
+        Serial.println(fbdo.errorReason());
+    }
+
+}
+
+void DataTransmit::endChallengeToData(String ID, const String& challengeData) {
+    String basePath = "/Lobby/";
+    String fullPath = basePath + ID;
+    int maxRetries = 3; // Number of retries
+    int attempt = 0;
+    bool success = false;
+
+    while (attempt < maxRetries && !success) {
+        if (Firebase.setJSON(fbdo, fullPath, challengeData)) {
+            success = true; // Data sent successfully
+            Serial.println("Data sent successfully.");
+        } else {
+            Serial.println("Failed to send data: " + fbdo.errorReason());
+            attempt++;
+            if (attempt < maxRetries) {
+                Serial.println("Retrying...");
+                delay(500); // Wait for 1 second before retrying
+            }
+        }
+    }
+
+    if (!success) {
+        Serial.println("Failed to send data after retries.");
+    }
+}
+
+void DataTransmit::removeChallengeFromData(const String& challengeId) {
+    String path = "/Lobby/" + challengeId;
+    if (Firebase.deleteNode(fbdo, path)) {
+        Serial.println("ID THAT WAS REMOVED " + challengeId);
+        Serial.println("Challenge removed successfully.");
+    } else {
+        Serial.print("Failed to remove challenge: ");
+        Serial.println(fbdo.errorReason());
     }
 }

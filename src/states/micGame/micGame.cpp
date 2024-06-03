@@ -3,6 +3,8 @@
 #include "rtos.h"
 #include "mbed.h"
 #include "functionality/scores.h"
+#include "functionality/challengeHandler.h"
+
 
 // Constructor, initializes the state with it's name "voicy"
 MicGame::MicGame():  State("Voicy"){}
@@ -10,10 +12,6 @@ MicGame::MicGame():  State("Voicy"){}
 void MicGame::handleInput() {
     using namespace rtos;
     using namespace mbed;
-
-#ifdef DEBUG
-     Serial.println("NU VÄNTAR JAG PÅ KNAPPAR");  
-#endif
 
     while (m_isRunning) {
         using namespace std::chrono;
@@ -71,6 +69,9 @@ void MicGame::game() {
     using namespace std::chrono;
     //class that is used for handling highscores and leaderboards
     Scores &leaderBoard = Scores::getInstance();
+    //class that is used for challenges
+    ChallengeHandler &challengeHandler = ChallengeHandler::getInstance();
+    challengeMode = challengeHandler.startingAChallenge || challengeHandler.respondingToChallenge;
 
     const int GAME_LENGTH = 15;             //Length in seconds of a game
     int lastTime = 0;                       //Keeps track of when to update score
@@ -108,25 +109,22 @@ void MicGame::game() {
     //Exit the waveform loop for proper termination of thread
     m_runWaveform = false;
 
-    //check if a new highscore was set
-    if (m_score > leaderBoard.maxScores[m_flagName]){
-        m_canvas->drawScreen4();
-        m_gameFlags.set(SCREEN_UPDATE_FLAG);
-        rtos::ThisThread::sleep_for(1s);
-    }
-
-    //check is highscore can get onto the leaderboard
-    if(leaderBoard.addScore(m_score,this)){
-        m_isRunning = false;
-        State::stateFlags.set(GlobalStates::stateList[INDEX_NEW_HIGHSCORE]->getFlagName());
-    } else{
-    //Draw the last screen showing the score
-    m_canvas->drawScreen3();
-    //Waits for button A press to exit the game
-    m_gameFlags.wait_any(ADVANCE_GAME_FLAG, osWaitForever, true);
-    //Return to the main menu when the game finishes
-    m_isRunning = false;
-    State::stateFlags.set(GlobalStates::stateList[INDEX_MAIN_MENU]->getFlagName());
+    if(challengeMode){
+        challenge(m_score);
+    } else {
+            //check is highscore can get onto the leaderboard
+        if(leaderBoard.addScore(m_score,this)) {
+            m_isRunning = false;
+            State::stateFlags.set(GlobalStates::stateList[INDEX_NEW_HIGHSCORE]->getFlagName());
+        } else {
+            //Draw the last screen showing the score
+            m_canvas->drawScreen3();
+            //Waits for button A press to exit the game
+            m_gameFlags.wait_any(ADVANCE_GAME_FLAG, osWaitForever, true);
+            //Return to the main menu when the game finishes
+            m_isRunning = false;
+            State::stateFlags.set(GlobalStates::stateList[INDEX_MAIN_MENU]->getFlagName());
+        }
     }
 }
 
@@ -251,7 +249,6 @@ void MicGame::incrementCounter() {
     m_timeCounter++;
 }
 
-
 //Updates the ball position based on mic input, adjust sleep_for parameter to change speed
 void MicGame::updatePosition(int change) {
 
@@ -268,5 +265,30 @@ void MicGame::updatePosition(int change) {
             m_position = 30;
         }
         rtos::ThisThread::sleep_for(3);
+    }
+}
+
+//sends challengedata to database
+void MicGame::challenge(int score) {
+    ChallengeHandler &ch = ChallengeHandler::getInstance();
+    //If the user is starting a new challenge
+    if(ch.startingAChallenge) {
+        ch.endStartChallenge(this,score);
+    } else if (ch.respondingToChallenge){
+        //get info from player 1
+        String player1name = ch.currentChallenge->m_player1Name;
+        int player1Score = ch.currentChallenge->m_player1Score;
+        String player2name = ch.currentChallenge->m_player2Name;
+        if(ch.endResponseToChallenge(score)){
+            m_canvas->drawChallengeWinScreen(player1name,player1Score,player2name,score);
+            m_gameFlags.set(SCREEN_UPDATE_FLAG);
+            rtos::ThisThread::sleep_for(std::chrono::seconds(5));
+            State::stateFlags.set(GlobalStates::stateList[INDEX_MAIN_MENU]->getFlagName());
+        } else {
+            m_canvas->drawChallengeLooseScreen(player1name,player1Score,player2name,score);
+            m_gameFlags.set(SCREEN_UPDATE_FLAG);
+            rtos::ThisThread::sleep_for(std::chrono::seconds(5));
+            State::stateFlags.set(GlobalStates::stateList[INDEX_MAIN_MENU]->getFlagName());
+        }
     }
 }

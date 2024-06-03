@@ -34,6 +34,7 @@ private:
 
     //Canvas object for drawing the screens
     MicGameUI *m_canvas = nullptr;
+    bool challengeMode = false;
 
 public:
     MicGame();
@@ -48,6 +49,8 @@ public:
     void updatePosition(int change);      //Updates the new ball position
 
     void incrementCounter();              //Increments m_timerCounter by 1 every second, used for game length and score
+
+    void challenge(int score);            //end or respond to a challenge
 
     Microphone mic;                       //object with all mic funtionality
     
