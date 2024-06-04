@@ -1,10 +1,10 @@
-
 /**
- * @brief 
- * 
- * @class
+ * @class WifiMenu
+ * @brief Handles the WiFi menu state of the application.
+ *
+ * This class is responsible for managing the WiFi menu state of the application.
+ * It also manages the WiFi connection and user credentials.
  */
-
 #ifndef GBGAME_wifiMenu_H
 #define GBGAME_wifiMenu_H
 #include <Arduino.h>
