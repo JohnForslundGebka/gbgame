@@ -77,7 +77,7 @@ bool DataTransmit::init() {
 
 void DataTransmit::getDataToHighscore(std::unordered_map<uint32_t, ScoresArray> &leaderBoards){
 
-    //Do this for all the games in our gamestate listsss
+    //Do this for all the games in our gamestate lists
         for (const auto & i : GlobalStates::gameList) {
             uint32_t gameKey = i->getFlagName();
             String gameName = i->m_stateName;
@@ -103,7 +103,7 @@ void DataTransmit::getDataToHighscore(std::unordered_map<uint32_t, ScoresArray> 
                         }
                     }
                 } else {
-                    Serial.println("Failed to fetch data: " + fbdo.errorReason());
+                    Serial.println("Failed to fetch data: " + fbdo.errorReason());  // Print error message
                 }
             }
         }

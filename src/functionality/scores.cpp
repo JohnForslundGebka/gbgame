@@ -14,7 +14,7 @@ Scores& Scores::getInstance() {
     return instance;
 }
 
-bool Scores::addScore(int score, State *gameThatWasPlayed) {
+bool Scores::checkIfScoreWasHighcore(int score, State *gameThatWasPlayed) {
     // Get the flag of the game that was played
     uint32_t playedGame = gameThatWasPlayed->getFlagName();
 

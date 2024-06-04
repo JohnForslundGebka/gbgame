@@ -113,7 +113,7 @@ void MicGame::game() {
         challenge(m_score);
     } else {
             //check is highscore can get onto the leaderboard
-        if(leaderBoard.addScore(m_score,this)) {
+        if(leaderBoard.checkIfScoreWasHighcore(m_score, this)) {
             m_isRunning = false;
             State::stateFlags.set(GlobalStates::stateList[INDEX_NEW_HIGHSCORE]->getFlagName());
         } else {
