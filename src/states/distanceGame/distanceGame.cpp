@@ -1,7 +1,6 @@
 #include "distanceGame.h"
 #include "distanceGameUi.h"
 #include "rtos.h"
-#include "mbed.h"
 #include "functionality/scores.h"
 #include "functionality/challengeHandler.h"
 
