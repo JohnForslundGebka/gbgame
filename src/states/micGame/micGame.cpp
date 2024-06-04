@@ -164,18 +164,10 @@ void MicGame::run() {
 void MicGame::stop() {
     using namespace std::chrono;
 
-#ifdef DEBUG
-    Serial.println("NU STOPPAR MIC GAME");
-#endif
-
     m_isRunning = false;
     //set flags, to not be stuck in waiting
     Buttons::states.set(Buttons::START_FLAG | Buttons::A_FLAG);
     m_gameFlags.set(SCREEN_UPDATE_FLAG | ADVANCE_GAME_FLAG);
-
-#ifdef DEBUG
-    Serial.println("AVSLUTAR TRÅDAR");
-#endif
 
     // Finnish threads and clean upp pointers
     if(t_gameLogic) {
@@ -184,29 +176,17 @@ void MicGame::stop() {
         t_gameLogic = nullptr;
     }
 
-#ifdef DEBUG
-    Serial.println("AVSLUTAT GAME LOGIC");
-#endif
-
     if(t_userInput){
         t_userInput->join();
         delete t_userInput;
         t_userInput = nullptr;
     }
 
-#ifdef DEBUG
-    Serial.println("AVSLUTAT USER INPUT");
-#endif
-
     if(t_screenUpdate){
         t_screenUpdate->join();
         delete t_screenUpdate;
         t_screenUpdate = nullptr;
     }
-   
-#ifdef DEBUG
-    Serial.println("AVSLUTAT SCREEN UPDARE");
-#endif
 
     if(t_animateWaveform){
         t_animateWaveform->join();
@@ -226,10 +206,6 @@ void MicGame::stop() {
     Buttons::states.clear(Buttons::START_FLAG | Buttons::A_FLAG);
 
     rtos::ThisThread::sleep_for(900ms);
-
-#ifdef DEBUG
-    Serial.println("HEJDA FRAN STOP I DISTANCEGAME");
-#endif
 }
 
 //Runs in a separate thread to update the waveform and screen
