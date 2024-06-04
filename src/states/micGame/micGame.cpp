@@ -109,10 +109,14 @@ void MicGame::game() {
     //Exit the waveform loop for proper termination of thread
     m_runWaveform = false;
 
+    // Draw the loading screen when checking highscore
+    m_canvas->drawScreen4();
+    m_displayManager.updateScreen(&m_canvas->c_main);
+
     if(challengeMode){
         challenge(m_score);
     } else {
-            //check is highscore can get onto the leaderboard
+        //check is highscore can get onto the leaderboard
         if(leaderBoard.addScore(m_score,this)) {
             m_isRunning = false;
             State::stateFlags.set(GlobalStates::stateList[INDEX_NEW_HIGHSCORE]->getFlagName());
@@ -131,11 +135,23 @@ void MicGame::game() {
 void MicGame::run() {
     using namespace rtos;
     using namespace mbed;
+    using namespace std::chrono;
+
+    m_canvas = new MicGameUI(this);
+
+    //Draw the intro screen and count down to start
+    for (int i = 3; i >= 0; i--) {
+        m_canvas->drawIntroScreen(i);
+        m_displayManager.updateScreen(&m_canvas->c_main);
+        ThisThread::sleep_for(1s); 
+    }
+    //Manually reset the screen before starting the game
+    m_canvas->resetScreen();
+    m_displayManager.updateScreen(&m_canvas->c_main);
 
     //Reset the counters to 0
     m_score = 0;
     m_timeCounter = 0;
-
 
     //Starts the threads
     m_isRunning = true;
@@ -149,8 +165,6 @@ void MicGame::run() {
     t_screenUpdate = new Thread;
     t_userInput = new Thread;
     t_animateWaveform = new Thread;
-
-    m_canvas = new MicGameUI(this);
 
     t_gameLogic->start(mbed::callback(this, &MicGame::game));
     t_userInput->start(mbed::callback(this, &MicGame::handleInput));

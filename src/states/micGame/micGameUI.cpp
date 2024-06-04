@@ -175,3 +175,35 @@ void MicGameUI::drawChallengeLooseScreen(String &player1name, int player1score, 
     c_main.C.drawLine(59, 46, 71, 46, 0xFFFF);
     c_main.C.drawBitmap(34, 75, image_Cry_dolph_bits, 55, 52, 0xFFFF);
 }
+
+void MicGameUI::drawIntroScreen(int counter) {
+    c_main.C.fillScreen(BLACK);
+    c_main.C.drawLine(0, 19, 127, 19, 0xFFFF);
+    c_main.C.setTextColor(0xFFFF);
+    c_main.C.setTextSize(2);
+    c_main.C.setTextWrap(false);
+    c_main.C.setCursor(33, 2);
+    c_main.C.print("Voicy");
+    c_main.C.setTextColor(0xFABF);
+    c_main.C.setCursor(21, 23);
+    c_main.C.print("Stay on");
+    c_main.C.setCursor(-2, 41);
+    c_main.C.print("the line by");
+    c_main.C.setTextColor(0x57FF);
+    c_main.C.setCursor(11, 60);
+    c_main.C.print("SHOUTING!");
+    c_main.C.setTextColor(0xFAAA);
+    c_main.C.setTextSize(3);
+    c_main.C.setCursor(54, 101);
+
+    c_main.C.print(counter);
+    
+    c_main.C.setTextColor(0xFFFF);
+    c_main.C.setTextSize(1);
+    c_main.C.setCursor(19, 86);
+    c_main.C.print("Game starts in:");
+}
+
+void MicGameUI::resetScreen() {
+    c_main.C.fillScreen(BLACK);
+}
