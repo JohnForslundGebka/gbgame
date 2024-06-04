@@ -25,25 +25,20 @@ void DistanceGame::handleInput() {
 
         //debounce logic
         rtos::ThisThread::sleep_for(50ms);
-        if(Buttons::states.get() == 0)
+        if(Buttons::states.get() == 0){
             continue;
+        }
 
-        //clear flags
-        Buttons::states.clear(Buttons::START_FLAG  | Buttons::A_FLAG);
         // Handle input and update positions
         switch (result) {
             case Buttons::A_FLAG :
-                #ifdef DEBUG
-                     Serial.println("HEJ FRAN A");
-                #endif
                 m_gameFlags.set(ADVANCE_GAME_FLAG);
+                Buttons::states.clear(Buttons::A_FLAG);
                 break;
             case Buttons::START_FLAG:
-                #ifdef DEBUG
-                    Serial.println("HEJ FRAN START");
-                #endif
                  m_isRunning = false;
-                State::stateFlags.set(GlobalStates::stateList[0]->getFlagName());
+                 Buttons::states.clear(Buttons::START_FLAG);
+                State::stateFlags.set(GlobalStates::stateList[INDEX_MAIN_MENU]->getFlagName());
                 break;
             default:
                 break;
