@@ -103,7 +103,7 @@ void DataTransmit::getDataToHighscore(std::unordered_map<uint32_t, ScoresArray> 
                         }
                     }
                 } else {
-                    Serial.println("Failed to fetch data: " + fbdo.errorReason());  //or somehting
+                    Serial.println("Failed to fetch data: " + fbdo.errorReason());
                 }
             }
         }

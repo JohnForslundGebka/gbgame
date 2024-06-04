@@ -35,12 +35,6 @@ bool Scores::addScore(int score, State *gameThatWasPlayed) {
 }
 
 void Scores::init() {
-
-#ifdef DEBUG
-    if(dataTransmit.wifiIsConnected)
-    Serial.println("wifi is connected!!");
-#endif
-
     //if the unit is connected to Wi-Fi, update the leaderboard with the values from the database
     if(dataTransmit.wifiIsConnected) {
         //set all the current scores
@@ -79,18 +73,6 @@ void Scores::init() {
 void Scores::getLeaderboardFromDatabase() {
     dataTransmit.getDataToHighscore(leaderBoards);
 
-#ifdef DEBUG
-    Serial.print("PRINTING LEADERBOARD:");
-    for (int i = 0; i < GlobalStates::numberOfGameStates; i++){
-        uint32_t gameKey = GlobalStates::gameList[i]->getFlagName();
-        Serial.println(" ");
-        for(int j = 0; j < 5; j++){
-            Serial.print(leaderBoards[gameKey][j].first);
-            Serial.print("    ---> ");
-            Serial.println(leaderBoards[gameKey][j].second);
-        }
-    }
-#endif
 }
 
 bool Scores::addScoreToLeaderboard(int score, uint32_t playedGame) {
