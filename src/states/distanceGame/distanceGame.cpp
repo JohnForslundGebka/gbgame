@@ -124,7 +124,7 @@ void DistanceGame::game() {
             m_gameFlags.set(SCREEN_UPDATE_FLAG);
             rtos::ThisThread::sleep_for(1s);
         } //try to add to leaderboard
-        if (leaderBoard.addScore(m_totScore, this)) {
+        if (leaderBoard.checkIfScoreWasHighcore(m_totScore, this)) {
             m_isRunning = false;
             State::stateFlags.set(GlobalStates::stateList[INDEX_NEW_HIGHSCORE]->getFlagName());
         } else {
