@@ -26,7 +26,7 @@ void DistanceGame::handleInput() {
         //debounce logic
         rtos::ThisThread::sleep_for(50ms);
         if(Buttons::states.get() == 0){
-            continue;
+            continue; // If no button is pressed, continue to wait
         }
         // Handle input and update positions
         switch (result) {
