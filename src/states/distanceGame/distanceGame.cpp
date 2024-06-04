@@ -189,7 +189,7 @@ void DistanceGame::stop() {
     rtos::ThisThread::sleep_for(10ms);
 
 }
-
+//Blinks the screen text "button A" to indicate to the user that they should press the button
 void DistanceGame::screenBlink() {
     using namespace std::chrono;
     while (m_shouldBlink) {
@@ -203,7 +203,7 @@ void DistanceGame::screenBlink() {
         rtos::ThisThread::sleep_for(300ms);
     }
 }
-
+//Handles the challenge logic
 void DistanceGame::challenge(int score) {
     ChallengeHandler &ch = ChallengeHandler::getInstance();
     //If the user is starting a new challenge
