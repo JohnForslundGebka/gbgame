@@ -73,7 +73,7 @@ void MicGame::game() {
     ChallengeHandler &challengeHandler = ChallengeHandler::getInstance();
     challengeMode = challengeHandler.startingAChallenge || challengeHandler.respondingToChallenge;
 
-    const int GAME_LENGTH = 15;             //Length in seconds of a game
+    const int GAME_LENGTH = 20;             //Length in seconds of a game
     int lastTime = 0;                       //Keeps track of when to update score
 
     //Creates and initialize a timer and attached a function that increments m_timeCounter every second
