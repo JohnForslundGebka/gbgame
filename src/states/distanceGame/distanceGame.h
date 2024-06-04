@@ -41,6 +41,7 @@ private:
     //Canvas object for drawing the screens
     DistanceGameUi *m_canvas = nullptr;
     bool challengeMode = false;
+    bool m_shouldBlink = true;      //Variable that controls if the "press A" text should blink or not
 public:
     DistanceGame();
 

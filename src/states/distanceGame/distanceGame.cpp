@@ -1,7 +1,6 @@
 #include "distanceGame.h"
 #include "distanceGameUi.h"
 #include "rtos.h"
-#include "mbed.h"
 #include "functionality/scores.h"
 #include "functionality/challengeHandler.h"
 
@@ -19,31 +18,25 @@ void DistanceGame::handleInput() {
     while (m_isRunning) {
         using namespace std::chrono;
 
-        uint32_t result = Buttons::states.wait_any(Buttons::START_FLAG  | Buttons::A_FLAG, osWaitForever, false);
+        uint32_t result = Buttons::states.wait_any(Buttons::START_FLAG | Buttons::A_FLAG, osWaitForever, false);
 
         if (!m_isRunning) break;
 
         //debounce logic
         rtos::ThisThread::sleep_for(50ms);
-        if(Buttons::states.get() == 0)
-            continue;
-
-        //clear flags
-        Buttons::states.clear(Buttons::START_FLAG  | Buttons::A_FLAG);
+        if(Buttons::states.get() == 0){
+            continue; // If no button is pressed, continue to wait
+        }
         // Handle input and update positions
         switch (result) {
             case Buttons::A_FLAG :
-                #ifdef DEBUG
-                     Serial.println("HEJ FRAN A");
-                #endif
                 m_gameFlags.set(ADVANCE_GAME_FLAG);
+                Buttons::states.clear(Buttons::A_FLAG);
                 break;
             case Buttons::START_FLAG:
-                #ifdef DEBUG
-                    Serial.println("HEJ FRAN START");
-                #endif
                  m_isRunning = false;
-                State::stateFlags.set(GlobalStates::stateList[0]->getFlagName());
+                 Buttons::states.clear(Buttons::START_FLAG);
+                State::stateFlags.set(GlobalStates::stateList[INDEX_MAIN_MENU]->getFlagName());
                 break;
             default:
                 break;
@@ -52,7 +45,7 @@ void DistanceGame::handleInput() {
     }
 }
 
-//Updates the screen immediately when the SCREEN_UPDATE_FLAG is set (this thread has the highest priority)
+//Updates the screen immediately when the SCREEN_UPDATE_FLAG is set
 void DistanceGame::update(){
     while (m_isRunning)
     {
@@ -79,15 +72,17 @@ void DistanceGame::game() {
         m_targetLength = random(10, 100);
         //Creates and starts a thread that blink the screen text "button A"
         rtos::ThisThread::sleep_for(50ms);
-        Thread t_screenBlink;
+        Thread t_screenBlink(osPriorityBelowNormal2,1024);
+        m_shouldBlink = true;
         t_screenBlink.start(mbed::callback(this, &DistanceGame::screenBlink));
 
         m_canvas->drawScreen1();
         m_gameFlags.set(SCREEN_UPDATE_FLAG);
-
         //Waits for user to press A to measure distance
+        rtos::ThisThread::sleep_for(500ms);
         m_gameFlags.wait_any(ADVANCE_GAME_FLAG, osWaitForever, true);
 
+        m_shouldBlink = false;
         t_screenBlink.join();
 
         //Measures distance and calculates how far off the user was.
@@ -197,15 +192,7 @@ void DistanceGame::stop() {
 
 void DistanceGame::screenBlink() {
     using namespace std::chrono;
-    while (m_isRunning) {
-#ifdef DEBUG
-        Serial.println("NU BLINKAR JAG");
-#endif
-        if (m_gameFlags.get() & ADVANCE_GAME_FLAG) {
-            m_gameFlags.clear(ADVANCE_GAME_FLAG);
-            break;
-        }
-
+    while (m_shouldBlink) {
         textColor = WHITE;
         m_canvas->drawScreen1();
         m_gameFlags.set(SCREEN_UPDATE_FLAG);
