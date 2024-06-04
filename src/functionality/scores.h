@@ -26,7 +26,7 @@ public:
      * @param gameThatWasPlayed Pointer to the game state for which the score is added.
      * @return True if the score is a new high score, false otherwise.
      */
-    bool addScore(int score, State *gameThatWasPlayed); // Add a score to the list
+    bool checkIfScoreWasHighcore(int score, State *gameThatWasPlayed); // Add a score to the list
 
     /**
      * @brief Attempts to add a score to the leaderboard.

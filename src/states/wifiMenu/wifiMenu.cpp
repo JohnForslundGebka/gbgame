@@ -1,7 +1,7 @@
 #include "wifiMenu.h"
 #include "wifiMenuUI.h"
+#include "functionality/scores.h"
 #include "rtos.h"
-#include "mbed.h"
 #include <string>
 
 
@@ -137,7 +137,8 @@ void WifiMenu::game() {
     using namespace rtos;
     using namespace mbed;
     using namespace std::chrono;
-    
+    Scores &scores = Scores::getInstance();
+
     while (m_isRunning) {
 
         m_gameFlags.wait_any(ADVANCE_GAME_FLAG,osWaitForever, true);
@@ -250,10 +251,11 @@ void WifiMenu::game() {
             Serial.println(wifi.ssid);
             Serial.println(wifi.password);
 
-            wifi.init();
-            Serial.println("tried to connect...");
-
-
+            //Try to connect to Wi-Fi
+            if(wifi.init()){
+                ThisThread::sleep_for(1s);
+                scores.getLeaderboardFromDatabase(); //Update the leaderboard from the database
+            }
             //Clear flags and go back to wifi menu
             m_option = 0;
             m_execute = false;

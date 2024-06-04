@@ -14,48 +14,27 @@ Scores& Scores::getInstance() {
     return instance;
 }
 
-bool Scores::addScore(int score,State *gameThatWasPlayed) {
-
-    //get the flag of the game the was played
+bool Scores::checkIfScoreWasHighcore(int score, State *gameThatWasPlayed) {
+    // Get the flag of the game that was played
     uint32_t playedGame = gameThatWasPlayed->getFlagName();
-      //if the user has set a new high score
-      if(score > maxScores[playedGame]) {
-       //if the unit is connected to Wi-Fi, try to add the score to the leaderboard
-          if (dataTransmit.wifiIsConnected) {
-              if (addScoreToLeaderboard(score, playedGame)) {
-                  GlobalStates::newHighscore.setScore(score);
-                  return true;
-#ifdef DEBUG
-                  Serial.print("PRINTING LEADERBOARD AFTER UPDATE:");
-                  for (int i = 0; i < GlobalStates::numberOfGameStates; i++) {
-                      uint32_t gameKey = GlobalStates::gameList[i]->getFlagName();
-                      Serial.println(" ");
-                      for (int j = 0; j < 5; j++) {
-                          Serial.print(leaderBoards[gameKey][j].first);
-                          Serial.print("    ---> ");
-                          Serial.println(leaderBoards[gameKey][j].second);
-                      }
-                  }
-#endif
-              }
-          } else {  // if the unit is not connected to Wi-Fi, just add the score locally
-              addScoreToLeaderboard(score, playedGame);
-              GlobalStates::newHighscore.setScore(score);
-              return true;
-          }
-      } else{
-          return false;
-      }
 
+    // Check if the score is greater than the maximum score for the played game
+    if(score > maxScores[playedGame]) {
+        // Attempt to add the score to the leaderboard
+        bool scoreAdded = addScoreToLeaderboard(score, playedGame);
+
+        // If the score was successfully added, set the new high score
+        if (scoreAdded) {
+            GlobalStates::newHighscore.setScore(score);
+        }
+        return scoreAdded;
+    } else {
+        // If the score is not greater than the maximum score, return false
+        return false;
+    }
 }
 
 void Scores::init() {
-
-#ifdef DEBUG
-    if(dataTransmit.wifiIsConnected)
-    Serial.println("wifi is connected!!");
-#endif
-
     //if the unit is connected to Wi-Fi, update the leaderboard with the values from the database
     if(dataTransmit.wifiIsConnected) {
         //set all the current scores
@@ -94,18 +73,6 @@ void Scores::init() {
 void Scores::getLeaderboardFromDatabase() {
     dataTransmit.getDataToHighscore(leaderBoards);
 
-#ifdef DEBUG
-    Serial.print("PRINTING LEADERBOARD:");
-    for (int i = 0; i < GlobalStates::numberOfGameStates; i++){
-        uint32_t gameKey = GlobalStates::gameList[i]->getFlagName();
-        Serial.println(" ");
-        for(int j = 0; j < 5; j++){
-            Serial.print(leaderBoards[gameKey][j].first);
-            Serial.print("    ---> ");
-            Serial.println(leaderBoards[gameKey][j].second);
-        }
-    }
-#endif
 }
 
 bool Scores::addScoreToLeaderboard(int score, uint32_t playedGame) {
