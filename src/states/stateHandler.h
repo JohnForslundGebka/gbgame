@@ -16,6 +16,7 @@
 #define GBGAME_STATEHANDLER_H
 #include "core/state.h"
 #include "globalStates.h"
+#include "macros.h"
 
 class StateHandler {
 public:

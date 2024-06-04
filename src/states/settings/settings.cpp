@@ -32,7 +32,7 @@ void Settings::handleInput() {
 
         if(input==Buttons::START_FLAG){
             m_isRunning = false;
-            State::stateFlags.set(GlobalStates::stateList[0]->getFlagName());
+            State::stateFlags.set(GlobalStates::stateList[INDEX_MAIN_MENU]->getFlagName());
         }
 
 
@@ -140,7 +140,7 @@ void Settings::run() {
 
     t_move->set_priority(osPriorityBelowNormal);
 
-    m_canvas->init(); // Assuming init() is a method of SettingsUi
+    m_canvas->init();
     m_displayManager.updateScreen(&m_canvas->c_handPos0);
 }
 

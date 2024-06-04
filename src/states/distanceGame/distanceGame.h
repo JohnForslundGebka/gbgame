@@ -24,6 +24,7 @@
 #include "hardware/ultrasonic.h"
 #include "distanceGameUi.h"
 
+class ChallengeHandler;
 
 //Number of rounds for a game
 #define MAX_ROUNDS 3
@@ -35,13 +36,11 @@ private:
     rtos::Thread *t_userInput = nullptr;      //Thread that handles user input
     rtos::Thread *t_screenUpdate = nullptr;  //This thread is responsible for updating the screen when the SCREEN_UPDATE_FLAG is set (highest priority)
 
-
-
     rtos::EventFlags m_gameFlags;    //Contains flags ADVANCE_GAME_FLAG and SCREEN_UPDATE_FLAG
 
     //Canvas object for drawing the screens
     DistanceGameUi *m_canvas = nullptr;
-
+    bool challengeMode = false;
 public:
     DistanceGame();
 
@@ -54,6 +53,7 @@ public:
     void handleInput() override;
     void update() override;
     void stop() override;
+    void challenge(int score);
 
     void game();               //Contains the logic for the game
 

@@ -9,25 +9,39 @@
 #define GBGAME_GLOBALSTATES_H
 #include <cstdint>
 
+class Settings;
 class MainMenu;
 class DistanceGame;
 class Games;
-class Settings;
+class MicGame;
+class HighScore;
+class NewHighscore;
+class WifiMenu;
+class MultiplayerMenu;
+
+
+// Not a state, just the base class
 class State;
 
 namespace GlobalStates {
 
-    const int numberOfTotalStates = 4;
-    const int numberOfMainMenuStates = 2;
-    const int numberOfGameStates = 1;
-    const int numberOfSettingsStates = 3;
+    const int numberOfTotalStates = 9;
+    const int numberOfMainMenuStates = 4;
+    const int numberOfGameStates = 2;
+    const int numberOfSettingsStates = 1;
 
     //all different states on the machine
     extern MainMenu mainMenu;
     extern DistanceGame distanceGame;
     extern Games games;
     extern Settings settings;
+    extern MicGame micGame;
+    extern HighScore highScore;
+    extern NewHighscore newHighscore;
+    extern WifiMenu wifiMenu;
+    extern MultiplayerMenu multiplayerMenu;
 
+    
     //arrays of different states, used for menus
     extern State* stateList[numberOfTotalStates];
     extern State* mainMenuList[numberOfMainMenuStates];

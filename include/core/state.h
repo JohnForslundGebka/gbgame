@@ -14,7 +14,6 @@
 #define GBGAME_STATE_H
 #include "hardware/displayManager.h"
 #include "states/globalStates.h"
-
 class State {
 public:
     /**
