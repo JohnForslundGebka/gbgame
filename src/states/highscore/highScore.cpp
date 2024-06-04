@@ -2,6 +2,7 @@
 #include "highScoreUi.h"
 #include "hardware/buttons.h"
 #include "functionality/scores.h"
+#include "wifi/dataTransmit.h"
 
 void HighScore::handleInput() {
     using namespace rtos;
@@ -68,8 +69,12 @@ void HighScore::run() {
     using namespace rtos;
     using namespace mbed;
     m_isRunning = true;
-    Scores &scores = Scores::getInstance();
-    scores.getLeaderboardFromDatabase();
+    //if the unit is connected to Wi-Fi, update the leaderboard with the values from the database
+    DataTransmit &wifi = DataTransmit::getInstance();
+    if(wifi.wifiIsConnected){
+        Scores &scores = Scores::getInstance();
+        scores.getLeaderboardFromDatabase();
+    }
 
     c_canvas = new HighScoreUi(this);
     t_gfx = new Thread;
