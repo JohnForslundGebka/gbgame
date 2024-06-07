@@ -18,6 +18,7 @@ class HighScore;
 class NewHighscore;
 class WifiMenu;
 class MultiplayerMenu;
+class GyroscopeGame;
 
 
 // Not a state, just the base class
@@ -25,9 +26,9 @@ class State;
 
 namespace GlobalStates {
 
-    const int numberOfTotalStates = 9;
+    const int numberOfTotalStates = 10;
     const int numberOfMainMenuStates = 4;
-    const int numberOfGameStates = 2;
+    const int numberOfGameStates = 3;
     const int numberOfSettingsStates = 1;
 
     //all different states on the machine
@@ -40,7 +41,7 @@ namespace GlobalStates {
     extern NewHighscore newHighscore;
     extern WifiMenu wifiMenu;
     extern MultiplayerMenu multiplayerMenu;
-
+    extern GyroscopeGame gyroscopeGame;
     
     //arrays of different states, used for menus
     extern State* stateList[numberOfTotalStates];
