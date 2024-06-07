@@ -5,6 +5,8 @@
 #include "core/state.h"
 #include "hardware/buttons.h"
 #include "hardware/displayManager.h"
+#include <Arduino_LSM6DSOX.h>
+
 
 class GyroscopeGame : public State{
 private:
@@ -31,9 +33,10 @@ private:
     const float m_sensitivity = 10.0; // Increased sensitivity
 
     // Score and time
-    int m_score = 0;
+    int m_score;
     unsigned long m_startTime;
     unsigned long m_gameTime = 60000; // 1 minute in milliseconds
+    int m_timeCounter;
 
     // Game states
     enum GameState {
@@ -53,6 +56,7 @@ public:
     void stop() override;
     void challenge(int score);
     void incrementCounter(); //Function that attaches to the timer interrupt ticker and increments time counter
+    void updatePositionOfBall();
 
     void game();               //Contains the logic for the game
 
