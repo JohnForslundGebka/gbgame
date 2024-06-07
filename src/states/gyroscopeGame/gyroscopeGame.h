@@ -20,9 +20,6 @@ private:
     // Gyro sensitivity (tune this value)
     const float m_sensitivity = 10.0; // Increased sensitivity
 
-    unsigned long m_startTime;
-    unsigned long m_gameTime = 60000; // 1 minute in milliseconds
-
     // Game states
     enum GameState {
         STARTING,
@@ -34,12 +31,15 @@ public:
     // Score and time
     int m_score;
     int m_timeCounter;
+
     //falling ball properties
     const static int m_numFallingBalls = 5;
-    int m_fallingBallX[m_numFallingBalls];
-    int m_fallingBallY[m_numFallingBalls];
-    int m_fallingBallColors[m_numFallingBalls]; // Array to store colors of falling balls
-    // Falling ball properties
+    struct Ball {
+        int x;
+        int y;
+        uint16_t color;
+    };
+    Ball m_fallingBalls[m_numFallingBalls];
     const int m_fallingBallRadius = 2;
     const int m_fallingSpeed = 4; // Falling speed
 

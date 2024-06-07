@@ -14,8 +14,9 @@ public:
 
     void drawScoreAndTime();
     void draw();
-    void drawFallingBalls();
+    void drawFallingBalls(int x, int y, uint16_t color);
     void drawPlayerBall();
+    void drawGameOver();
 private:
 
 };

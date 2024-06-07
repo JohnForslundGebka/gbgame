@@ -28,7 +28,7 @@ namespace GlobalStates {
     MultiplayerMenu multiplayerMenu;
     GyroscopeGame gyroscopeGame;
 
-    State* stateList[numberOfTotalStates] = {&mainMenu, &distanceGame, &games, &settings, &micGame, &highScore, &newHighscore, &wifiMenu, &multiplayerMenu};
+    State* stateList[numberOfTotalStates] = {&mainMenu, &distanceGame, &games, &settings, &micGame, &highScore, &newHighscore, &wifiMenu, &multiplayerMenu, &gyroscopeGame};
 
     State* mainMenuList[numberOfMainMenuStates] = {&games,&settings,&highScore, &multiplayerMenu};
     State* gameList[numberOfGameStates] = {&distanceGame, &micGame, &gyroscopeGame};
