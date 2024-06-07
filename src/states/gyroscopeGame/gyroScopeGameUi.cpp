@@ -5,7 +5,7 @@ GyroScopeGameUi::GyroScopeGameUi(GyroscopeGame *pGame) : parentState(pGame), c_m
 
 }
 
-void GyroScopeGameUi::init() {
+void GyroScopeGameUi::drawScoreAndTime() {
     // Draw score counter
     c_main.C.setTextSize(1);
     c_main.C.setTextColor(0xFFFF);
@@ -22,6 +22,20 @@ void GyroScopeGameUi::init() {
 }
 
 void GyroScopeGameUi::draw() {
+    c_main.C.fillScreen(BLACK); // Clear screen
+    drawScoreAndTime();
+    drawFallingBalls();
+    drawPlayerBall();
+}
 
+void GyroScopeGameUi::drawFallingBalls() {
+    for(int i = 0; i < parentState->m_numFallingBalls; i++){
+        c_main.C.fillCircle(parentState->m_fallingBallX[i], parentState->m_fallingBallY[i], parentState->m_fallingBallRadius, parentState->m_fallingBallColors[i]);
+    }
+
+}
+
+void GyroScopeGameUi::drawPlayerBall() {
+    c_main.C.fillCircle(parentState->m_playerBallX, parentState->m_playerBally, parentState->PLAYERBALL_RADIUS, 0x07E0);
 
 }

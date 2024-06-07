@@ -12,8 +12,10 @@ public:
     GyroscopeGame *parentState;
     Canvas c_main;
 
-    void init();
+    void drawScoreAndTime();
     void draw();
+    void drawFallingBalls();
+    void drawPlayerBall();
 private:
 
 };
