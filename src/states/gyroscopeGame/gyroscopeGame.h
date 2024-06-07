@@ -40,8 +40,6 @@ private:
         STARTING,
         PLAYING,
         GAME_OVER
-
-
     };
 public:
 
