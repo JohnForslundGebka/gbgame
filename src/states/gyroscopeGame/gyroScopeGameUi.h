@@ -1,0 +1,10 @@
+#ifndef GBGAME_GYROSCOPEGAMEUI_H
+#define GBGAME_GYROSCOPEGAMEUI_H
+
+
+class GyroScopeGameUi {
+
+};
+
+
+#endif //GBGAME_GYROSCOPEGAMEUI_H
