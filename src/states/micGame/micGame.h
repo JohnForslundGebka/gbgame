@@ -20,6 +20,7 @@
 #include "hardware/ultrasonic.h"
 #include "micGameUi.h"
 #include "hardware/microphone.h"
+#include "hardware/vibration.h"
 
 class MicGame : public State {
 private:
@@ -31,6 +32,8 @@ private:
 
 
     rtos::EventFlags m_gameFlags;    //Contains flags ADVANCE_GAME_FLAG and SCREEN_UPDATE_FLAG
+
+    Vibration vibration;
 
     //Canvas object for drawing the screens
     MicGameUI *m_canvas = nullptr;
