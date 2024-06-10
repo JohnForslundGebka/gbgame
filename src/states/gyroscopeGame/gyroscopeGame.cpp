@@ -16,7 +16,7 @@ while (true){
         Buttons::states.clear(Buttons::START_FLAG);
         break;
     } else if (result == Buttons::A_FLAG) {
-        m_gameFlags.set(ADVANCE_GAME_FLAG);
+       // m_gameFlags.set(ADVANCE_GAME_FLAG);
         Buttons::states.clear(Buttons::A_FLAG);
     }
 }
@@ -42,11 +42,9 @@ void GyroscopeGame::game() {
         resetFallingBall(i);
     }
 
-    Serial.println("STARTING GAME LOOP NOW");
     while (m_isRunning) {
         switch (gameState) {
             case PLAYING :
-                Serial.println("NOW GAME PLAYING");
                 //check if the time is up
                 if (m_timeCounter == 0) {
                     gameState = GAME_OVER;
@@ -81,34 +79,34 @@ void GyroscopeGame::game() {
                 break;
 
             case GAME_OVER :
-                m_canvas->drawGameOver();
-                m_gameFlags.set(SCREEN_UPDATE_FLAG);
+                if(m_challengeMode){
+                    challenge(m_score);
+                } else {
+                    //if a new highscore was set
+                    if (m_score > leaderBoard.maxScores[m_flagName]) {
+                        m_canvas->drawCheckingSCore();
+                        m_gameFlags.set(SCREEN_UPDATE_FLAG);
+                        rtos::ThisThread::sleep_for(50ms);
+                    } //try to add to leaderboard
+                    if (leaderBoard.checkIfScoreWasHighcore(m_score, this)) {
+                        m_isRunning = false;
+                        State::stateFlags.set(GlobalStates::stateList[INDEX_NEW_HIGHSCORE]->getFlagName());
+                    } else { //if not added to leaderboard
+                        m_canvas->drawNoHighcoreScreen(m_score); //draw the no highscore screen
+                        m_gameFlags.set(SCREEN_UPDATE_FLAG);
+
+                        rtos::ThisThread::sleep_for(5s);
+                        //Return to main manu when game finish
+                        m_isRunning = false;
+                        State::stateFlags.set(GlobalStates::stateList[INDEX_MAIN_MENU]->getFlagName());
+                    }
+                }
+              //  m_gameFlags.set(SCREEN_UPDATE_FLAG);
                 m_isRunning = false;
                 break;
         }
     }
-    if(m_challengeMode){
-        challenge(m_score);
-    } else {
-        //if a new highscore was set
-        if (m_score > leaderBoard.maxScores[m_flagName]) {
-            m_canvas->drawCheckingSCore();
-            m_gameFlags.set(SCREEN_UPDATE_FLAG);
-            rtos::ThisThread::sleep_for(50ms);
-        } //try to add to leaderboard
-        if (leaderBoard.checkIfScoreWasHighcore(m_score, this)) {
-            m_isRunning = false;
-            State::stateFlags.set(GlobalStates::stateList[INDEX_NEW_HIGHSCORE]->getFlagName());
-        } else {
-            m_canvas->drawNoHighcoreScreen(m_score);
-            m_gameFlags.set(SCREEN_UPDATE_FLAG);
 
-            rtos::ThisThread::sleep_for(5s);
-            //Return to main manu when game finish
-            m_isRunning = false;
-            State::stateFlags.set(GlobalStates::stateList[INDEX_MAIN_MENU]->getFlagName());
-        }
-    }
 
 }
 
@@ -117,7 +115,7 @@ void GyroscopeGame::stop() {
     m_isRunning = false;
     //set flags, to not be stuck in waiting
     Buttons::states.set(Buttons::START_FLAG | Buttons::A_FLAG);
-    m_gameFlags.set(SCREEN_UPDATE_FLAG | ADVANCE_GAME_FLAG);
+    m_gameFlags.set(SCREEN_UPDATE_FLAG);
 
     // Finnish threads and clean upp pointers
     if(t_gameLogic) {
@@ -143,7 +141,7 @@ void GyroscopeGame::stop() {
     IMU.end();
 
     //clear all flags before exiting
-    m_gameFlags.clear(SCREEN_UPDATE_FLAG | ADVANCE_GAME_FLAG);
+    m_gameFlags.clear(SCREEN_UPDATE_FLAG);
     Buttons::states.clear(Buttons::START_FLAG | Buttons::A_FLAG);
 
     rtos::ThisThread::sleep_for(50ms);
@@ -153,7 +151,6 @@ void GyroscopeGame::update() {
 
     while (m_isRunning)
     {   m_gameFlags.wait_any(SCREEN_UPDATE_FLAG, osWaitForever, true);
-        //Serial.println("NOW screen update");
         m_displayManager.updateScreen(&m_canvas->c_main);
     }
 }
@@ -207,7 +204,6 @@ void GyroscopeGame::updatePositionOfBall() {
     float x, y, z;
     // Update ball position based on IMU data
     if (IMU.accelerationAvailable()) {
-        Serial.println("Reading IMU data");
         IMU.readAcceleration(x, y, z);
         m_playerBallX += int(y * m_sensitivity); // Use gyroscope's Y-axis reading for left-right movement
         m_playerBally += int(x * m_sensitivity); // Use gyroscope's X-axis reading for up-down movement
