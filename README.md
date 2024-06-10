@@ -5,7 +5,7 @@ There's also online highscore boards which saves the top 5 scores for each game.
 ## About the code base
 The program is built on the Arduino/Mbed OS framework and uses Mbed RTOS features.
 The program is based around our system of 'states' which could be described as small applications
-or games running on the device.
+or games/menus running on the device. 
 
 All states are handled by the stateHandler. The stateHandler is resposible for stopping all threads running of the previously running state and launching the new state initializing its threads.  
 
