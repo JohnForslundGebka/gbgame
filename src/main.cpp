@@ -19,6 +19,27 @@ StateHandler stateHandler;
 Scores &scores = Scores::getInstance();
 DataTransmit &wifi = DataTransmit::getInstance();
 
+void print_memory_info() {
+    mbed_stats_heap_t heap_stats;
+    mbed_stats_heap_get(&heap_stats);
+
+    Serial.print("Current heap: ");
+    Serial.println(heap_stats.current_size);
+
+    Serial.print("Max heap size: ");
+    Serial.println(heap_stats.max_size);
+
+    Serial.print("Total heap size: ");
+    Serial.println(heap_stats.reserved_size);
+
+    Serial.print("Alloc count: ");
+    Serial.println(heap_stats.alloc_cnt);
+
+    Serial.print("Alloc fail count: ");
+    Serial.println(heap_stats.alloc_fail_cnt);
+    Serial.println("------------------------------------");
+    Serial.println(" "); }
+
 
 void setup() {
     Serial.begin(115200);
@@ -35,8 +56,6 @@ void setup() {
 
 void loop() {
     using namespace std::chrono;
-
-    rtos::ThisThread::sleep_for(seconds(4));
-    //vibration.off();
-
+    rtos::ThisThread::sleep_for(seconds(2));
+   // print_memory_info();
 }
