@@ -13,6 +13,7 @@
 
 #ifndef GBGAME_wifiMenu_H
 #define GBGAME_wifiMenu_H
+
 #include <Arduino.h>
 #include <vector>
 #include "core/macros.h"
