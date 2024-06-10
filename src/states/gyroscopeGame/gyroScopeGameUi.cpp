@@ -22,13 +22,13 @@ void GyroScopeGameUi::drawScoreAndTime() {
 }
 
 void GyroScopeGameUi::draw() {
-    Serial.println("Draw screen 1");
- //   c_main.C.fillScreen(BLACK); // Clear screen
+    c_main.C.fillScreen(BLACK); // Clear screen
     drawScoreAndTime();
     drawPlayerBall();
 }
 
 void GyroScopeGameUi::drawFallingBalls(int x, int y,uint16_t color) {
+    Serial.println("Draw screen fallingball");
     c_main.C.fillCircle(x, y, parentState->m_fallingBallRadius, color);
 }
 

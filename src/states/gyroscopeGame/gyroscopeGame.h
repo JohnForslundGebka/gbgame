@@ -1,4 +1,7 @@
+#include <Wire.h>
+#include <SPI.h>
 #include <core/state.h>
+#include <Arduino_LSM6DSOX.h>
 #include "core/macros.h"
 #include "mbed.h"
 #include "rtos.h"
@@ -6,7 +9,7 @@
 #include "hardware/buttons.h"
 #include "hardware/displayManager.h"
 #include "gyroScopeGameUi.h"
-#include <Arduino_LSM6DSOX.h>
+
 
 
 class GyroscopeGame : public State{
@@ -27,10 +30,11 @@ private:
         GAME_OVER
     };
     GameState gameState;
+    LSM6DSOXClass IMU;
 public:
     // Score and time
     int m_score;
-    int m_timeCounter;
+    int m_timeCounter = 60;
 
     //falling ball properties
     const static int m_numFallingBalls = 5;

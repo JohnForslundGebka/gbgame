@@ -1,6 +1,6 @@
 #include "gyroscopeGame.h"
 
-GyroscopeGame::GyroscopeGame() : State("balancey") {}
+GyroscopeGame::GyroscopeGame() : State("balancey"), IMU_LSM6DSOX(Wire,0x6A) {}
 
 
 void GyroscopeGame::handleInput() {
@@ -15,7 +15,7 @@ while (true){
         break;
     } else if (result == Buttons::A_FLAG) {
         m_gameFlags.set(ADVANCE_GAME_FLAG);
-        Buttons::states.clear(Buttons::START_FLAG);
+        Buttons::states.clear(Buttons::A_FLAG);
     }
 }
 }
@@ -25,7 +25,7 @@ void GyroscopeGame::game() {
     using namespace mbed;
     using namespace std::chrono;
 
-    const int GAME_LENGTH = 60; //Length in seconds of a game
+   // const int GAME_LENGTH = 60; //Length in seconds of a game
 
     //Creates and initializes a timer and attached a function that increments m_timeCounter every second
     Ticker ticker;
@@ -42,13 +42,13 @@ void GyroscopeGame::game() {
             case PLAYING :
                 Serial.println("NOW GAME PLAYING");
                 //check if the time is up
-                if (m_timeCounter >= GAME_LENGTH) {
+                if (m_timeCounter >= 0) {
                     gameState = GAME_OVER;
                     break;
                 }
                 //draw the score and time and player ball
                 m_canvas->draw();
-                Serial.println("NOW DRAW");
+               // Serial.println("NOW DRAW");
                 for (int i = 0; i < m_numFallingBalls; i++) {
                     //draw the falling ball
                     m_canvas->drawFallingBalls(m_fallingBalls[i].x, m_fallingBalls[i].y, m_fallingBalls[i].color);
@@ -72,7 +72,7 @@ void GyroscopeGame::game() {
                 // Update the player's ball position based on gyroscope data
                 updatePositionOfBall();
                 m_gameFlags.set(SCREEN_UPDATE_FLAG);
-                ThisThread::sleep_for(500ms);
+                ThisThread::sleep_for(50ms);
                 break;
 
             case GAME_OVER :
@@ -82,6 +82,9 @@ void GyroscopeGame::game() {
                 break;
         }
     }
+
+    State::stateFlags.wait_any(ADVANCE_GAME_FLAG, osWaitForever);
+    State::stateFlags.set(GlobalStates::stateList[INDEX_MAIN_MENU]->getFlagName());
 
 }
 
@@ -126,21 +129,23 @@ void GyroscopeGame::stop() {
 void GyroscopeGame::update() {
 
     while (m_isRunning)
-    {   m_gameFlags.wait_any(SCREEN_UPDATE_FLAG, osWaitForever);
+    {   m_gameFlags.wait_any(SCREEN_UPDATE_FLAG, osWaitForever, true);
+        //Serial.println("NOW screen update");
         m_displayManager.updateScreen(&m_canvas->c_main);
     }
 }
 
 
 void GyroscopeGame::run() {
-    Serial.println("now running gyrogame");
+    //initialize the game
+    m_timeCounter = 60;
     gameState = PLAYING;
     using namespace rtos;
     using namespace mbed;
     m_score = 0;
     m_timeCounter = 0;
     m_isRunning = true;
-
+    //Create the threads
     t_gameLogic = new Thread;
     t_screenUpdate = new Thread;
     t_userInput = new Thread;
@@ -150,18 +155,20 @@ void GyroscopeGame::run() {
     t_userInput->start(mbed::callback(this, &GyroscopeGame::handleInput));
     t_screenUpdate->start(mbed::callback(this, &GyroscopeGame::update));
     t_screenUpdate->set_priority(osPriorityAboveNormal);
+    t_userInput->set_priority(osPriorityAboveNormal);
 
     m_canvas = new GyroScopeGameUi(this);
     m_canvas->draw();
+    m_displayManager.updateScreen(&m_canvas->c_main);
 
-    //initialize the Gyroscope
+   // initialize the Gyroscope
     if (!IMU.begin()) {
         Serial.println("Failed to initialize IMU!");
     }
     Serial.println("IMU initialized!");
 
 }
-
+//function to reset the falling ball
 void GyroscopeGame::resetFallingBall(int index) {
     m_fallingBalls[index].x = random(0, 127);
     m_fallingBalls[index].y = 0;
@@ -170,10 +177,15 @@ void GyroscopeGame::resetFallingBall(int index) {
     Serial.println("resetting falling ball");
 }
 
+void GyroscopeGame::incrementCounter() {
+    m_timeCounter--;
+}
+
 void GyroscopeGame::updatePositionOfBall() {
     float x, y, z;
     // Update ball position based on IMU data
     if (IMU.accelerationAvailable()) {
+        Serial.println("Reading IMU data");
         IMU.readAcceleration(x, y, z);
         m_playerBallX += int(y * m_sensitivity); // Use gyroscope's Y-axis reading for left-right movement
         m_playerBally += int(x * m_sensitivity); // Use gyroscope's X-axis reading for up-down movement
@@ -185,10 +197,6 @@ void GyroscopeGame::updatePositionOfBall() {
         if (m_playerBally > 127 - PLAYERBALL_RADIUS) m_playerBally = 127 - PLAYERBALL_RADIUS;
     }
 
-}
-
-void GyroscopeGame::incrementCounter() {
-    m_timeCounter++;
 }
 
 void GyroscopeGame::challenge(int score) {

@@ -54,5 +54,5 @@ void setup() {
 void loop() {
     using namespace std::chrono;
     rtos::ThisThread::sleep_for(seconds(4));
-    print_memory_info();
+    //print_memory_info();
 }
