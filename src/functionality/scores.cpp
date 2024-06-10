@@ -69,7 +69,19 @@ void Scores::init() {
 }
 
 void Scores::getLeaderboardFromDatabase() {
+    // Define the type for the leaderboard entry
+    using LeaderboardEntry = std::pair<String, int>;
+    // Define the type for the scores array, containing 5 top scores
+    using ScoresArray = std::array<LeaderboardEntry, 5>;
+    // Define the map to hold all game states with their respective scores
+    std::unordered_map<uint32_t, ScoresArray> leaderBoards;
 
+    dataTransmit.getDataToHighscore(leaderBoards);
+    //fill the local map with the lowest score on the leaderboard
+    for (auto &game: GlobalStates::gameList) {
+        uint32_t playedGame = game->getFlagName();
+        maxScores.emplace(playedGame, leaderBoards[playedGame][4].second);
+    }
 
 }
 
