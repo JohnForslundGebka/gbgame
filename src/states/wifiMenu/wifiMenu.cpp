@@ -383,9 +383,6 @@ void WifiMenu::stop() {
 #endif
 }
 
-void WifiMenu::setName() {
-
-}
 
 void WifiMenu::checkLetterBounds(char &letter) {
     if (letter > m_maxASCII) {
