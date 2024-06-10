@@ -1,11 +1,12 @@
 
 /**
- * @brief 
- * 
- * @class
+ * @brief This is the multiplayer menu state. It let's the user start new challenges online,
+ * respond to other players challenges or check scores of ongoing challenges. 
  */
+
 #ifndef GBGAME_multiplayerMenu_h
 #define GBGAME_multiplayerMenu_h
+
 #include <Arduino.h>
 #include <vector>
 #include "core/macros.h"

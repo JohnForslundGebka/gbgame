@@ -202,7 +202,7 @@ void MultiplayerMenuUI::drawChallengeInfo(Challenge* challenge) {
         }
 
     } else {
-        c_main.C.setCursor(38, 105);
+        c_main.C.setCursor(20, 105);
         c_main.C.setTextColor(WHITE);
         c_main.C.print("Not played!");
     }

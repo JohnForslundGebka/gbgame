@@ -73,8 +73,9 @@ void MicGame::game() {
     ChallengeHandler &challengeHandler = ChallengeHandler::getInstance();
     challengeMode = challengeHandler.startingAChallenge || challengeHandler.respondingToChallenge;
 
-    const int GAME_LENGTH = 15;             //Length in seconds of a game
+    const int GAME_LENGTH = 20;             //Length in seconds of a game
     int lastTime = 0;                       //Keeps track of when to update score
+    int lastVibrationTime = 0;              //Used for keeping time for the vibration motor
 
     //Creates and initialize a timer and attached a function that increments m_timeCounter every second
     Ticker ticker;
@@ -89,6 +90,12 @@ void MicGame::game() {
                 m_score++;
                 lastTime = m_timeCounter;
             }
+
+            vibration.on();
+
+        } else if (m_timeCounter - lastVibrationTime >= 1) {
+            vibration.off();
+            lastVibrationTime = m_timeCounter;
         }
         
         //Process the audioBuffer setting the Microphone::m_value variable
@@ -108,6 +115,10 @@ void MicGame::game() {
 
     //Exit the waveform loop for proper termination of thread
     m_runWaveform = false;
+
+    // Draw the loading screen when checking highscore
+    m_canvas->drawScreen4();
+    m_displayManager.updateScreen(&m_canvas->c_main);
 
     if(challengeMode){
         challenge(m_score);
@@ -131,11 +142,27 @@ void MicGame::game() {
 void MicGame::run() {
     using namespace rtos;
     using namespace mbed;
+    using namespace std::chrono;
+
+    // pinMode(9, OUTPUT);
+    // digitalWrite(9, HIGH);
+
+    vibration.off();
+    m_canvas = new MicGameUI(this);
+
+    //Draw the intro screen and count down to start
+    for (int i = 3; i >= 0; i--) {
+        m_canvas->drawIntroScreen(i);
+        m_displayManager.updateScreen(&m_canvas->c_main);
+        ThisThread::sleep_for(1s); 
+    }
+    //Manually reset the screen before starting the game
+    m_canvas->resetScreen();
+    m_displayManager.updateScreen(&m_canvas->c_main);
 
     //Reset the counters to 0
     m_score = 0;
     m_timeCounter = 0;
-
 
     //Starts the threads
     m_isRunning = true;
@@ -149,8 +176,6 @@ void MicGame::run() {
     t_screenUpdate = new Thread;
     t_userInput = new Thread;
     t_animateWaveform = new Thread;
-
-    m_canvas = new MicGameUI(this);
 
     t_gameLogic->start(mbed::callback(this, &MicGame::game));
     t_userInput->start(mbed::callback(this, &MicGame::handleInput));
@@ -198,8 +223,9 @@ void MicGame::stop() {
     delete m_canvas; // Properly delete the m_canvas when stopping
     m_canvas = nullptr;
 
-    mic.end();
+    mic.end();  
 
+    vibration.off(); //Turn off vibration when stopping the game
 
     //clear all flags before exiting
     m_gameFlags.clear(SCREEN_UPDATE_FLAG | ADVANCE_GAME_FLAG);

@@ -1,12 +1,18 @@
 /**
- * @class WifiMenu
- * @brief Handles the WiFi menu state of the application.
- *
- * This class is responsible for managing the WiFi menu state of the application.
- * It also manages the WiFi connection and user credentials.
+ * @brief This is the wifi menu state. It has the following functionality:
+ * - Let's the user scan and choose network 
+ * - Enter network password
+ * - Enter username displayed in challenges and highscore boards. 
+ * - Connect to the network using the saved network name and password. 
+ * 
+ * The network name, password and user name are saved to flash memory and are saved
+ * between power on/off so if the user is connecting to the same network it's possible login directly
+ * using the Login option in the menu.
  */
+
 #ifndef GBGAME_wifiMenu_H
 #define GBGAME_wifiMenu_H
+
 #include <Arduino.h>
 #include <vector>
 #include "core/macros.h"
@@ -49,21 +55,21 @@ public:
     std::string m_string_password = " ";
     std::string m_saved_network = " ";
 
-    bool m_optionEntered = false;
-    bool m_execute = false;
-    bool m_getNetworks = true;
+    bool m_optionEntered = false;   //Bool for entering the selected option
+    bool m_execute = false;         //Bool for executing the selected option
+    bool m_getNetworks = true;      
 
-    int m_option = 0;
-    int m_optionMAX = 3;
+    int m_option = 0;               //Keeps track of the selected option
+    int m_optionMAX = 3;            //Sets the max available menu options
 
-    int m_selectedNetwork = 0; 
+    int m_selectedNetwork = 0;      //Used for keeping track of selected network
 
 
-    int m_selectedLetter = 0;
-    int m_maxLetter = 4;
+    int m_selectedLetter = 0;       //Used for selecting letters in text edit screens
+    int m_maxLetter = 4;            //Max selecable letter
 
-    int m_minASCII = 65;
-    int m_maxASCII = 122;
+    int m_minASCII = 65;            // Sets the minimum bounds for ascii table letter selection
+    int m_maxASCII = 122;           // Sets the maximum bounds for ascii table letter selection
 
     bool m_firstRun = true;
 
@@ -74,10 +80,9 @@ public:
     void update() override;
     void stop() override;
 
-    void game();                          //Contains the logic for the game
+    void game();                            //Contains the logic for the game
 
-    void setName();
-    void checkLetterBounds(char &letter);
+    void checkLetterBounds(char &letter);   //Corrects the ascii letter if out of bounds.
 
     void setASCIIBounds(int min, int max);
     void updatePasswordString();

@@ -9,6 +9,8 @@
 #include "functionality/readWriteFlash.h"
 #include "mbed_stats.h"
 
+#include "hardware/vibration.h"
+
 //#define DEBUG
 uint32_t State::instanceCounter = 0; // Static variable to keep track of the number of instances of State
 DisplayManager& dm = DisplayManager::getInstance(); // Display manager instance
@@ -26,10 +28,15 @@ void setup() {
     //Get the Wi-Fi credentials from the flash
     wifi.userName = flash::readFromFlash("username");
     wifi.ssid = flash::readFromFlash("network");
-    wifi.password = flash::readFromFlash("password");
+    wifi.password = flash::readFromFlash("password");  
 }
+
+
 
 void loop() {
     using namespace std::chrono;
+
     rtos::ThisThread::sleep_for(seconds(4));
+    //vibration.off();
+
 }

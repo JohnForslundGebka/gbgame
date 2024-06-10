@@ -1,0 +1,2 @@
+# Folder content
+This folder contains files and classes handling the hardware components like buttons, vibration motor or microphone etc. The file and class names are kind of self explanatory but each header file contains additional documentation if needed. 
