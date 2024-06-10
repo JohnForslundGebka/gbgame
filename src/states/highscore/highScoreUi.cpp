@@ -12,12 +12,10 @@ void HighScoreUi::drawHighscore() {
 
     // Define the type for the leaderboard entry
     using LeaderboardEntry = std::pair<String, int>;
-    // Define the type for the scores array, containing 5 top scores
-    using ScoresArray = std::array<LeaderboardEntry, 5>;
-    // Define the map to hold all game states with their respective scores
-    std::unordered_map<uint32_t, ScoresArray> leaderBoards;
-
-    wifi.getDataToHighscore(leaderBoards);
+    //array that will hold the top 5 scores
+    std::array<LeaderboardEntry, 5> leaderBoard;
+    //get the top 5 scores for the current game
+    wifi.getSingleDataToHighscore(parentState->m_selectedState,leaderBoard);
 
     c_main.C.drawLine(0, 19, 128, 19, 0xFFFF);
     c_main.C.setTextColor(0xFFFF);
@@ -50,34 +48,33 @@ void HighScoreUi::drawHighscore() {
     c_main.C.print("5");
     c_main.C.setTextColor(0xA815);
     c_main.C.setCursor(19, 45);
-    c_main.C.print(leaderBoards[currentSelectedGame][0].first);
+    c_main.C.print(leaderBoard[0].first);
     c_main.C.setTextColor(0xAD55);
     c_main.C.setCursor(19, 63);
-    c_main.C.print(leaderBoards[currentSelectedGame][1].first);
+    c_main.C.print(leaderBoard[1].first);
     c_main.C.setTextColor(0xAD55);
     c_main.C.setCursor(19, 80);
-    c_main.C.print(leaderBoards[currentSelectedGame][2].first);
+    c_main.C.print(leaderBoard[2].first);
     c_main.C.setCursor(19, 96);
-    c_main.C.print(leaderBoards[currentSelectedGame][3].first);
+    c_main.C.print(leaderBoard[3].first);
     c_main.C.setCursor(19, 112);
-    c_main.C.print(leaderBoards[currentSelectedGame][4].first);
+    c_main.C.print(leaderBoard[4].first);
     c_main.C.setTextColor(0x540);
     c_main.C.setCursor(88, 47);
-    c_main.C.print(leaderBoards[currentSelectedGame][0].second);
+    c_main.C.print(leaderBoard[0].second);
     c_main.C.setCursor(87, 63);
-    c_main.C.print(leaderBoards[currentSelectedGame][1].second);
+    c_main.C.print(leaderBoard[1].second);
     c_main.C.setCursor(87, 80);
-    c_main.C.print(leaderBoards[currentSelectedGame][2].second);
+    c_main.C.print(leaderBoard[2].second);
     c_main.C.setCursor(87, 96);
-    c_main.C.print(leaderBoards[currentSelectedGame][3].second);
+    c_main.C.print(leaderBoard[3].second);
     c_main.C.setCursor(87, 111);
-    c_main.C.print(leaderBoards[currentSelectedGame][4].second);
+    c_main.C.print(leaderBoard[4].second);
     c_main.C.drawRect(1, 95, 14, 17, 0xFFFF);
     c_main.C.drawRect(1, 111, 14, 17, 0xFFFF);
     c_main.C.drawRect(1, 78, 14, 17, 0xFFFF);
     c_main.C.drawRect(1, 61, 14, 17, 0xFFFF);
     c_main.C.drawRect(1, 44, 14, 17, 0xFFFF);
-
 }
 
 HighScoreUi::HighScoreUi(HighScore *p) : c_main(128,128,0,0), parentState(p)  {}

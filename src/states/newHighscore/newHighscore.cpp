@@ -17,7 +17,6 @@ void NewHighscore::update() {
 }
 
 void NewHighscore::run() {
-    delay(2000);
     using namespace rtos;
     using namespace mbed;
     using namespace std::chrono;

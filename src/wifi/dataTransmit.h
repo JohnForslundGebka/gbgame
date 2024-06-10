@@ -35,6 +35,8 @@ public:
     //updates the local leaderboard with the values from the firebase database
     void getDataToHighscore(std::unordered_map<uint32_t, ScoresArray> &leaderBoards);
 
+    void getSingleDataToHighscore(uint32_t gameID, ScoresArray &leaderBoard);
+
     //will take the local leaderboard and upload it to the airbase database
     void sendHighscoreToData(std::unordered_map<uint32_t, ScoresArray> &leaderBoards);
     //will take the local challenge and upload it to the airbase database

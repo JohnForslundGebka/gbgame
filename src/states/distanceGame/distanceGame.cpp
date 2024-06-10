@@ -3,6 +3,7 @@
 #include "rtos.h"
 #include "functionality/scores.h"
 #include "functionality/challengeHandler.h"
+#include "wifi/dataTransmit.h"
 
 
 // Constructor, initializes all necessary objects
@@ -109,28 +110,25 @@ void DistanceGame::game() {
         //Waits for button A press to finish the game
         m_gameFlags.wait_any(ADVANCE_GAME_FLAG, osWaitForever, true);
     }
-
+    //If the game is in challenge mode, do not check for highscore
     if(challengeMode){
         challenge(m_totScore);
-    } else {
-        //if a new highscore was set
-        if (m_totScore > leaderBoard.maxScores[m_flagName]) {
-            m_canvas->drawScreen4();
-            m_gameFlags.set(SCREEN_UPDATE_FLAG);
-            rtos::ThisThread::sleep_for(1s);
-        } //try to add to leaderboard
-        if (leaderBoard.checkIfScoreWasHighcore(m_totScore, this)) {
-            m_isRunning = false;
-            State::stateFlags.set(GlobalStates::stateList[INDEX_NEW_HIGHSCORE]->getFlagName());
-        } else {
-            m_canvas->drawScreen3(m_totScore);
-            m_gameFlags.set(SCREEN_UPDATE_FLAG);
-
-            rtos::ThisThread::sleep_for(3s);
-            //Return to main manu when game finish
-            m_isRunning = false;
-            State::stateFlags.set(GlobalStates::stateList[INDEX_MAIN_MENU]->getFlagName());
+    } else if(m_totScore > leaderBoard.maxScores[m_flagName]) { //if a new highscore was set
+        m_canvas->drawScreen4();
+        m_gameFlags.set(SCREEN_UPDATE_FLAG);
+        DataTransmit &wifi = DataTransmit::getInstance();
+        if (wifi.wifiIsConnected){ //If wifi is connected, send the new highscore to the database
+            leaderBoard.checkIfScoreWasHighcore(m_totScore, this);
         }
+        m_isRunning = false;
+        State::stateFlags.set(GlobalStates::stateList[INDEX_NEW_HIGHSCORE]->getFlagName());
+    } else {   //if no new highscore was set
+        m_canvas->drawScreen3(m_totScore);
+        m_gameFlags.set(SCREEN_UPDATE_FLAG);
+        rtos::ThisThread::sleep_for(3s);
+        //Return to main manu when game finish
+        m_isRunning = false;
+        State::stateFlags.set(GlobalStates::stateList[INDEX_MAIN_MENU]->getFlagName());
     }
 }
 
