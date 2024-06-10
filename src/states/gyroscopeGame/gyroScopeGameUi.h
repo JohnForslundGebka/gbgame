@@ -17,6 +17,12 @@ public:
     void drawFallingBalls(int x, int y, uint16_t color);
     void drawPlayerBall();
     void drawGameOver();
+
+    void drawCheckingSCore();
+    void drawChallengeWinScreen(String &player1name, int player1score, String &player2name, int player2score);
+    void drawChallengeLoseScreen(String &player1name, int player1score, String &player2name, int player2score);
+    void drawNoHighcoreScreen(int score);
+
 private:
 
 };

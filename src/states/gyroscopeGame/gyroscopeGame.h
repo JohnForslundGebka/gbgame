@@ -1,3 +1,11 @@
+/**
+* @class GyroscopeGame
+* @brief A game that uses a gyroscope for control.
+*
+* This class represents a game where the player controls a ball using a gyroscope.
+* The game logic, user input, and screen updates are handled by separate threads.
+* The game has several states, including STARTING, PLAYING, and GAME_OVER.
+*/
 #include <Wire.h>
 #include <SPI.h>
 #include <core/state.h>
@@ -21,16 +29,16 @@ private:
     GyroScopeGameUi *m_canvas = nullptr;
 
     // Gyro sensitivity (tune this value)
-    const float m_sensitivity = 10.0; // Increased sensitivity
+    const float m_sensitivity = 10.0;
 
     // Game states
     enum GameState {
-        STARTING,
         PLAYING,
         GAME_OVER
     };
     GameState gameState;
     LSM6DSOXClass IMU;
+    bool m_challengeMode = false;
 public:
     // Score and time
     int m_score;
@@ -61,7 +69,7 @@ public:
     void update() override;
     void stop() override;
     void challenge(int score);
-    void incrementCounter(); //Function that attaches to the timer interrupt ticker and increments time counter
+    void incrementCounter(); //Function that attaches to the timer interrupt ticker and increment time counter
     void updatePositionOfBall();
     void game();               //Contains the logic for the game
 };

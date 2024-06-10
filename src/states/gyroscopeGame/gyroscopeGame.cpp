@@ -1,6 +1,8 @@
 #include "gyroscopeGame.h"
+#include "functionality/scores.h"
+#include "functionality/challengeHandler.h"
 
-GyroscopeGame::GyroscopeGame() : State("balancey"), IMU_LSM6DSOX(Wire,0x6A) {}
+GyroscopeGame::GyroscopeGame() : State("tilty"), IMU_LSM6DSOX(Wire,0x6A) {}
 
 
 void GyroscopeGame::handleInput() {
@@ -25,7 +27,11 @@ void GyroscopeGame::game() {
     using namespace mbed;
     using namespace std::chrono;
 
-   // const int GAME_LENGTH = 60; //Length in seconds of a game
+    //class that is used for handling highscores and leaderboards
+    Scores &leaderBoard = Scores::getInstance();
+    //class that is used for challenges
+    ChallengeHandler &challengeHandler = ChallengeHandler::getInstance();
+    m_challengeMode = challengeHandler.startingAChallenge || challengeHandler.respondingToChallenge;
 
     //Creates and initializes a timer and attached a function that increments m_timeCounter every second
     Ticker ticker;
@@ -80,6 +86,28 @@ void GyroscopeGame::game() {
                 m_gameFlags.set(SCREEN_UPDATE_FLAG);
                 m_isRunning = false;
                 break;
+        }
+    }
+    if(m_challengeMode){
+        challenge(m_score);
+    } else {
+        //if a new highscore was set
+        if (m_score > leaderBoard.maxScores[m_flagName]) {
+            m_canvas->drawScreen4();
+            m_gameFlags.set(SCREEN_UPDATE_FLAG);
+            rtos::ThisThread::sleep_for(1s);
+        } //try to add to leaderboard
+        if (leaderBoard.checkIfScoreWasHighcore(m_score, this)) {
+            m_isRunning = false;
+            State::stateFlags.set(GlobalStates::stateList[INDEX_NEW_HIGHSCORE]->getFlagName());
+        } else {
+            m_canvas->drawScreen3(m_score);
+            m_gameFlags.set(SCREEN_UPDATE_FLAG);
+
+            rtos::ThisThread::sleep_for(3s);
+            //Return to main manu when game finish
+            m_isRunning = false;
+            State::stateFlags.set(GlobalStates::stateList[INDEX_MAIN_MENU]->getFlagName());
         }
     }
 
