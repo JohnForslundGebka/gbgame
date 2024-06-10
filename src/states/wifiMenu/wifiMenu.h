@@ -1,8 +1,14 @@
 
 /**
- * @brief 
+ * @brief This is the wifi menu state. It has the following functionality:
+ * - Let's the user scan and choose network 
+ * - Enter network password
+ * - Enter username displayed in challenges and highscore boards. 
+ * - Connect to the network using the saved network name and password. 
  * 
- * @class
+ * The network name, password and user name are saved to flash memory and are saved
+ * between power on/off so if the user is connecting to the same network it's possible login directly
+ * using the Login option in the menu.
  */
 
 #ifndef GBGAME_wifiMenu_H
