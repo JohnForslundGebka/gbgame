@@ -13,6 +13,8 @@
 #include "mbed_stats.h"
 #include "functionality/challengeHandler.h"
 
+#include "hardware/vibration.h"
+
 //#define DEBUG
 uint32_t State::instanceCounter = 0;
 DisplayManager& dm = DisplayManager::getInstance();
@@ -53,10 +55,21 @@ void setup() {
     wifi.userName = flash::readFromFlash("username");
     wifi.ssid = flash::readFromFlash("network");
     wifi.password = flash::readFromFlash("password");
+
+    
 }
+
+
 
 void loop() {
     using namespace std::chrono;
+
+    //vibration.on();
+    //pinMode(9, OUTPUT);
+    //digitalWrite(9, HIGH);
    // Serial.println(wifi.ssid);
     rtos::ThisThread::sleep_for(seconds(4));
+    //vibration.off();
+
+
 }

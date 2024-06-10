@@ -1,0 +1,16 @@
+# challenge.h/cpp:
+Contains the definition and implementation of the Challenge class. 
+Starting a new challange (online) will create an instance of Challange, which will store the 
+data for each game.  
+
+# challengeHandler.h/cpp:
+Manages all challenges and coordinates the state of the game and players.
+
+# wifi/dataTransmit.h/cpp:
+Handles all data transmission needs over WiFi.
+
+# readWriteFlash.h/cpp: 
+Functionality for reading and writing password, network and username to/from flash memory. 
+
+# score.h/cpp:
+Manages scores and highscore lists

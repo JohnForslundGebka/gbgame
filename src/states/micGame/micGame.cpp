@@ -75,6 +75,7 @@ void MicGame::game() {
 
     const int GAME_LENGTH = 20;             //Length in seconds of a game
     int lastTime = 0;                       //Keeps track of when to update score
+    int lastVibrationTime = 0;              //Used for keeping time for the vibration motor
 
     //Creates and initialize a timer and attached a function that increments m_timeCounter every second
     Ticker ticker;
@@ -89,6 +90,12 @@ void MicGame::game() {
                 m_score++;
                 lastTime = m_timeCounter;
             }
+
+            vibration.on();
+
+        } else if (m_timeCounter - lastVibrationTime >= 1) {
+            vibration.off();
+            lastVibrationTime = m_timeCounter;
         }
         
         //Process the audioBuffer setting the Microphone::m_value variable
@@ -137,6 +144,10 @@ void MicGame::run() {
     using namespace mbed;
     using namespace std::chrono;
 
+    // pinMode(9, OUTPUT);
+    // digitalWrite(9, HIGH);
+
+    vibration.off();
     m_canvas = new MicGameUI(this);
 
     //Draw the intro screen and count down to start
@@ -232,8 +243,9 @@ void MicGame::stop() {
     delete m_canvas; // Properly delete the m_canvas when stopping
     m_canvas = nullptr;
 
-    mic.end();
+    mic.end();  
 
+    vibration.off(); //Turn off vibration when stopping the game
 
     //clear all flags before exiting
     m_gameFlags.clear(SCREEN_UPDATE_FLAG | ADVANCE_GAME_FLAG);
