@@ -4,7 +4,7 @@
 *
 * This class represents a game where the player controls a ball using a gyroscope.
 * The game logic, user input, and screen updates are handled by separate threads.
-* The game has several states, including STARTING, PLAYING, and GAME_OVER.
+* The game has two states: PLAYING and GAME_OVER.
 */
 #include <Wire.h>
 #include <SPI.h>
@@ -65,11 +65,11 @@ public:
     void resetFallingBall(int index);
 
     void run() override;
-    void handleInput() override;
+    void handleInput() override; //Function that attaches to the user input thread and handles the user button presses
     void update() override;
     void stop() override;
-    void challenge(int score);
+    void challenge(int score); //Function that is called when the game is played in challenge mode
     void incrementCounter(); //Function that attaches to the timer interrupt ticker and increment time counter
-    void updatePositionOfBall();
+    void updatePositionOfBall(); //Reads the gyroscope data and updates the position of the player ball
     void game();               //Contains the logic for the game
 };
