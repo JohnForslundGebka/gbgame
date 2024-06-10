@@ -10,6 +10,7 @@
 #include "states/newHighscore/newHighscore.h"
 #include "states/wifiMenu/wifiMenu.h"
 #include "states/multiplayer/multiplayerMenu.h"
+#include "states/gyroscopeGame/gyroscopeGame.h"
 
 
 
@@ -25,12 +26,12 @@ namespace GlobalStates {
     NewHighscore newHighscore;
     WifiMenu wifiMenu;
     MultiplayerMenu multiplayerMenu;
+    GyroscopeGame gyroscopeGame;
 
-
-    State* stateList[numberOfTotalStates] = {&mainMenu, &distanceGame, &games, &settings, &micGame, &highScore, &newHighscore, &wifiMenu, &multiplayerMenu};
+    State* stateList[numberOfTotalStates] = {&mainMenu, &distanceGame, &games, &settings, &micGame, &highScore, &newHighscore, &wifiMenu, &multiplayerMenu, &gyroscopeGame};
 
     State* mainMenuList[numberOfMainMenuStates] = {&games,&settings,&highScore, &multiplayerMenu};
-    State* gameList[numberOfGameStates] = {&distanceGame, &micGame};
+    State* gameList[numberOfGameStates] = {&distanceGame, &micGame, &gyroscopeGame};
     State* settingsList[numberOfSettingsStates] = {&wifiMenu};
 
     //variable used be the State handler to change state
@@ -42,5 +43,6 @@ namespace GlobalStates {
                                      highScore.getFlagName()|
                                      newHighscore.getFlagName() |
                                      wifiMenu.getFlagName() |
-                                     multiplayerMenu.getFlagName();
+                                     multiplayerMenu.getFlagName()|
+                                      gyroscopeGame.getFlagName();
 }

@@ -1,6 +1,6 @@
 #include "scores.h"
 #include "core/state.h"
-#include <algorithm> // For std::max_element
+#include <algorithm>
 
 
 Scores::Scores() {

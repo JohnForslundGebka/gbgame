@@ -13,7 +13,7 @@
 //pins used for SPI communication by the DisplayManager
 #define DC_PIN   15   // Data/Command
 #define CS_PIN   14   // Chip Select, can use any GPIO except A6/A7
-#define RST_PIN  18    // Reset
+#define RST_PIN  9    // Reset
 
 //Pins used by the ultrasonic sensor
 #define TRIG_PIN 16    //D16
@@ -39,7 +39,8 @@ enum {
     INDEX_HIGHSCORE,
     INDEX_NEW_HIGHSCORE,
     INDEX_WIFI_MENU,
-    INDEX_MULTIPLAYER_MENU
+    INDEX_MULTIPLAYER_MENU,
+    INDEX_GYROSCOPE_GAME
 };
 
 
