@@ -100,7 +100,7 @@ bool MicGameUI::isWaveformInCircle(int circleX, int circleY, int radius) {
 }
 
 //Exit screen
-void MicGameUI::drawScreen3() {
+void MicGameUI::drawScoreScreen() {
     c_main.C.fillRect(0, 0, 128, 128, BLACK);
 
     c_main.C.setTextColor(0xFFFF);
