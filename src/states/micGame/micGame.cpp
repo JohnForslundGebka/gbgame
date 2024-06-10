@@ -143,10 +143,6 @@ void MicGame::run() {
     using namespace rtos;
     using namespace mbed;
     using namespace std::chrono;
-
-    // pinMode(9, OUTPUT);
-    // digitalWrite(9, HIGH);
-
     vibration.off();
     m_canvas = new MicGameUI(this);
 
