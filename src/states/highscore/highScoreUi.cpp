@@ -78,3 +78,20 @@ void HighScoreUi::drawHighscore() {
 }
 
 HighScoreUi::HighScoreUi(HighScore *p) : c_main(128,128,0,0), parentState(p)  {}
+
+void HighScoreUi::drawNotConnectedScreen() {
+    c_main.C.fillScreen(BLACK);
+    c_main.C.drawBitmap(43, 76, image_Restoring_bits, 38, 32, 0xFFFF);
+    c_main.C.setTextColor(0xFFFF);
+    c_main.C.setTextSize(2);
+    c_main.C.setTextWrap(false);
+    c_main.C.setCursor(25, 4);
+    c_main.C.print("Please ");
+    c_main.C.setCursor(24, 21);
+    c_main.C.print("connect");
+    c_main.C.setCursor(23, 40);
+    c_main.C.print("to wifi");
+    c_main.C.setTextSize(1);
+    c_main.C.setCursor(21, 59);
+    c_main.C.print("for Highscore");
+}

@@ -4,7 +4,7 @@
 #include <string>
 #include "functionality/challengeHandler.h"
 #include "wifi/dataTransmit.h"
-#include "mbed_stats.h"
+
 
 
 // Constructor, initializes the state with it's name "Wifi Menu"
@@ -235,44 +235,9 @@ void MultiplayerMenu::run() {
         t_gameLogic = new Thread;
         t_screenUpdate = new Thread;
         t_userInput = new Thread;
-        mbed_stats_heap_t heap_stats;
-        mbed_stats_heap_get(&heap_stats);
-
-        Serial.print("Current heap: ");
-        Serial.println(heap_stats.current_size);
-
-        Serial.print("Max heap size: ");
-        Serial.println(heap_stats.max_size);
-
-        Serial.print("Total heap size: ");
-        Serial.println(heap_stats.reserved_size);
-
-        Serial.print("Alloc count: ");
-        Serial.println(heap_stats.alloc_cnt);
-
-        Serial.print("Alloc fail count: ");
-        Serial.println(heap_stats.alloc_fail_cnt);
-        Serial.println("------------------------------------");
-        Serial.println(" ");     // Stack statistics (aggregated)
-        mbed_stats_stack_t stack_stats;
-        mbed_stats_stack_get(&stack_stats);
-        Serial.println("Stack Statistics:");
-        Serial.print("Max stack size used: ");
-        Serial.println(stack_stats.max_size);
-        Serial.print("Reserved stack size: ");
-        Serial.println(stack_stats.reserved_size);
-
-        Serial.println("------------------------------------");
-
-
         t_userInput->start(mbed::callback(this, &MultiplayerMenu::handleInput));
-        Serial.println("userinput started");
         t_screenUpdate->start(mbed::callback(this, &MultiplayerMenu::update));
-        Serial.println("userinput started");
         t_gameLogic->start(mbed::callback(this, &MultiplayerMenu::game));
-        Serial.println("gamelogic started");
-        Serial.println(" all Threads started");
-
  }
 }
 

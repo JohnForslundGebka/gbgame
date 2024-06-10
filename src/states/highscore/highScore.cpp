@@ -69,14 +69,16 @@ void HighScore::run() {
     using namespace rtos;
     using namespace mbed;
     m_isRunning = true;
+    c_canvas = new HighScoreUi(this);
     //if the unit is connected to Wi-Fi, update the leaderboard with the values from the database
     DataTransmit &wifi = DataTransmit::getInstance();
-    if(wifi.wifiIsConnected){
-        Scores &scores = Scores::getInstance();
-        scores.getLeaderboardFromDatabase();
+    if(!wifi.wifiIsConnected){
+        c_canvas->drawNotConnectedScreen(); //draw wifi message screen
+        m_displayManager.updateScreen(&c_canvas->c_main);
+        ThisThread::sleep_for(std::chrono::seconds(3));
+        State::stateFlags.set(GlobalStates::stateList[INDEX_MAIN_MENU]->getFlagName());
     }
 
-    c_canvas = new HighScoreUi(this);
     t_gfx = new Thread;
     t_move = new Thread;
 

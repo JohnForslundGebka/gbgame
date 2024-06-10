@@ -17,6 +17,7 @@ public:
     Canvas c_main;
     explicit HighScoreUi(HighScore *p);
     void drawHighscore();
+    void drawNotConnectedScreen()
 };
 
 
