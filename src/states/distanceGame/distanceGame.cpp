@@ -114,12 +114,12 @@ void DistanceGame::game() {
     if(challengeMode){
         challenge(m_totScore);
     } else if(m_totScore > leaderBoard.maxScores[m_flagName]) { //if a new highscore was set
-        m_canvas->drawScreen4();
-        m_gameFlags.set(SCREEN_UPDATE_FLAG);
         DataTransmit &wifi = DataTransmit::getInstance();
-        if (wifi.wifiIsConnected){ //If wifi is connected, send the new highscore to the database
-            leaderBoard.checkIfScoreWasHighcore(m_totScore, this);
-        }
+         if(wifi.wifiIsConnected){
+            m_canvas->drawScreen4();
+            m_gameFlags.set(SCREEN_UPDATE_FLAG);
+         }
+        leaderBoard.checkIfScoreWasHighcore(m_totScore, this);
         m_isRunning = false;
         State::stateFlags.set(GlobalStates::stateList[INDEX_NEW_HIGHSCORE]->getFlagName());
     } else {   //if no new highscore was set

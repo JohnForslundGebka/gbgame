@@ -17,19 +17,26 @@ Scores& Scores::getInstance() {
 bool Scores::checkIfScoreWasHighcore(int score, State *gameThatWasPlayed) {
     // Get the flag of the game that was played
     uint32_t playedGame = gameThatWasPlayed->getFlagName();
-
     // Check if the score is greater than the maximum score for the played game
-    if(score > maxScores[playedGame]) {
+    bool isHighScore = score > maxScores[playedGame];
+
+    if(isHighScore && dataTransmit.wifiIsConnected) {
+
         // Attempt to add the score to the leaderboard
-        bool scoreAdded = addScoreToLeaderboard(score, playedGame);
+        bool scoreWasAdded = addScoreToLeaderboard(score, playedGame);
 
         // If the score was successfully added, set the new high score
-        if (scoreAdded) {
+        if (scoreWasAdded) {
             GlobalStates::newHighscore.setScore(score);
         }
-        return scoreAdded;
+        return scoreWasAdded;
+    } else if (isHighScore && !dataTransmit.wifiIsConnected) {
+        //if the wifi is not connected, set the new highscore locally
+        GlobalStates::newHighscore.setScore(score);
+        //set the new highscore to the local map
+        maxScores[playedGame] = score;
+        return true;
     } else {
-        // If the score is not greater than the maximum score, return false
         return false;
     }
 }
