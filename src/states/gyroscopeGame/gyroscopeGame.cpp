@@ -75,7 +75,7 @@ void GyroscopeGame::game() {
                 // Update the player's ball position based on gyroscope data
                 updatePositionOfBall();
                 m_gameFlags.set(SCREEN_UPDATE_FLAG);
-                ThisThread::sleep_for(50ms);
+              //  ThisThread::sleep_for(50ms);
                 break;
 
             case GAME_OVER :
@@ -87,11 +87,11 @@ void GyroscopeGame::game() {
                         m_canvas->drawCheckingSCore();
                         m_gameFlags.set(SCREEN_UPDATE_FLAG);
                         rtos::ThisThread::sleep_for(50ms);
-                    } //try to add to leaderboard
-                    if (leaderBoard.checkIfScoreWasHighcore(m_score, this)) {
+                        leaderBoard.checkIfScoreWasHighcore(m_score, this);
                         m_isRunning = false;
                         State::stateFlags.set(GlobalStates::stateList[INDEX_NEW_HIGHSCORE]->getFlagName());
-                    } else { //if not added to leaderboard
+                    }else {
+                       //if not added to leaderboard
                         m_canvas->drawNoHighcoreScreen(m_score); //draw the no highscore screen
                         m_gameFlags.set(SCREEN_UPDATE_FLAG);
 
@@ -100,11 +100,12 @@ void GyroscopeGame::game() {
                         m_isRunning = false;
                         State::stateFlags.set(GlobalStates::stateList[INDEX_MAIN_MENU]->getFlagName());
                     }
-                }
+
               //  m_gameFlags.set(SCREEN_UPDATE_FLAG);
                 m_isRunning = false;
                 break;
         }
+    }
     }
 
 
