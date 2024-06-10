@@ -2,7 +2,7 @@
 #include "functionality/scores.h"
 #include "functionality/challengeHandler.h"
 
-GyroscopeGame::GyroscopeGame() : State("Tilty"), IMU_LSM6DSOX(Wire,0x6A) {}
+GyroscopeGame::GyroscopeGame() : State("Tilty"){}
 
 
 void GyroscopeGame::handleInput() {
@@ -155,7 +155,6 @@ void GyroscopeGame::update() {
         m_displayManager.updateScreen(&m_canvas->c_main);
     }
 }
-
 
 void GyroscopeGame::run() {
     //initialize the game

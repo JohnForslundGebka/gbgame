@@ -57,12 +57,7 @@ public:
      * - `ScoresArray`: An array of five `LeaderboardEntry` elements, representing the top five scores for a game state.
      * - `leaderBoards`: A hash map where each key is a game state ID (`uint32_t`) and the value is a `ScoresArray` containing the top scores for that state.
      */
-    // Define the type for the leaderboard entry
-    using LeaderboardEntry = std::pair<String, int>;
-    // Define the type for the scores array, containing 5 top scores
-    using ScoresArray = std::array<LeaderboardEntry, 5>;
-    // Define the map to hold all game states with their respective scores
-    std::unordered_map<uint32_t, ScoresArray> leaderBoards;
+
 
 
 

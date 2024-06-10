@@ -37,7 +37,6 @@ private:
         GAME_OVER
     };
     GameState gameState;
-    LSM6DSOXClass IMU;
     bool m_challengeMode = false;
 public:
     // Score and time

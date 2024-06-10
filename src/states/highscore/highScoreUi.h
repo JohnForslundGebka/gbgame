@@ -9,7 +9,7 @@ class HighScore; // Forward declaration
 
 class HighScoreUi {
 private:
-    Scores &scores = Scores::getInstance();
+ //   Scores &scores = Scores::getInstance();
     HighScore *parentState;
     uint32_t currentSelectedGame = 0;
 

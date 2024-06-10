@@ -35,10 +35,17 @@ bool Scores::checkIfScoreWasHighcore(int score, State *gameThatWasPlayed) {
 }
 
 void Scores::init() {
+    // Define the type for the leaderboard entry
+    using LeaderboardEntry = std::pair<String, int>;
+    // Define the type for the scores array, containing 5 top scores
+    using ScoresArray = std::array<LeaderboardEntry, 5>;
+    // Define the map to hold all game states with their respective scores
+    std::unordered_map<uint32_t, ScoresArray> leaderBoards;
+
     //if the unit is connected to Wi-Fi, update the leaderboard with the values from the database
     if(dataTransmit.wifiIsConnected) {
         //set all the current scores
-        getLeaderboardFromDatabase();
+        dataTransmit.getDataToHighscore(leaderBoards);
 
         //fill the local map with the lowest score on the leaderboard
         for (auto &game: GlobalStates::gameList) {
@@ -55,15 +62,6 @@ void Scores::init() {
        uint32_t playedGame = game->getFlagName();
        maxScores.emplace(playedGame,1);
     }
-    //fill the map with temp values
-        for (auto & game : GlobalStates::gameList){
-            uint32_t gameKey = game->getFlagName();
-            int score = 5;
-            for (int j = 0; j < 5; j++){
-                leaderBoards[gameKey][j] = std::make_pair("-", score);
-                score--;
-            }
-        }
 
     }
 
@@ -71,15 +69,32 @@ void Scores::init() {
 }
 
 void Scores::getLeaderboardFromDatabase() {
-    dataTransmit.getDataToHighscore(leaderBoards);
+
 
 }
 
 bool Scores::addScoreToLeaderboard(int score, uint32_t playedGame) {
 
+    // Define the type for the leaderboard entry
+    using LeaderboardEntry = std::pair<String, int>;
+    // Define the type for the scores array, containing 5 top scores
+    using ScoresArray = std::array<LeaderboardEntry, 5>;
+    // Define the map to hold all game states with their respective scores
+    std::unordered_map<uint32_t, ScoresArray> leaderBoards;
+
+    //fill the map with temp values
+    for (auto & game : GlobalStates::gameList){
+        uint32_t gameKey = game->getFlagName();
+        int score = 5;
+        for (int j = 0; j < 5; j++){
+            leaderBoards[gameKey][j] = std::make_pair("-", score);
+            score--;
+        }
+    }
+
     if(dataTransmit.wifiIsConnected){
     //update the leaderboard from Database
-    getLeaderboardFromDatabase();
+    dataTransmit.getDataToHighscore(leaderBoards);
     }
 
     //Early exit if the new score is not higher than the lowest score on the board.

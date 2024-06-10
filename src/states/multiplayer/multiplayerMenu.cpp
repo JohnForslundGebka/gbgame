@@ -200,6 +200,7 @@ void MultiplayerMenu::game() {
 void MultiplayerMenu::run() {
     using namespace rtos;
     using namespace mbed;
+    using namespace std::chrono;
     DataTransmit &wifi = DataTransmit::getInstance();
     m_canvas = new MultiplayerMenuUI(this);
     m_myGamesList.clear();
@@ -234,7 +235,6 @@ void MultiplayerMenu::run() {
         t_gameLogic = new Thread;
         t_screenUpdate = new Thread;
         t_userInput = new Thread;
-        Serial.println("Threads created");
         mbed_stats_heap_t heap_stats;
         mbed_stats_heap_get(&heap_stats);
 
@@ -253,7 +253,17 @@ void MultiplayerMenu::run() {
         Serial.print("Alloc fail count: ");
         Serial.println(heap_stats.alloc_fail_cnt);
         Serial.println("------------------------------------");
-        Serial.println(" ");
+        Serial.println(" ");     // Stack statistics (aggregated)
+        mbed_stats_stack_t stack_stats;
+        mbed_stats_stack_get(&stack_stats);
+        Serial.println("Stack Statistics:");
+        Serial.print("Max stack size used: ");
+        Serial.println(stack_stats.max_size);
+        Serial.print("Reserved stack size: ");
+        Serial.println(stack_stats.reserved_size);
+
+        Serial.println("------------------------------------");
+
 
         t_userInput->start(mbed::callback(this, &MultiplayerMenu::handleInput));
         Serial.println("userinput started");
@@ -263,9 +273,7 @@ void MultiplayerMenu::run() {
         Serial.println("gamelogic started");
         Serial.println(" all Threads started");
 
-        m_gameFlags.set(INPUT_UPDATE_FLAG);
-    }
-
+ }
 }
 
 void MultiplayerMenu::stop() {

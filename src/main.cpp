@@ -19,7 +19,11 @@ StateHandler stateHandler;
 Scores &scores = Scores::getInstance();
 DataTransmit &wifi = DataTransmit::getInstance();
 
+int counter = 0;
+
 void print_memory_info() {
+    Serial.println(counter);
+    counter++;
     mbed_stats_heap_t heap_stats;
     mbed_stats_heap_get(&heap_stats);
 
@@ -38,7 +42,21 @@ void print_memory_info() {
     Serial.print("Alloc fail count: ");
     Serial.println(heap_stats.alloc_fail_cnt);
     Serial.println("------------------------------------");
-    Serial.println(" "); }
+    Serial.println(" ");     // Stack statistics (aggregated)
+    mbed_stats_stack_t stack_stats;
+    mbed_stats_stack_get(&stack_stats);
+    Serial.println("Stack Statistics:");
+    Serial.print("Max stack size used: ");
+    Serial.println(stack_stats.max_size);
+    Serial.print("Reserved stack size: ");
+    Serial.println(stack_stats.reserved_size);
+
+    Serial.println("------------------------------------");
+
+
+}
+
+
 
 
 void setup() {
@@ -57,5 +75,5 @@ void setup() {
 void loop() {
     using namespace std::chrono;
     rtos::ThisThread::sleep_for(seconds(2));
-   // print_memory_info();
+     print_memory_info();
 }
