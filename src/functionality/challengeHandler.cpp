@@ -26,6 +26,9 @@ void ChallengeHandler::respondToChallenge(Challenge* challenge) {
   } else if(game == "Voicy")
   {
       State::stateFlags.set(GlobalStates::stateList[INDEX_MIC_GAME]->getFlagName());
+  } else if(game == "Tilty")
+  {
+      State::stateFlags.set(GlobalStates::stateList[INDEX_GYROSCOPE_GAME]->getFlagName());
   }
 }
 

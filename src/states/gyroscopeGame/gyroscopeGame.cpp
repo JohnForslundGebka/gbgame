@@ -2,7 +2,7 @@
 #include "functionality/scores.h"
 #include "functionality/challengeHandler.h"
 
-GyroscopeGame::GyroscopeGame() : State("tilty"), IMU_LSM6DSOX(Wire,0x6A) {}
+GyroscopeGame::GyroscopeGame() : State("Tilty"), IMU_LSM6DSOX(Wire,0x6A) {}
 
 
 void GyroscopeGame::handleInput() {
@@ -48,13 +48,12 @@ void GyroscopeGame::game() {
             case PLAYING :
                 Serial.println("NOW GAME PLAYING");
                 //check if the time is up
-                if (m_timeCounter >= 0) {
+                if (m_timeCounter == 0) {
                     gameState = GAME_OVER;
                     break;
                 }
                 //draw the score and time and player ball
                 m_canvas->draw();
-               // Serial.println("NOW DRAW");
                 for (int i = 0; i < m_numFallingBalls; i++) {
                     //draw the falling ball
                     m_canvas->drawFallingBalls(m_fallingBalls[i].x, m_fallingBalls[i].y, m_fallingBalls[i].color);
@@ -93,26 +92,23 @@ void GyroscopeGame::game() {
     } else {
         //if a new highscore was set
         if (m_score > leaderBoard.maxScores[m_flagName]) {
-            m_canvas->drawScreen4();
+            m_canvas->drawCheckingSCore();
             m_gameFlags.set(SCREEN_UPDATE_FLAG);
-            rtos::ThisThread::sleep_for(1s);
+            rtos::ThisThread::sleep_for(50ms);
         } //try to add to leaderboard
         if (leaderBoard.checkIfScoreWasHighcore(m_score, this)) {
             m_isRunning = false;
             State::stateFlags.set(GlobalStates::stateList[INDEX_NEW_HIGHSCORE]->getFlagName());
         } else {
-            m_canvas->drawScreen3(m_score);
+            m_canvas->drawNoHighcoreScreen(m_score);
             m_gameFlags.set(SCREEN_UPDATE_FLAG);
 
-            rtos::ThisThread::sleep_for(3s);
+            rtos::ThisThread::sleep_for(5s);
             //Return to main manu when game finish
             m_isRunning = false;
             State::stateFlags.set(GlobalStates::stateList[INDEX_MAIN_MENU]->getFlagName());
         }
     }
-
-    State::stateFlags.wait_any(ADVANCE_GAME_FLAG, osWaitForever);
-    State::stateFlags.set(GlobalStates::stateList[INDEX_MAIN_MENU]->getFlagName());
 
 }
 
@@ -150,8 +146,7 @@ void GyroscopeGame::stop() {
     m_gameFlags.clear(SCREEN_UPDATE_FLAG | ADVANCE_GAME_FLAG);
     Buttons::states.clear(Buttons::START_FLAG | Buttons::A_FLAG);
 
-    rtos::ThisThread::sleep_for(900ms);
-
+    rtos::ThisThread::sleep_for(50ms);
 }
 
 void GyroscopeGame::update() {
@@ -171,7 +166,6 @@ void GyroscopeGame::run() {
     using namespace rtos;
     using namespace mbed;
     m_score = 0;
-    m_timeCounter = 0;
     m_isRunning = true;
     //Create the threads
     t_gameLogic = new Thread;
@@ -228,5 +222,25 @@ void GyroscopeGame::updatePositionOfBall() {
 }
 
 void GyroscopeGame::challenge(int score) {
-
+    ChallengeHandler &ch = ChallengeHandler::getInstance();
+    //If the user is starting a new challenge
+    if(ch.startingAChallenge) {
+        ch.endStartChallenge(this,score);
+    } else if (ch.respondingToChallenge){
+        //get info from player 1
+        String player1name = ch.currentChallenge->m_player1Name;
+        int player1Score = ch.currentChallenge->m_player1Score;
+        String player2name = ch.currentChallenge->m_player2Name;
+        if(ch.endResponseToChallenge(score)){
+            m_canvas->drawChallengeWinScreen(player1name,player1Score,player2name,score);
+            m_gameFlags.set(SCREEN_UPDATE_FLAG);
+            rtos::ThisThread::sleep_for(std::chrono::seconds(5));
+            State::stateFlags.set(GlobalStates::stateList[INDEX_MAIN_MENU]->getFlagName());
+        } else {
+            m_canvas->drawChallengeLoseScreen(player1name,player1Score,player2name,score);
+            m_gameFlags.set(SCREEN_UPDATE_FLAG);
+            rtos::ThisThread::sleep_for(std::chrono::seconds(5));
+            State::stateFlags.set(GlobalStates::stateList[INDEX_MAIN_MENU]->getFlagName());
+        }
+    }
 }
