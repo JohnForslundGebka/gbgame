@@ -88,7 +88,6 @@ void ChallengeHandler::endStartChallenge(State *state, int score) {
 
     wifi.sendChallengeToData(output);
 
-    Serial.println("WE SENT A CHALLENGE");
     //Go to some menu or something
     State::stateFlags.set(GlobalStates::stateList[INDEX_MULTIPLAYER_MENU]->getFlagName());
 }

@@ -22,7 +22,7 @@ public:
     bool isWaveformInCircle(int circleX, int circleY, int radius); //checks if the waveform crosses the circle
 
     void drawScreen4();           //draws the data loading screen
-    void drawScreen3();           // Draws the exit/finish screen
+    void drawScoreScreen();           // Draws the exit/finish screen
     void drawChallengeWinScreen(String &player1name, int player1score, String &player2name, int player2score);
     void drawChallengeLooseScreen(String &player1name, int player1score, String &player2name, int player2score);
     void drawIntroScreen(int counter);

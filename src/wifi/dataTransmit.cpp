@@ -245,3 +245,33 @@ void DataTransmit::removeChallengeFromData(const String& challengeId) {
 
     }
 }
+
+void DataTransmit::getSingleDataToHighscore(uint32_t gameID, ScoresArray &leaderBoard) {
+    String gameName = GlobalStates::gameList[gameID]->m_stateName;
+    String basePath = "/Leaderbord/" + gameName;  // Path to the leaderboard data in Firebase
+
+    for (int j = 0; j < 5; j++) {
+        String fullPath = basePath + "/score_" + static_cast<String>(j + 1);
+
+        if (Firebase.getJSON(fbdo, fullPath)) {
+            if (fbdo.dataType() == "json") {
+                // Use JsonDocument
+                JsonDocument doc;
+                DeserializationError error = deserializeJson(doc, fbdo.jsonData());
+                if (!error) {
+
+                    String name = doc["name"].as<String>();
+                    int score = doc["score"].as<int>();
+                    leaderBoard[j] = std::make_pair(name, score);
+                } else {
+                    Serial.print("deserializeJson() failed with code ");
+                    Serial.println(error.c_str());
+
+                }
+            }
+        } else {
+            Serial.println("Failed to fetch data: " + fbdo.errorReason());  // Print error message
+        }
+    }
+
+}

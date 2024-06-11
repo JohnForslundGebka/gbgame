@@ -19,7 +19,6 @@ StateHandler stateHandler;
 Scores &scores = Scores::getInstance();
 DataTransmit &wifi = DataTransmit::getInstance();
 
-
 void setup() {
     Serial.begin(115200);
     dm.init();
@@ -31,12 +30,7 @@ void setup() {
     wifi.password = flash::readFromFlash("password");  
 }
 
-
-
 void loop() {
     using namespace std::chrono;
-
-    rtos::ThisThread::sleep_for(seconds(4));
-    //vibration.off();
-
+    rtos::ThisThread::sleep_for(minutes(4));
 }

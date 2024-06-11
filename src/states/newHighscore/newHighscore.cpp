@@ -1,12 +1,14 @@
 #include "newHighscore.h"
 #include "hardware/buttons.h"
+#include "wifi/dataTransmit.h"
 
 //waits for button inputs, if the user presses A, will end the state and go back to main menu
 void NewHighscore::handleInput() {
-
+    DataTransmit &wifi = DataTransmit::getInstance();
     if(Buttons::states.wait_any(Buttons::A_FLAG,osWaitForever, true) == Buttons::A_FLAG){
         m_isRunning = false;
-        State::stateFlags.set(GlobalStates::stateList[INDEX_HIGHSCORE]->getFlagName());
+        if(wifi.wifiIsConnected) State::stateFlags.set(GlobalStates::stateList[INDEX_HIGHSCORE]->getFlagName());
+        else State::stateFlags.set(GlobalStates::stateList[INDEX_MAIN_MENU]->getFlagName());
     }
 }
 
@@ -17,7 +19,6 @@ void NewHighscore::update() {
 }
 
 void NewHighscore::run() {
-    delay(2000);
     using namespace rtos;
     using namespace mbed;
     using namespace std::chrono;

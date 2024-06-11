@@ -14,6 +14,7 @@
 
 
 
+
 namespace GlobalStates {
     //all available states
     MainMenu mainMenu;
@@ -44,5 +45,5 @@ namespace GlobalStates {
                                      newHighscore.getFlagName() |
                                      wifiMenu.getFlagName() |
                                      multiplayerMenu.getFlagName()|
-                                      gyroscopeGame.getFlagName();
+                                     gyroscopeGame.getFlagName();
 }

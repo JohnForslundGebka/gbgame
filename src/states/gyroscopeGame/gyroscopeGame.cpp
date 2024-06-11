@@ -2,7 +2,7 @@
 #include "functionality/scores.h"
 #include "functionality/challengeHandler.h"
 
-GyroscopeGame::GyroscopeGame() : State("Tilty"), IMU_LSM6DSOX(Wire,0x6A) {}
+GyroscopeGame::GyroscopeGame() : State("Tilty"){}
 
 
 void GyroscopeGame::handleInput() {
@@ -79,37 +79,34 @@ void GyroscopeGame::game() {
                 break;
 
             case GAME_OVER :
+                //If the game is in challenge mode, do not check for highscore
                 if(m_challengeMode){
                     challenge(m_score);
-                } else {
-                    //if a new highscore was set
-                    if (m_score > leaderBoard.maxScores[m_flagName]) {
+                } else if(m_score > leaderBoard.maxScores[m_flagName]) { //if a new highscore was set
+                    DataTransmit &wifi = DataTransmit::getInstance();
+                    if(wifi.wifiIsConnected){
                         m_canvas->drawCheckingSCore();
                         m_gameFlags.set(SCREEN_UPDATE_FLAG);
-                        rtos::ThisThread::sleep_for(50ms);
-                        leaderBoard.checkIfScoreWasHighcore(m_score, this);
-                        m_isRunning = false;
-                        State::stateFlags.set(GlobalStates::stateList[INDEX_NEW_HIGHSCORE]->getFlagName());
-                    }else {
-                       //if not added to leaderboard
-                        m_canvas->drawNoHighcoreScreen(m_score); //draw the no highscore screen
-                        m_gameFlags.set(SCREEN_UPDATE_FLAG);
-
-                        rtos::ThisThread::sleep_for(5s);
-                        //Return to main manu when game finish
-                        m_isRunning = false;
-                        State::stateFlags.set(GlobalStates::stateList[INDEX_MAIN_MENU]->getFlagName());
                     }
-
-              //  m_gameFlags.set(SCREEN_UPDATE_FLAG);
+                    leaderBoard.checkIfScoreWasHighcore(m_score, this);
+                    m_isRunning = false;
+                    State::stateFlags.set(GlobalStates::stateList[INDEX_NEW_HIGHSCORE]->getFlagName());
+                } else {   //if no new highscore was set
+                    m_canvas->drawNoHighcoreScreen(m_score);
+                    m_gameFlags.set(SCREEN_UPDATE_FLAG);
+                    rtos::ThisThread::sleep_for(3s);
+                    //Return to main manu when game finish
+                    m_isRunning = false;
+                    State::stateFlags.set(GlobalStates::stateList[INDEX_MAIN_MENU]->getFlagName());
+                }
                 m_isRunning = false;
                 break;
         }
     }
-    }
-
-
 }
+
+
+
 
 void GyroscopeGame::stop() {
     using namespace std::chrono;
@@ -155,7 +152,6 @@ void GyroscopeGame::update() {
         m_displayManager.updateScreen(&m_canvas->c_main);
     }
 }
-
 
 void GyroscopeGame::run() {
     //initialize the game

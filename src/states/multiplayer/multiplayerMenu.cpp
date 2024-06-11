@@ -6,6 +6,7 @@
 #include "wifi/dataTransmit.h"
 
 
+
 // Constructor, initializes the state with it's name "Wifi Menu"
 MultiplayerMenu::MultiplayerMenu() :  State("Multiplayer"){}
 
@@ -199,6 +200,7 @@ void MultiplayerMenu::game() {
 void MultiplayerMenu::run() {
     using namespace rtos;
     using namespace mbed;
+    using namespace std::chrono;
     DataTransmit &wifi = DataTransmit::getInstance();
     m_canvas = new MultiplayerMenuUI(this);
     m_myGamesList.clear();
@@ -233,13 +235,10 @@ void MultiplayerMenu::run() {
         t_gameLogic = new Thread;
         t_screenUpdate = new Thread;
         t_userInput = new Thread;
-        t_gameLogic->start(mbed::callback(this, &MultiplayerMenu::game));
         t_userInput->start(mbed::callback(this, &MultiplayerMenu::handleInput));
         t_screenUpdate->start(mbed::callback(this, &MultiplayerMenu::update));
-
-        m_gameFlags.set(INPUT_UPDATE_FLAG);
-    }
-
+        t_gameLogic->start(mbed::callback(this, &MultiplayerMenu::game));
+ }
 }
 
 void MultiplayerMenu::stop() {
