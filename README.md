@@ -10,8 +10,10 @@ or games/menus running on the device.
 All states are handled by the stateHandler. The stateHandler is resposible for stopping all threads running of the previously running state and launching the new state initializing its threads.  
 
 ### Getting Started
-The project is based on an Arduino Nano RP2040 connect board and you can find the schematics of the hardware build here: https://www.figma.com/board/exiw9wgnHgAbENhK7Swpkf/Kunskapsbank?node-id=0-1&t=veI6WtQ6J8sapXFR-0 
+The project is based on an Arduino Nano RP2040 connect board, and you can find the schematics of the hardware build here: https://www.figma.com/board/exiw9wgnHgAbENhK7Swpkf/Kunskapsbank?node-id=0-1&t=veI6WtQ6J8sapXFR-0
+
+![alt text](https://www.figma.com/board/exiw9wgnHgAbENhK7Swpkf/Kunskapsbank?node-id=278-500&t=RV8F5udBvnBxb6Dh-4)
 
 #### Prerequisites
-All neccesary libraries are included in the repo and you should use platformIO to build the program.
+All necessary libraries are included in the repo, and you should use platformIO to build the program.
 
