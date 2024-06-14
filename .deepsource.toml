@@ -5,3 +5,7 @@ name = "shell"
 
 [[analyzers]]
 name = "cxx"
+
+exclude_patterns = [
+  "lib/**",
+]
