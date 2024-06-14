@@ -1,7 +1,6 @@
 version = 1
 
-[[analyzers]]
-name = "shell"
+exclude_patterns = ["lib/**"]
 
 [[analyzers]]
 name = "cxx"
